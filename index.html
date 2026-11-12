@@ -1,0 +1,2303 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Wheek Rush</title>
+<meta name="description" content="A carrot clicker with a herd of hungry guinea pigs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fbf1e1; --panel:#fffaf1; --card:#ffffff; --ink:#4a2f1d; --soft:#8b6b55; --line:#efdcc2;
+  --orange:#f57c1f; --orange2:#d2600c; --green:#58a845; --green2:#3e8131; --cant:#bba996;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:'Fredoka',ui-rounded,'Nunito','Segoe UI',system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit}
+.ci{display:inline-block;width:1em;height:1em;flex:none;vertical-align:-.15em;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M14.2 6.4c.3-2.4 1.6-4 3.6-4.4-.4 1.4-.4 2.6.1 3.6 1.5-.8 3-.8 4.1.1-1.2.9-2.6 1.4-4.2 1.4z' fill='%2350a845'/%3E%3Cpath d='M16.4 7.6c-1.7-1.7-4.4-1.6-6 .2L2.7 19.6c-.7 1.1.6 2.4 1.7 1.7l11.8-7.7c1.8-1.6 1.9-4.3.2-6z' fill='%23f57c1f'/%3E%3Cpath d='M8 12.5l2 1.2M6.2 15.4l1.7 1M10.2 9.4l1.6 1' stroke='%23c95d0c' stroke-width='1' stroke-linecap='round'/%3E%3C/svg%3E") center/contain no-repeat}
+#app{display:grid;grid-template-rows:auto minmax(0,1fr);height:100vh;height:100dvh}
+#hdr{display:flex;align-items:center;gap:12px;padding:6px 14px;background:linear-gradient(#a56f45,#8a5a37);color:#fff7ea;box-shadow:0 3px 0 #6e4528;position:relative;z-index:10}
+.brand{display:flex;align-items:center;gap:8px;min-width:0;flex:1}
+#logo{width:46px;height:34px;flex:none}
+.title{font-weight:700;font-size:22px;letter-spacing:.4px;line-height:1}
+.tagline{font-size:12px;opacity:.8}
+.counter{text-align:center;flex:2;min-width:0}
+.counter .big{font-size:30px;font-weight:700;line-height:1.1;display:flex;align-items:center;justify-content:center;gap:6px;font-variant-numeric:tabular-nums}
+.counter .sub{font-size:13px;opacity:.92;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hdr-btns{flex:1;display:flex;justify-content:flex-end;gap:6px}
+.iconbtn{background:rgba(255,255,255,.16);border:0;border-radius:12px;width:40px;height:40px;cursor:pointer;display:grid;place-items:center;color:#fff7ea;font-weight:700;font-size:18px}
+.iconbtn:hover{background:rgba(255,255,255,.26)}
+.iconbtn svg{width:22px;height:22px}
+#layout{display:grid;grid-template-columns:300px minmax(0,1fr) 330px;gap:10px;padding:10px;min-height:0}
+.col{display:flex;flex-direction:column;gap:10px;min-height:0;overflow-y:auto;overscroll-behavior:contain}
+#colR{overflow:hidden}
+#colC{display:flex;flex-direction:column;gap:10px;min-height:0;min-width:0}
+#fieldWrap{flex:1 1 0;min-height:200px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#field{display:block;border-radius:18px;box-shadow:0 5px 0 #dcc6a6,0 10px 26px rgba(90,60,30,.16);touch-action:manipulation;user-select:none;-webkit-user-select:none;outline:none}
+#field:focus-visible{box-shadow:0 0 0 4px var(--orange),0 5px 0 #dcc6a6}
+.sec{background:var(--panel);border:2px solid var(--line);border-radius:16px;padding:9px 9px 3px;flex:none}
+.sec h3{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:1px;color:var(--soft);display:flex;align-items:center;gap:8px}
+.sec h3 .grow{flex:1}
+.sec h3.sub{margin-top:8px}
+.h3meta{font-size:12px;text-transform:none;letter-spacing:0;font-weight:500;color:var(--green2)}
+.note{font-size:12px;color:var(--soft);margin:-2px 2px 7px;line-height:1.3}
+.item{display:grid;grid-template-columns:40px minmax(0,1fr) auto;align-items:center;gap:8px;width:100%;text-align:left;background:var(--card);border:2px solid var(--line);border-radius:12px;padding:5px 8px;margin:0 0 6px;cursor:pointer;box-shadow:0 2px 0 var(--line);transition:transform .08s,border-color .15s}
+button.item:hover{border-color:#f1b47e}
+button.item:active{transform:translateY(2px);box-shadow:0 0 0 var(--line)}
+.item .ico{width:40px;height:40px}
+.item .info{display:block;min-width:0}
+.item .nm{display:block;font-weight:600;font-size:14.5px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item .lv{margin-left:5px;font-size:12px;color:var(--soft);font-weight:500}
+.item .ds{display:block;font-size:12px;color:var(--soft);line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item .mt{display:block;font-size:12px;color:var(--green2);font-weight:500;line-height:1.25}
+.item .cost{font-weight:700;font-size:14px;color:var(--orange2);white-space:nowrap;display:flex;align-items:center;gap:3px}
+.item.cant{background:#fdf8f1}
+.item.cant .cost{color:var(--cant)}
+.item.maxed .cost{color:var(--green2)}
+.item.locked{opacity:.55;cursor:default;box-shadow:none}
+.item.current{border-color:#9bd27f;background:#f4fbef;cursor:default}
+.item.current .cost{color:var(--green2);font-size:12px}
+.item.flash{animation:flash .45s}
+.item.shake{animation:shake .3s}
+@keyframes flash{0%{background:#fff0bd;border-color:#f5b041}}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.farmgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(172px,1fr));gap:6px;margin-bottom:6px}
+.farmgrid .item{margin:0;grid-template-columns:36px minmax(0,1fr);grid-template-rows:auto auto;row-gap:1px;padding:5px 7px}
+.farmgrid .item .ico{width:36px;height:36px;grid-row:span 2}
+.farmgrid .item .ds{display:none}
+.farmgrid .item .cost{grid-column:2;font-size:13px}
+.seg{display:inline-flex;background:#f3e4cf;border-radius:9px;padding:2px;gap:2px;text-transform:none;letter-spacing:0}
+.seg button{border:0;background:transparent;border-radius:7px;padding:2px 8px;cursor:pointer;font-weight:600;font-size:12px;color:var(--soft)}
+.seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 0 #e2ccb0}
+.bar{background:#f0e3d0;border-radius:99px;overflow:hidden;height:6px}
+.bar i{display:block;height:100%;background:var(--green);border-radius:99px;transition:width .2s linear}
+.breedbox{background:#fff;border:2px solid #f3c7cf;border-radius:12px;padding:7px 9px;margin-bottom:6px}
+.bb-top{display:flex;gap:8px;align-items:center;margin-bottom:6px}
+.bb-top canvas{width:36px;height:36px}
+.bb-top .nm{font-weight:600;font-size:14px}
+.bb-top .ds{font-size:12px;color:var(--soft)}
+.breedbox .bar{height:10px}
+.breedbox .bar i{background:linear-gradient(90deg,#f59bb0,#f06b8b)}
+.bb-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--soft);margin-top:4px}
+#sec-herd{flex:1 1 auto;min-height:150px;display:flex;flex-direction:column}
+.herdlist{overflow-y:auto;min-height:0;flex:1;margin:0 -4px;padding:0 4px 6px;overscroll-behavior:contain}
+.pig{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:6px;align-items:center;background:#fff;border:2px solid var(--line);border-left:5px solid var(--rc);border-radius:12px;padding:4px 6px;margin-bottom:5px}
+.pig canvas{width:52px;height:38px;cursor:pointer}
+.ph{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.pn{font-weight:600;font-size:14px}
+.badge{font-size:10.5px;font-weight:600;padding:0 6px;border-radius:999px;color:#fff;background:var(--rc)}
+.tchip{font-size:10.5px;font-weight:600;padding:0 6px;border-radius:999px;color:#7a4fb3;background:#efe5fa;cursor:help}
+.pstats{font-size:11.5px;color:var(--soft);line-height:1.3}
+.pstats b{color:var(--ink);font-weight:600}
+.rehome{border:0;background:#f3e4cf;border-radius:9px;padding:4px 7px;font-size:11px;cursor:pointer;color:var(--soft)}
+.rehome:hover{background:#ecd6b8}
+.rehome.sure{background:#e0533c;color:#fff}
+.statrow{display:flex;flex-wrap:wrap;gap:2px 12px;font-size:12.5px;color:var(--soft);margin-bottom:5px}
+.statrow b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.achrow{display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin-bottom:6px;font-size:12px;color:var(--soft)}
+.achb{width:21px;height:21px;border-radius:50%;background:#efe4d3;display:grid;place-items:center;font-size:11px;color:#cbb9a3;cursor:help}
+.achb.got{background:#ffd76a;color:#8a5a00;box-shadow:inset 0 0 0 2px #f0b02e}
+.btn{border:0;border-radius:12px;padding:10px 16px;font-weight:600;cursor:pointer;background:var(--orange);color:#fff;box-shadow:0 3px 0 var(--orange2)}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--orange2)}
+.btn.ghost{background:#f3e4cf;color:var(--ink);box-shadow:0 3px 0 #e2ccb0}
+.btn.danger{background:#d9452f;box-shadow:0 3px 0 #a8321f}
+#toasts{position:fixed;right:16px;bottom:16px;display:flex;flex-direction:column;gap:8px;z-index:50;pointer-events:none;width:340px;max-width:calc(100vw - 32px)}
+.toast{background:#fffaf1;border:2px solid var(--line);border-radius:14px;padding:9px 11px;box-shadow:0 8px 24px rgba(80,50,20,.22);display:flex;gap:10px;align-items:center;animation:tin .3s ease-out;font-size:13px;color:var(--soft);line-height:1.3}
+.toast b{display:block;font-size:14.5px;color:var(--ink)}
+.toast canvas{width:58px;height:42px;flex:none}
+.toast.achtoast{border-color:#f1c27a;background:#fff8e6}
+.toast.pup{border-color:#f3c7cf}
+.toast.out{animation:tout .4s forwards}
+@keyframes tin{from{transform:translateY(12px)}}
+@keyframes tout{to{transform:translateY(8px);opacity:0}}
+@media (prefers-reduced-motion:reduce){.toast,.toast.out,.item.flash,.item.shake{animation:none}}
+.modal{position:fixed;inset:0;background:rgba(60,35,15,.45);display:grid;place-items:center;z-index:100;padding:16px}
+.modal[hidden]{display:none}
+.mbox{background:var(--panel);border-radius:20px;padding:20px 22px;max-width:460px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);max-height:calc(100vh - 32px);overflow:auto}
+.mbox h2{margin:0 0 8px;font-size:24px}
+.mbox p{margin:6px 0;line-height:1.4}
+.mbox textarea{width:100%;height:110px;border-radius:10px;border:2px solid var(--line);padding:8px;font:12px ui-monospace,monospace;resize:vertical;background:#fff}
+.mbtns{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap}
+#gore{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:40;display:none}
+#dbg{position:fixed;left:8px;bottom:8px;z-index:60;background:rgba(40,25,10,.85);padding:6px;border-radius:10px;display:flex;gap:4px;flex-wrap:wrap;max-width:260px}
+#dbg button{border:0;border-radius:6px;padding:4px 8px;font-size:12px;cursor:pointer}
+@media (min-width:1101px){#sec-herd .note{display:none}}
+@media (max-width:1300px){#layout{grid-template-columns:270px minmax(0,1fr) 300px}}
+@media (max-width:1100px){
+  #app{display:block;height:auto}
+  #hdr{position:sticky;top:0;padding:6px 10px}
+  #layout{display:flex;flex-direction:column;padding:8px;gap:8px}
+  .col,#colC{display:contents}
+  #fieldWrap{order:1;flex:none;min-height:0}
+  #sec-farm{order:2}#sec-carrots{order:3}#sec-training{order:4}#sec-breed{order:5}#sec-herd{order:6}#sec-stats{order:7}
+  #sec-herd{min-height:0}
+  .herdlist{overflow:visible}
+  .tagline{display:none}
+  .counter .big{font-size:24px}
+  .counter .sub{font-size:12px}
+  .title{font-size:18px}
+  #toasts{left:10px;right:10px;bottom:10px;width:auto;max-width:none}
+}
+@media (max-width:520px){
+  .brand .title{display:none}
+  .brand,.hdr-btns{flex:0 0 auto}
+  .iconbtn{width:34px;height:34px}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <header id="hdr">
+    <div class="brand"><canvas id="logo" width="92" height="68" aria-hidden="true"></canvas><div><div class="title">Wheek Rush</div><div class="tagline">a carrot clicker with pigs</div></div></div>
+    <div class="counter">
+      <div class="big"><span class="ci"></span><span id="cCount">0</span></div>
+      <div class="sub"><span id="cRate">0</span> per second · <span id="cCatch">no catches yet</span></div>
+    </div>
+    <div class="hdr-btns">
+      <button id="btnHelp" class="iconbtn" type="button" aria-label="How to play">?</button>
+      <button id="btnSound" class="iconbtn" type="button" aria-label="Toggle sound"></button>
+      <button id="btnMenu" class="iconbtn" type="button" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg></button>
+    </div>
+  </header>
+  <main id="layout">
+    <aside id="colL" class="col">
+      <section class="sec" id="sec-carrots"></section>
+      <section class="sec" id="sec-training"></section>
+    </aside>
+    <section id="colC">
+      <div id="fieldWrap"><canvas id="field" tabindex="0" aria-label="The carrot field. Click the big carrot to pluck carrots for your guinea pigs."></canvas></div>
+      <section class="sec" id="sec-farm"></section>
+    </section>
+    <aside id="colR" class="col">
+      <section class="sec" id="sec-breed"></section>
+      <section class="sec" id="sec-herd"></section>
+      <section class="sec" id="sec-stats"></section>
+    </aside>
+  </main>
+</div>
+<canvas id="gore" aria-hidden="true"></canvas>
+<div id="toasts" aria-live="polite"></div>
+<div id="modal" class="modal" hidden><div class="mbox" role="dialog" aria-modal="true"><div id="mbody"></div><div class="mbtns" id="mbtns"></div></div></div>
+<noscript><p style="padding:20px">Wheek Rush needs JavaScript to run.</p></noscript>
+<script>
+(() => {
+'use strict';
+
+// ---------------------------------------------------------------- helpers
+const W = 1000, H = 620, KEY = 'wheek-rush-save-v1', TAU = Math.PI * 2;
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const rand = (a, b) => a + Math.random() * (b - a);
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
+const hyp = Math.hypot;
+const DEBUG = /[?&]debug=1/.test(location.search);
+const FONT = 'Fredoka, ui-rounded, "Nunito", system-ui, sans-serif';
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function hexToRgb(h) {
+  h = h.replace('#', '');
+  if (h.length === 3) h = h.split('').map(x => x + x).join('');
+  const n = parseInt(h, 16);
+  return [n >> 16 & 255, n >> 8 & 255, n & 255];
+}
+function shade(h, a) { // a<0 darken, a>0 lighten
+  const [r, g, b] = hexToRgb(h), t = a < 0 ? 0 : 255, p = Math.abs(a);
+  const f = v => Math.round(v + (t - v) * p);
+  return `rgb(${f(r)},${f(g)},${f(b)})`;
+}
+function lum(h) { const [r, g, b] = hexToRgb(h); return (0.299 * r + 0.587 * g + 0.114 * b) / 255; }
+function ell(c, x, y, rx, ry, rot = 0) { c.beginPath(); c.ellipse(x, y, Math.max(0.01, rx), Math.max(0.01, ry), rot, 0, TAU); }
+function rr(c, x, y, w, h, r) {
+  c.beginPath(); c.moveTo(x + r, y); c.lineTo(x + w - r, y); c.quadraticCurveTo(x + w, y, x + w, y + r);
+  c.lineTo(x + w, y + h - r); c.quadraticCurveTo(x + w, y + h, x + w - r, y + h); c.lineTo(x + r, y + h);
+  c.quadraticCurveTo(x, y + h, x, y + h - r); c.lineTo(x, y + r); c.quadraticCurveTo(x, y, x + r, y); c.closePath();
+}
+function heart(c, x, y, s) {
+  c.beginPath(); c.moveTo(x, y + s * 0.35);
+  c.bezierCurveTo(x - s, y - s * 0.4, x - s * 0.4, y - s * 1.05, x, y - s * 0.45);
+  c.bezierCurveTo(x + s * 0.4, y - s * 1.05, x + s, y - s * 0.4, x, y + s * 0.35); c.closePath();
+}
+function star4(c, x, y, s) {
+  c.beginPath(); c.moveTo(x, y - s); c.quadraticCurveTo(x, y, x + s, y); c.quadraticCurveTo(x, y, x, y + s);
+  c.quadraticCurveTo(x, y, x - s, y); c.quadraticCurveTo(x, y, x, y - s); c.closePath();
+}
+function mulberry(a) { return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+const SUFFIX = ['', 'K', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp', 'Oc', 'No', 'Dc'];
+function fmt(n) {
+  if (!isFinite(n)) return '∞';
+  if (n < 0) return '-' + fmt(-n);
+  if (n < 1000) {
+    if (n < 100 && Math.abs(n - Math.round(n)) > 0.05) return n.toFixed(1);
+    return String(Math.round(n));
+  }
+  const i = Math.floor(Math.log10(n) / 3 + 1e-9);
+  if (i >= SUFFIX.length) return n.toExponential(2);
+  const v = n / Math.pow(1000, i);
+  return (v < 10 ? v.toFixed(2) : v < 100 ? v.toFixed(1) : Math.floor(v)) + SUFFIX[i];
+}
+const fmtCount = n => n < 1000 ? String(Math.floor(n)) : fmt(n);
+const fmtRate = n => n < 1 ? String(+n.toFixed(2)) : n < 10 ? n.toFixed(1) : fmt(n);
+function dur(sec) {
+  sec = Math.floor(sec);
+  const h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60), s = sec % 60;
+  if (h) return `${h}h ${m}m`;
+  if (m) return `${m}m ${s}s`;
+  return `${s}s`;
+}
+
+// ---------------------------------------------------------------- data
+const TIERS = [
+  {name: 'Garden Carrot', value: 1, cost: 0, desc: 'Crunchy, orange, honest.', body: ['#ffb65c', '#f7841f', '#d2600c'], leaf: '#4fae45'},
+  {name: 'Purple Heirloom', value: 3, cost: 150, desc: 'Grandma\'s old seeds. The pigs go quiet with respect.', body: ['#c39ae6', '#8447b8', '#5b2588'], leaf: '#5cae4a', outline: 'rgba(60,10,80,.5)', ridge: 'rgba(40,0,60,.3)'},
+  {name: 'Rainbow Carrot', value: 9, cost: 3000, desc: 'Striped in every colour the garden knows.', fx: 'rainbow', leaf: '#58c35a'},
+  {name: 'Golden Carrot', value: 27, cost: 40000, desc: 'Shines in the sun. Tastes like it, too.', body: ['#fff3b0', '#f5c542', '#c58a12'], leaf: '#79c257', fx: 'shine', outline: 'rgba(130,80,0,.5)'},
+  {name: 'Frost Carrot', value: 81, cost: 5e5, desc: 'Grown in a glacier greenhouse. Brain-freeze crunchy.', body: ['#f2fdff', '#a5e6f7', '#5cb3d6'], leaf: '#8fe3cc', fx: 'crystal', outline: 'rgba(30,90,130,.45)', ridge: 'rgba(30,90,130,.25)'},
+  {name: 'Lava Carrot', value: 243, cost: 6e6, desc: 'Handle with oven mitts. The pigs blow on it first.', body: ['#7a2a18', '#3f140c', '#1e0806'], leaf: '#3f8a2c', fx: 'lava', outline: 'rgba(255,120,40,.7)', ridge: 'rgba(255,140,60,.35)'},
+  {name: 'Moon Carrot', value: 729, cost: 8e7, desc: 'Harvested on the far side. Slightly bouncy.', body: ['#ffffff', '#cfd0dc', '#8f90a6'], leaf: '#a6d99c', fx: 'moon', outline: 'rgba(70,70,100,.45)', ridge: 'rgba(70,70,100,.25)'},
+  {name: 'Cosmic Carrot', value: 2187, cost: 1e9, desc: 'Holds a tiny galaxy. Nobody asks how.', body: ['#7d5cff', '#3b1f94', '#150a40'], leaf: '#7ef0c2', fx: 'cosmic', outline: 'rgba(180,150,255,.7)', ridge: 'rgba(200,180,255,.3)'},
+];
+
+const BUILDINGS = [
+  {id: 'gnome', name: 'Garden Gnome', rate: 0.1, cost: 15, desc: 'Plucks a carrot now and then. Never blinks.'},
+  {id: 'patch', name: 'Carrot Patch', rate: 0.4, cost: 100, desc: 'A tidy row of carrots, tossed straight to the herd.'},
+  {id: 'greenhouse', name: 'Greenhouse', rate: 1.5, cost: 1100, desc: 'Warm, steamy and very carroty.'},
+  {id: 'coop', name: 'Veggie Co-op', rate: 4, cost: 12000, desc: 'The neighbours pitch in. Literally pitch.'},
+  {id: 'tower', name: 'Hydro Tower', rate: 10, cost: 130000, desc: 'Carrots stacked all the way to the clouds.'},
+  {id: 'orbital', name: 'Orbital Garden', rate: 25, cost: 1.4e6, desc: 'Drops carrots from low orbit. Mind your heads.'},
+  {id: 'portal', name: 'Carrot Portal', rate: 60, cost: 2e7, desc: 'Opens onto a world made entirely of carrots.'},
+];
+const ORIGINS = {
+  gnome: {x: 205, y: 405}, patch: {x: 330, y: 420}, greenhouse: {x: 100, y: 345}, coop: {x: 860, y: 335},
+  tower: {x: 760, y: 262}, orbital: {x: 840, y: 92}, portal: {x: 250, y: 110},
+};
+
+const UPG = {
+  thumb: {name: 'Green Thumb', base: 25, grow: 2.4, max: 9, icon: 'upg:thumb', desc: 'Each click throws one more carrot.'},
+  whisper: {name: 'Carrot Whisperer', base: 300, grow: 1.45, max: 200, icon: 'upg:whisper', desc: 'Every carrot is worth 10% more. Keeps stacking.'},
+  zoom: {name: 'Zoomies Training', base: 30, grow: 1.8, max: 30, icon: 'upg:zoom', desc: 'All pigs run 15% faster.'},
+  cheeks: {name: 'Big Cheeks', base: 90, grow: 2.8, max: 8, icon: 'upg:cheeks', desc: 'Pigs can snatch carrots from 15% farther away.'},
+  gulp: {name: 'Speed Snacking', base: 150, grow: 2.8, max: 5, icon: 'upg:gulp', desc: 'Pigs gulp carrots 15% faster, so they\'re ready for the next one sooner.'},
+  cozy: {name: 'Cozy Bedding', base: 300, grow: 2.6, max: 12, icon: 'upg:cozy', desc: 'Pups arrive 12% sooner.'},
+  pedigree: {name: 'Pedigree Charts', base: 700, grow: 3.0, max: 10, icon: 'upg:pedigree', desc: 'Better odds of rare pups.'},
+  hutch: {name: 'Hutch Extension', base: 400, grow: 2.5, max: 12, icon: 'upg:hutch', desc: 'Room for 2 more pigs.'},
+};
+const BREED_HOUSE_COST = 150;
+// Poking Paws circle the big carrot and poke it like a click
+const PAW_COST = 15;
+const PAW_UPGRADES = [
+  {id: 'quick', name: 'Quick Paws', need: 1, cost: 100, desc: 'Paws poke twice as often.'},
+  {id: 'nimble', name: 'Nimble Paws', need: 5, cost: 500, desc: 'Paws poke twice as often.'},
+  {id: 'green', name: 'Green-Fingered Paws', need: 10, cost: 5000, desc: 'Every poke throws 2 extra carrots.'},
+  {id: 'busy', name: 'Busy Paws', need: 25, cost: 50000, desc: 'Paws poke twice as often.'},
+  {id: 'parade', name: 'Paw Parade', need: 50, cost: 2e6, desc: 'Paws poke twice as often.'},
+  {id: 'storm', name: 'Paw Storm', need: 100, cost: 1e8, desc: 'Paws poke twice as often.'},
+];
+// pigs fatten as they eat: 2x size at 10K carrots, 3x at 50K, and they pop just before 4x at 200K
+const POP_AT = 200000;
+function growthOf(e) {
+  if (e <= 10000) return 1 + e / 10000;
+  if (e <= 50000) return 2 + (e - 10000) / 40000;
+  return 3 + 0.95 * Math.min(1, (e - 50000) / 150000);
+}
+const CHARGE_TIME = 4;
+
+const RARITIES = [
+  {name: 'Common', color: '#9a8f84', w: 60, speed: [0.85, 1.1], cheeks: [0, 0.1], forage: [0.005, 0.015], trait: 0.1},
+  {name: 'Uncommon', color: '#4caf50', w: 26, speed: [1.0, 1.25], cheeks: [0.05, 0.2], forage: [0.01, 0.025], trait: 0.25},
+  {name: 'Rare', color: '#2f8fd8', w: 10, speed: [1.15, 1.45], cheeks: [0.15, 0.35], forage: [0.02, 0.04], trait: 0.5},
+  {name: 'Epic', color: '#9b59d0', w: 3.5, speed: [1.35, 1.7], cheeks: [0.3, 0.6], forage: [0.04, 0.07], trait: 0.8},
+  {name: 'Legendary', color: '#f0a020', w: 0.5, speed: [1.6, 2.1], cheeks: [0.6, 1.0], forage: [0.08, 0.15], trait: 1},
+];
+const PEDIGREE_BOOST = [0, 0.2, 0.35, 0.5, 0.7];
+const TRAITS = {
+  lucky: {name: 'Lucky', desc: '12% chance a catch is worth ×5'},
+  popcorn: {name: 'Popcorner', desc: 'catches from 50% farther away'},
+  hoarder: {name: 'Hay Hoarder', desc: 'forage bonus doubled'},
+  gulper: {name: 'Gulper', desc: 'eats carrots in half the time'},
+  zoomies: {name: 'Zoomies', desc: 'runs 20% faster'},
+};
+const NAMES = ['Biscuit', 'Peanut', 'Mochi', 'Pumpkin', 'Nugget', 'Clover', 'Waffles', 'Pebble', 'Hazel', 'Truffle', 'Butterscotch', 'Pip', 'Dumpling', 'Sprout', 'Cocoa', 'Muffin', 'Fudge', 'Bean', 'Toffee', 'Maple', 'Cinnamon', 'Turnip', 'Radish', 'Parsnip', 'Basil', 'Ginger', 'Pudding', 'Noodle', 'Tater', 'Squeak', 'Cupcake', 'Bramble', 'Acorn', 'Barley', 'Chestnut', 'Sesame', 'Tofu', 'Kiwi', 'Plum', 'Marzipan', 'Custard', 'Pickle', 'Scone', 'Crumpet', 'Bun', 'Fig', 'Olive', 'Juniper', 'Poppy', 'Daisy', 'Willow', 'Fern', 'Meringue', 'Gnocchi', 'Pretzel', 'Sundae', 'Popcorn', 'Bubbles', 'Snickerdoodle', 'Honey', 'Nutmeg', 'Saffron', 'Clementine', 'Rhubarb', 'Wasabi', 'Dandelion', 'Teacake', 'Marshmallow'];
+
+const ACH = [
+  {id: 'first', name: 'First Wheek', desc: 'Catch your first carrot', test: () => S.stats.caught >= 1},
+  {id: 'c100', name: 'Snack Time', desc: 'Earn 100 carrots', test: () => S.total >= 100},
+  {id: 'c10k', name: 'Carrot Cake', desc: 'Earn 10,000 carrots', test: () => S.total >= 1e4},
+  {id: 'c1m', name: 'Root Millionaire', desc: 'Earn 1 million carrots', test: () => S.total >= 1e6},
+  {id: 'c1b', name: 'Carrot Tycoon', desc: 'Earn 1 billion carrots', test: () => S.total >= 1e9},
+  {id: 'c1t', name: 'Orange Planet', desc: 'Earn 1 trillion carrots', test: () => S.total >= 1e12},
+  {id: 'clicks', name: 'Busy Fingers', desc: 'Click the carrot 1,000 times', test: () => S.stats.clicks >= 1000},
+  {id: 's25', name: 'Popcorn Party', desc: 'Reach a 25-catch streak', test: () => S.stats.bestStreak >= 25},
+  {id: 's100', name: 'Unstoppable Zoomies', desc: 'Reach a 100-catch streak', test: () => S.stats.bestStreak >= 100},
+  {id: 'house', name: 'Love Shack', desc: 'Build the Breeding House', test: () => S.breed.built},
+  {id: 'pup', name: 'Tiny Paws', desc: 'Welcome your first pup', test: () => S.stats.born >= 1},
+  {id: 'h10', name: 'Squeak Squad', desc: 'Have 10 pigs at once', test: () => S.pigs.length >= 10},
+  {id: 'h20', name: 'Wheek Choir', desc: 'Have 20 pigs at once', test: () => S.pigs.length >= 20},
+  {id: 'rare', name: 'Rare Find', desc: 'Raise a Rare pig or better', test: () => S.pigs.some(p => p.rarity >= 2)},
+  {id: 'epic', name: 'Best in Show', desc: 'Raise an Epic pig or better', test: () => S.pigs.some(p => p.rarity >= 3)},
+  {id: 'legend', name: 'Legend of the Hutch', desc: 'Raise a Legendary pig', test: () => S.pigs.some(p => p.rarity >= 4)},
+  {id: 'lucky', name: 'Lucky Break', desc: 'Click a lucky flying carrot', test: () => S.stats.luckies >= 1},
+  {id: 'gold', name: 'Gold Standard', desc: 'Grow Golden Carrots', test: () => S.tier >= 3},
+  {id: 'cosmic', name: 'Space Veg', desc: 'Grow Cosmic Carrots', test: () => S.tier >= 7},
+  {id: 'gnomes', name: 'Gnome Army', desc: 'Own 10 Garden Gnomes', test: () => S.bld.gnome >= 10},
+  {id: 'portal', name: 'Through the Portal', desc: 'Build a Carrot Portal', test: () => S.bld.portal >= 1},
+  {id: 'paws', name: 'Helping Paws', desc: 'Own 25 Poking Paws', test: () => S.paws >= 25},
+  {id: 'chonk', name: 'Absolute Unit', desc: 'Grow a pig to twice its size', test: () => S.pigs.some(p => (p.eaten || 0) >= 10000)},
+];
+
+// ---------------------------------------------------------------- state
+let S;
+const G = {
+  time: 0, carrots: [], spots: {}, parts: [], floats: [], bubbles: [], clouds: [],
+  pluckAcc: 0, pawAcc: 0, pawNext: 0, pawPokes: {}, farmThrown: 0, farmRate: 0, streak: 0, buffs: {frenzy: 0, zoomies: 0}, lucky: null, banner: null,
+  showerLeft: 0, showerCd: 0, big: {squish: 0},
+  bucket: 0, bucketP: 0, bucketT: 0, hist: [], rate: 0, resolved: [],
+  tag: null, highlight: null, lastBubble: 0, lastFloat: 0, assignT: 0, achT: 0, timeScale: 1, drops: 0, hiddenAt: 0, sparkT: 0,
+};
+
+function freshState() {
+  return {
+    v: 1, carrots: 0, total: 0, tier: 0,
+    upg: {thumb: 0, whisper: 0, zoom: 0, cheeks: 0, gulp: 0, cozy: 0, pedigree: 0, hutch: 0},
+    bld: Object.fromEntries(BUILDINGS.map(b => [b.id, 0])),
+    breed: {built: false, progress: 0},
+    pigs: [], nextPigId: 1, ach: {},
+    stats: {clicks: 0, caught: 0, dropped: 0, pickups: 0, bestStreak: 0, born: 0, luckies: 0, played: 0, lost: 0},
+    paws: 0, pawUp: {},
+    passiveRate: 0, lastSaved: Date.now(), sound: true, hints: {}, luckyTimer: 45, herdSort: 'rarity',
+  };
+}
+
+// ---------------------------------------------------------------- derived values
+const herdCap = () => 6 + 2 * S.upg.hutch;
+const breedTime = () => 45 * Math.pow(0.88, S.upg.cozy);
+const pigForage = p => p.forage * (p.trait === 'hoarder' ? 2 : 1);
+const forageBonus = () => S.pigs.reduce((a, p) => a + pigForage(p), 0);
+const farmBase = () => BUILDINGS.reduce((a, b) => a + S.bld[b.id] * b.rate, 0);
+const farmPlucks = () => farmBase() * (1 + forageBonus());
+const achMult = () => 1 + 0.01 * Object.keys(S.ach).length;
+const whisperMult = () => Math.pow(1.1, S.upg.whisper);
+const unitValue = () => TIERS[S.tier].value * achMult() * whisperMult() * (G.buffs.frenzy > G.time ? 3 : 1);
+const clickCount = () => 1 + S.upg.thumb;
+const pawPokeRate = () => 0.1 * Math.pow(2, ['quick', 'nimble', 'busy', 'parade', 'storm'].filter(id => S.pawUp[id]).length);
+const pawCarrots = () => clickCount() + (S.pawUp.green ? 2 : 0);
+const pawRate = () => S.paws * pawPokeRate() * pawCarrots();
+function pawCost(n = 1) { const r = 1.15, c0 = PAW_COST * Math.pow(r, S.paws); return Math.ceil(c0 * (Math.pow(r, n) - 1) / (r - 1)); }
+const pigSize = p => p.s * (p.g || 1);
+const streakMult = () => 1 + Math.min(G.streak, 100) * 0.005;
+const upgCost = id => Math.ceil(UPG[id].base * Math.pow(UPG[id].grow, S.upg[id]));
+function bldCost(b, n = 1) {
+  const r = 1.15, c0 = b.cost * Math.pow(r, S.bld[b.id]);
+  return Math.ceil(c0 * (Math.pow(r, n) - 1) / (r - 1));
+}
+function pigSpeed(p) {
+  let s = 800 * p.speed * (1 + 0.15 * S.upg.zoom);
+  if (p.trait === 'zoomies') s *= 1.2;
+  if (G.buffs.zoomies > G.time) s *= 2;
+  return Math.min(s, 2600);
+}
+function catchR(p) { return 20 * (p.s || 1.2) * Math.sqrt(p.g || 1) * (1 + 0.15 * S.upg.cheeks) * (p.trait === 'popcorn' ? 1.5 : 1); }
+const pigScale = y => 1.08 + (y - 478) / 122 * 0.36;
+const headX = p => p.x + p.face * 16 * pigSize(p);
+function rareOdds() {
+  const ws = RARITIES.map((r, i) => r.w * (1 + S.upg.pedigree * PEDIGREE_BOOST[i]));
+  const tot = ws.reduce((a, b) => a + b, 0);
+  return ((ws[2] + ws[3] + ws[4]) / tot * 100).toFixed(1);
+}
+
+// ---------------------------------------------------------------- audio
+const SFX = {
+  ctx: null, master: null, last: {},
+  init() {
+    if (this.ctx) { if (this.ctx.state === 'suspended') this.ctx.resume(); return; }
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      this.ctx = new AC(); this.master = this.ctx.createGain(); this.master.gain.value = 0.2; this.master.connect(this.ctx.destination);
+    } catch (e) { this.ctx = null; }
+  },
+  ok(name, gap) {
+    if (!S.sound || !this.ctx || document.hidden) return false;
+    const t = performance.now();
+    if (this.last[name] && t - this.last[name] < gap) return false;
+    this.last[name] = t; return true;
+  },
+  tone(type, f0, f1, d, vol, delay = 0) {
+    const c = this.ctx, t = c.currentTime + delay, o = c.createOscillator(), g = c.createGain();
+    o.type = type; o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(Math.max(1, f1), t + d);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+    o.connect(g); g.connect(this.master); o.start(t); o.stop(t + d + 0.03);
+  },
+  pluck() { if (this.ok('pluck', 35)) this.tone('sine', 380, 760, 0.08, 0.45); },
+  // a guinea pig "wheek": a rising, wobbly squeal, sometimes doubled
+  wheek(pitch = 1) {
+    if (!this.ok('wheek', 90)) return false;
+    const c = this.ctx, t = c.currentTime, p = pitch * rand(0.95, 1.05), n = Math.random() < 0.35 ? 2 : 1;
+    for (let k = 0; k < n; k++) {
+      const t0 = t + k * 0.2, d = k ? 0.16 : 0.22;
+      const o = c.createOscillator(), f = c.createBiquadFilter(), g = c.createGain(), l = c.createOscillator(), lg = c.createGain();
+      o.type = 'sawtooth'; f.type = 'bandpass'; f.Q.value = 4;
+      o.frequency.setValueAtTime(950 * p, t0); o.frequency.exponentialRampToValueAtTime(2300 * p, t0 + d * 0.7); o.frequency.exponentialRampToValueAtTime(2000 * p, t0 + d);
+      f.frequency.setValueAtTime(1400 * p, t0); f.frequency.exponentialRampToValueAtTime(3000 * p, t0 + d * 0.7);
+      l.frequency.value = 32; lg.gain.value = 70 * p; l.connect(lg); lg.connect(o.frequency);
+      g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(0.6, t0 + 0.02); g.gain.setValueAtTime(0.55, t0 + d * 0.75); g.gain.exponentialRampToValueAtTime(0.0001, t0 + d);
+      o.connect(f); f.connect(g); g.connect(this.master);
+      o.start(t0); l.start(t0); o.stop(t0 + d + 0.02); l.stop(t0 + d + 0.02);
+    }
+    return true;
+  },
+  noise() {
+    if (!this.nb) { const n = Math.floor(this.ctx.sampleRate * 0.8), b = this.ctx.createBuffer(1, n, this.ctx.sampleRate), d = b.getChannelData(0); for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1; this.nb = b; }
+    return this.nb;
+  },
+  crunch() {
+    if (!this.ok('crunch', 60)) return;
+    const c = this.ctx, t = c.currentTime;
+    for (let k = 0; k < 2; k++) {
+      const src = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain(), t0 = t + k * 0.055;
+      src.buffer = this.noise(); f.type = 'bandpass'; f.frequency.value = rand(1800, 3200); f.Q.value = 1.2;
+      g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(0.45, t0 + 0.005); g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.05);
+      src.connect(f); f.connect(g); g.connect(this.master); src.start(t0, Math.random() * 0.6); src.stop(t0 + 0.06);
+    }
+  },
+  buy() { if (!this.ok('buy', 40)) return; this.tone('sine', 660, 880, 0.08, 0.35); this.tone('sine', 990, 1320, 0.1, 0.28, 0.07); },
+  nope() { if (this.ok('nope', 100)) this.tone('square', 200, 150, 0.08, 0.1); },
+  birth() { if (!this.ok('birth', 200)) return; [523, 659, 784, 1046].forEach((f, i) => this.tone('triangle', f, f * 1.01, 0.14, 0.26, i * 0.08)); this.tone('triangle', 1100, 1900, 0.12, 0.22, 0.36); },
+  charge(dur) {
+    if (!S.sound || !this.ctx || document.hidden) return null;
+    try {
+      const c = this.ctx, t = c.currentTime;
+      const o = c.createOscillator(), o2 = c.createOscillator(), f = c.createBiquadFilter(), g = c.createGain(), trem = c.createGain(), lfo = c.createOscillator(), lg = c.createGain();
+      o.type = 'sawtooth'; o2.type = 'square';
+      o.frequency.setValueAtTime(110, t); o.frequency.exponentialRampToValueAtTime(1400, t + dur);
+      o2.frequency.setValueAtTime(55, t); o2.frequency.exponentialRampToValueAtTime(700, t + dur);
+      f.type = 'lowpass'; f.Q.value = 6; f.frequency.setValueAtTime(400, t); f.frequency.exponentialRampToValueAtTime(5000, t + dur);
+      lfo.frequency.setValueAtTime(4, t); lfo.frequency.exponentialRampToValueAtTime(32, t + dur); lg.gain.value = 0.3; trem.gain.value = 0.7;
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.2, t + 0.3); g.gain.linearRampToValueAtTime(0.55, t + dur); g.gain.linearRampToValueAtTime(0.0001, t + dur + 0.04);
+      lfo.connect(lg); lg.connect(trem.gain); o.connect(f); o2.connect(f); f.connect(trem); trem.connect(g); g.connect(this.master);
+      for (const n of [o, o2, lfo]) { n.start(t); n.stop(t + dur + 0.06); }
+      return {stop: () => { try { const now = c.currentTime; g.gain.cancelScheduledValues(now); g.gain.setValueAtTime(0.0001, now); for (const n of [o, o2, lfo]) n.stop(now + 0.02); } catch (e) {} }};
+    } catch (e) { return null; }
+  },
+  splat() {
+    if (!this.ok('splat', 200)) return;
+    const c = this.ctx, t = c.currentTime, src = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+    this.tone('sine', 240, 45, 0.28, 0.9);
+    src.buffer = this.noise(); f.type = 'lowpass'; f.frequency.setValueAtTime(1800, t); f.frequency.exponentialRampToValueAtTime(180, t + 0.45);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.9, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.55);
+    src.connect(f); f.connect(g); g.connect(this.master); src.start(t); src.stop(t + 0.6);
+    for (let i = 0; i < 6; i++) this.tone('sine', rand(700, 1100), rand(280, 480), 0.08, 0.1, 0.8 + i * rand(0.5, 1.1));
+  },
+  chime() { if (!this.ok('chime', 200)) return; [784, 988, 1175, 1568, 1976].forEach((f, i) => this.tone('sine', f, f, 0.18, 0.24, i * 0.06)); },
+};
+
+// ---------------------------------------------------------------- drawing: carrots
+function carrotPath(c, len, wid) {
+  c.beginPath();
+  c.moveTo(-wid * 0.5, 0);
+  c.bezierCurveTo(-wid * 0.52, len * 0.3, -wid * 0.2, len * 0.75, -wid * 0.04, len * 0.97);
+  c.quadraticCurveTo(0, len * 1.02, wid * 0.04, len * 0.97);
+  c.bezierCurveTo(wid * 0.2, len * 0.75, wid * 0.52, len * 0.3, wid * 0.5, 0);
+  c.quadraticCurveTo(wid * 0.25, -wid * 0.2, 0, -wid * 0.2);
+  c.quadraticCurveTo(-wid * 0.25, -wid * 0.2, -wid * 0.5, 0);
+  c.closePath();
+}
+const RAINBOW = ['#ff6b6b', '#ffa94d', '#ffe066', '#69db7c', '#4dabf7', '#9775fa'];
+const COSMIC_DOTS = [[-0.2, 0.12, 1], [0.15, 0.22, 0.7], [-0.05, 0.38, 1.2], [0.22, 0.5, 0.6], [-0.18, 0.6, 0.8], [0.05, 0.72, 0.9], [-0.04, 0.86, 0.6], [0.3, 0.1, 0.6]];
+function drawCarrot(c, x, y, len, ti, rot) {
+  const T = TIERS[ti] || TIERS[0], wid = len * 0.4;
+  c.save();
+  c.translate(x, y);
+  if (rot) c.rotate(rot);
+  c.translate(0, -len * 0.4);
+  c.fillStyle = T.leaf;
+  for (let k = -1; k <= 1; k++) {
+    c.save(); c.rotate(k * 0.42);
+    const ll = len * (k === 0 ? 0.44 : 0.34);
+    c.beginPath(); c.moveTo(0, -wid * 0.05);
+    c.quadraticCurveTo(-wid * 0.34, -ll * 0.55, 0, -ll);
+    c.quadraticCurveTo(wid * 0.34, -ll * 0.55, 0, -wid * 0.05);
+    c.fill(); c.restore();
+  }
+  carrotPath(c, len, wid);
+  if (T.fx === 'rainbow') c.fillStyle = '#ffa94d';
+  else {
+    const g = c.createLinearGradient(-wid * 0.5, 0, wid * 0.5, 0);
+    g.addColorStop(0, T.body[0]); g.addColorStop(0.45, T.body[1]); g.addColorStop(1, T.body[2]);
+    c.fillStyle = g;
+  }
+  c.fill();
+  c.save(); c.clip();
+  if (T.fx === 'rainbow') {
+    const bh = len / 6;
+    RAINBOW.forEach((col, i) => {
+      c.fillStyle = col; c.beginPath();
+      c.moveTo(-wid, i * bh - wid * 0.3); c.lineTo(wid, i * bh + wid * 0.1);
+      c.lineTo(wid, (i + 1) * bh + wid * 0.1 + 1); c.lineTo(-wid, (i + 1) * bh - wid * 0.3 + 1); c.fill();
+    });
+    const g = c.createLinearGradient(-wid * 0.5, 0, wid * 0.5, 0);
+    g.addColorStop(0, 'rgba(255,255,255,.4)'); g.addColorStop(0.5, 'rgba(255,255,255,0)'); g.addColorStop(1, 'rgba(0,0,0,.22)');
+    c.fillStyle = g; c.fillRect(-wid, -wid, wid * 2, len * 1.3);
+  } else if (T.fx === 'crystal') {
+    c.strokeStyle = 'rgba(255,255,255,.8)'; c.lineWidth = Math.max(0.8, len * 0.02);
+    c.beginPath(); c.moveTo(-wid * 0.32, 0); c.lineTo(0, len * 0.5); c.lineTo(wid * 0.28, len * 0.08);
+    c.moveTo(0, len * 0.5); c.lineTo(-wid * 0.08, len * 0.92); c.moveTo(wid * 0.42, len * 0.28); c.lineTo(0, len * 0.5); c.stroke();
+  } else if (T.fx === 'lava') {
+    c.strokeStyle = '#ffb347'; c.lineWidth = Math.max(1, len * 0.035); c.lineJoin = 'round';
+    c.beginPath(); c.moveTo(-wid * 0.36, len * 0.1); c.lineTo(-wid * 0.04, len * 0.28); c.lineTo(-wid * 0.22, len * 0.45);
+    c.lineTo(wid * 0.06, len * 0.62); c.lineTo(-wid * 0.02, len * 0.82); c.moveTo(wid * 0.38, len * 0.2); c.lineTo(wid * 0.1, len * 0.36); c.lineTo(wid * 0.22, len * 0.48); c.stroke();
+    c.strokeStyle = 'rgba(255,240,150,.8)'; c.lineWidth = Math.max(0.5, len * 0.012); c.stroke();
+  } else if (T.fx === 'moon') {
+    c.fillStyle = 'rgba(110,110,140,.42)';
+    ell(c, -wid * 0.15, len * 0.2, wid * 0.12, wid * 0.1); c.fill();
+    ell(c, wid * 0.14, len * 0.42, wid * 0.09, wid * 0.08); c.fill();
+    ell(c, -wid * 0.04, len * 0.68, wid * 0.06, wid * 0.05); c.fill();
+  } else if (T.fx === 'cosmic') {
+    const g = c.createRadialGradient(wid * 0.1, len * 0.35, 0, wid * 0.1, len * 0.35, wid * 0.6);
+    g.addColorStop(0, 'rgba(255,120,220,.55)'); g.addColorStop(1, 'rgba(255,120,220,0)');
+    c.fillStyle = g; c.fillRect(-wid, 0, wid * 2, len);
+    c.fillStyle = '#fff';
+    for (const [dx, dy, r] of COSMIC_DOTS) { c.beginPath(); c.arc(dx * wid, dy * len, Math.max(0.5, r * len * 0.014), 0, TAU); c.fill(); }
+  } else if (T.fx === 'shine') {
+    c.fillStyle = 'rgba(255,255,255,.6)'; ell(c, -wid * 0.2, len * 0.26, wid * 0.07, len * 0.18, 0.12); c.fill();
+  }
+  c.strokeStyle = T.ridge || 'rgba(90,30,0,.28)'; c.lineWidth = Math.max(0.8, len * 0.016); c.lineCap = 'round';
+  for (let i = 1; i <= 5; i++) {
+    const yy = len * (0.08 + i * 0.14), hw = wid * 0.5 * (1 - Math.pow(yy / len, 1.4)), sd = i % 2 ? -1 : 1;
+    c.beginPath(); c.moveTo(sd * hw * 0.95, yy); c.quadraticCurveTo(sd * hw * 0.5, yy + len * 0.015, sd * hw * 0.1, yy - len * 0.005); c.stroke();
+  }
+  c.restore();
+  c.strokeStyle = T.outline || 'rgba(110,40,0,.45)'; c.lineWidth = Math.max(0.8, len * 0.018);
+  carrotPath(c, len, wid); c.stroke();
+  c.restore();
+}
+const carrotSprites = {};
+function carrotSprite(ti) {
+  if (carrotSprites[ti]) return carrotSprites[ti];
+  const cv = document.createElement('canvas'), k = 3;
+  cv.width = 36 * k; cv.height = 64 * k;
+  const c = cv.getContext('2d'); c.scale(k, k);
+  drawCarrot(c, 18, 36, 40, ti, 0);
+  return (carrotSprites[ti] = cv);
+}
+function drawCarrotFast(c, x, y, len, ti, rot) {
+  const f = len / 40;
+  c.save(); c.translate(x, y); c.rotate(rot); c.scale(f, f);
+  c.drawImage(carrotSprite(ti), -18, -36, 36, 64);
+  c.restore();
+}
+function label(c, x, y, text, size, col) {
+  c.font = `700 ${size}px ${FONT}`; c.textAlign = 'center'; c.textBaseline = 'middle';
+  c.lineWidth = Math.max(3, size * 0.25); c.strokeStyle = 'rgba(70,35,10,.75)'; c.lineJoin = 'round';
+  c.strokeText(text, x, y); c.fillStyle = col; c.fillText(text, x, y);
+}
+
+// ---------------------------------------------------------------- drawing: guinea pigs
+function finishCoat(base, second, third, pattern, patches) {
+  const light = lum(base) > 0.55;
+  return {
+    base, second, third, pattern, patches,
+    outline: shade(base, light ? -0.38 : -0.45), ear: light ? '#eba59c' : shade(base, -0.28),
+    feet: light ? '#f2bbb0' : shade(base, -0.32), rose: shade(base, -0.22),
+  };
+}
+const COAT_COLS = ['#f6e6c8', '#fbf8f3', '#e39a4f', '#7a4a2e', '#3a3030', '#9c7d5c', '#dcb07a', '#c8693a'];
+function makeCoat(r) {
+  let pattern = pick(['solid', 'patches', 'patches', 'patches', 'tri', 'dutch', 'rosette', 'crest']);
+  let base = pick(COAT_COLS);
+  if (r >= 3 && Math.random() < 0.6) base = pick(['#c8b6d8', '#8c8f99', '#b9c6d6']);
+  let second = pick(COAT_COLS.filter(x => x !== base));
+  const third = pick(COAT_COLS.filter(x => x !== base && x !== second));
+  if (pattern === 'dutch') { base = '#fbf8f3'; second = pick(['#3a3030', '#7a4a2e', '#e39a4f', '#9c7d5c', '#dcb07a']); }
+  if (r === 4) { pattern = Math.random() < 0.5 ? 'gold' : 'silver'; base = pattern === 'gold' ? '#ffd76a' : '#e4e9f2'; }
+  const patches = [];
+  if (pattern === 'patches' || pattern === 'tri') {
+    const n = 2 + Math.floor(Math.random() * 3);
+    for (let i = 0; i < n; i++) patches.push({x: +rand(-24, 26).toFixed(1), y: +rand(-28, -6).toFixed(1), rx: +rand(7, 13).toFixed(1), ry: +rand(6, 10).toFixed(1), c: pattern === 'tri' && i % 2 ? third : second});
+  }
+  return finishCoat(base, second, third, pattern, patches);
+}
+function pigPath(c) {
+  c.beginPath();
+  c.ellipse(-3, -15, 25, 15, 0, 0, TAU);
+  c.moveTo(30, -17);
+  c.ellipse(17, -17, 13, 11.5, 0, 0, TAU);
+}
+function drawPig(c, p, x, y, s, o = {}) {
+  const k = p.coat;
+  c.save();
+  c.translate(x, y); c.scale(s, s);
+  const hop = o.hop || 0;
+  if (!o.noShadow) { c.fillStyle = 'rgba(35,60,15,.25)'; ell(c, 2, 0, Math.max(12, 27 - hop * 0.35), Math.max(3, 6 - hop * 0.08)); c.fill(); }
+  if (o.ring) { c.strokeStyle = o.ring; c.lineWidth = o.ringW || 2; c.globalAlpha = o.ringA || 0.6; ell(c, 2, 0, 31, 8.5); c.stroke(); c.globalAlpha = 1; }
+  c.translate(0, -hop);
+  c.scale(o.face || 1, 1);
+  const z = o.zoom || 0;
+  if (z > 0.05) {
+    c.strokeStyle = `rgba(255,255,255,${0.8 * z})`; c.lineWidth = 2.4; c.lineCap = 'round';
+    for (const [ly, ln] of [[-7, 38], [-16, 54], [-25, 34]]) { c.beginPath(); c.moveTo(-30, ly); c.lineTo(-30 - ln * z, ly); c.stroke(); }
+    c.rotate(0.07 * z); c.scale(1 + 0.16 * z, 1 - 0.08 * z);
+  }
+  const ph = o.phase || 0, run = o.running;
+  c.fillStyle = k.feet;
+  [[-16, 0], [-8, 0], [9, 0], [16, 0]].forEach(([fx], i) => {
+    const sw = run ? Math.sin(ph + (i % 2 ? Math.PI : 0) + (i > 1 ? 1.4 : 0)) * 3.5 : 0;
+    const lift = run ? Math.max(0, Math.cos(ph + i * 1.6)) * 1.6 : 0;
+    ell(c, fx + sw, -1.6 - lift, 4.2, 2.6); c.fill();
+  });
+  const bob = run ? Math.abs(Math.sin(ph)) * 2.2 : Math.sin(ph * 0.5) * 0.5;
+  c.translate(0, -bob);
+  const fat = o.fat || 0;
+  if (fat > 0) c.scale(1 + 0.14 * fat, 1 + 0.32 * fat);
+  pigPath(c);
+  c.lineWidth = 3; c.strokeStyle = k.outline; c.stroke();
+  if (k.pattern === 'gold' || k.pattern === 'silver') {
+    const g = c.createLinearGradient(0, -32, 0, 0);
+    if (k.pattern === 'gold') { g.addColorStop(0, '#fff4c2'); g.addColorStop(1, '#eeae2c'); } else { g.addColorStop(0, '#ffffff'); g.addColorStop(1, '#a8b3c8'); }
+    c.fillStyle = g;
+  } else c.fillStyle = k.base;
+  pigPath(c); c.fill();
+  c.save(); pigPath(c); c.clip();
+  switch (k.pattern) {
+    case 'patches': case 'tri':
+      for (const q of k.patches) { c.fillStyle = q.c; ell(c, q.x, q.y, q.rx, q.ry); c.fill(); }
+      break;
+    case 'dutch':
+      c.fillStyle = k.second; c.fillRect(-30, -34, 19, 40);
+      ell(c, 17, -18, 12.5, 11); c.fill();
+      c.fillStyle = k.base; ell(c, 27, -14, 4.5, 12); c.fill();
+      break;
+    case 'rosette':
+      c.strokeStyle = k.rose; c.lineWidth = 1.6;
+      for (const [rx, ry] of [[-16, -20], [-4, -24], [6, -12], [-18, -9]]) { c.beginPath(); c.arc(rx, ry, 4.5, 0, 4.6); c.stroke(); c.beginPath(); c.arc(rx, ry, 2, 1, 5.4); c.stroke(); }
+      break;
+    case 'crest':
+      c.fillStyle = '#fbf8f3'; ell(c, 15, -26, 5, 4); c.fill();
+      break;
+    case 'gold': case 'silver':
+      c.fillStyle = 'rgba(255,255,255,.85)';
+      star4(c, -12, -22, 2.4); c.fill(); star4(c, 4, -26, 1.8); c.fill(); star4(c, -20, -10, 1.6); c.fill();
+      break;
+  }
+  const sh = c.createLinearGradient(0, -32, 0, 0);
+  sh.addColorStop(0, 'rgba(255,255,255,.2)'); sh.addColorStop(0.5, 'rgba(255,255,255,0)'); sh.addColorStop(1, 'rgba(60,30,10,.2)');
+  c.fillStyle = sh; c.fillRect(-30, -34, 62, 36);
+  if (o.flush > 0) { c.fillStyle = `rgba(235,35,30,${0.55 * o.flush})`; c.fillRect(-30, -34, 62, 36); }
+  c.restore();
+  if (fat > 0.02) { // chunky cheek pouch
+    const cr = 2.5 + 6 * fat, cx = 18, cy = -10 + fat * 1.5;
+    c.fillStyle = k.pattern === 'gold' ? '#f7cf5a' : k.pattern === 'silver' ? '#dfe5ef' : k.base;
+    c.strokeStyle = k.outline; c.lineWidth = 1.2;
+    ell(c, cx, cy, cr * 1.15, cr * 0.9); c.fill();
+    c.beginPath(); c.ellipse(cx, cy, cr * 1.15, cr * 0.9, 0, 0.2, Math.PI - 0.2); c.stroke();
+    c.fillStyle = 'rgba(255,255,255,.22)'; ell(c, cx - cr * 0.25, cy - cr * 0.35, cr * 0.55, cr * 0.32); c.fill();
+    c.fillStyle = `rgba(255,130,150,${0.12 + 0.18 * fat})`; ell(c, cx + cr * 0.2, cy + cr * 0.15, cr * 0.5, cr * 0.32); c.fill();
+  }
+  c.fillStyle = k.ear; ell(c, 11, -26.5, 5.6, 4, -0.6); c.fill();
+  c.strokeStyle = k.outline; c.lineWidth = 1; ell(c, 11, -26.5, 5.6, 4, -0.6); c.stroke();
+  if (o.blink) { c.strokeStyle = '#1d1410'; c.lineWidth = 1.4; c.beginPath(); c.moveTo(20.4, -20.4); c.lineTo(25, -20.4); c.stroke(); }
+  else {
+    c.fillStyle = '#1d1410'; c.beginPath(); c.arc(22.6, -20.6, o.lookUp ? 2.9 : 2.7, 0, TAU); c.fill();
+    c.fillStyle = '#fff'; c.beginPath(); c.arc(23.5, o.lookUp ? -22 : -21.6, 0.95, 0, TAU); c.fill();
+  }
+  c.fillStyle = '#e48b8b'; ell(c, 29, -16.5, 1.9, 1.4); c.fill();
+  c.strokeStyle = 'rgba(60,30,20,.55)'; c.lineWidth = 1;
+  c.beginPath(); c.moveTo(29, -15.2); c.quadraticCurveTo(28.2, -12.6, 26, -12.9); c.stroke();
+  c.strokeStyle = 'rgba(60,40,30,.32)';
+  c.beginPath(); c.moveTo(27, -15.5); c.lineTo(36, -18); c.moveTo(27, -14.5); c.lineTo(36, -13); c.stroke();
+  if (o.carry >= 0) drawCarrot(c, 31, -10, 16, o.carry, 1.35);
+  if (p.rarity === 4) {
+    c.fillStyle = '#ffd23f'; c.strokeStyle = '#b97c00'; c.lineWidth = 1;
+    c.beginPath(); c.moveTo(7, -29); c.lineTo(8, -38); c.lineTo(11.5, -33); c.lineTo(14.5, -40); c.lineTo(17.5, -33); c.lineTo(21, -38); c.lineTo(22, -29); c.closePath(); c.fill(); c.stroke();
+  }
+  c.restore();
+}
+const SAMPLE_PIG = {rarity: 0, coat: finishCoat('#e39a4f', '#fbf8f3', '#3a3030', 'patches', [{x: -15, y: -16, rx: 11, ry: 9, c: '#fbf8f3'}, {x: 19, y: -10, rx: 7, ry: 6, c: '#fbf8f3'}])};
+
+// ---------------------------------------------------------------- drawing: farm buildings & scenery
+const BDRAW = {
+  gnome(c, x, y, s) {
+    c.save(); c.translate(x, y); c.scale(s, s);
+    c.fillStyle = 'rgba(40,70,20,.25)'; ell(c, 0, 0, 12, 3); c.fill();
+    c.fillStyle = '#5a3a22'; ell(c, -4, -1.6, 4, 2.2); c.fill(); ell(c, 4, -1.6, 4, 2.2); c.fill();
+    c.fillStyle = '#3e78d6'; c.beginPath(); c.moveTo(-9, -2); c.quadraticCurveTo(-10, -18, 0, -20); c.quadraticCurveTo(10, -18, 9, -2); c.closePath(); c.fill();
+    c.fillStyle = '#4a2d1a'; c.fillRect(-9, -9, 18, 2.5);
+    c.fillStyle = '#fff'; c.beginPath(); c.moveTo(-7, -21); c.quadraticCurveTo(-7, -8, 0, -6); c.quadraticCurveTo(7, -8, 7, -21); c.closePath(); c.fill();
+    c.fillStyle = '#f5c6a0'; ell(c, 0, -23, 5.5, 4.5); c.fill();
+    c.fillStyle = '#1d1410'; c.fillRect(-2.6, -24.4, 1.3, 1.3); c.fillRect(1.4, -24.4, 1.3, 1.3);
+    c.fillStyle = '#e8806e'; ell(c, 0, -21.6, 2, 1.6); c.fill();
+    c.fillStyle = '#e0473a'; c.beginPath(); c.moveTo(-8, -24); c.quadraticCurveTo(-2, -38, 3, -46); c.quadraticCurveTo(5, -34, 8, -24); c.closePath(); c.fill();
+    drawCarrot(c, 11, -12, 10, 0, 0.7);
+    c.restore();
+  },
+  patch(c, x, y, s) {
+    c.save(); c.translate(x, y); c.scale(s, s);
+    for (let r = 0; r < 2; r++) {
+      c.fillStyle = '#7b5033'; ell(c, 0, -2 - r * 10, 56 - r * 6, 6.5); c.fill();
+      c.fillStyle = '#946444'; ell(c, 0, -4 - r * 10, 52 - r * 6, 4); c.fill();
+      for (let i = -4; i <= 4; i++) {
+        const px = i * (11 - r), py = -5 - r * 10;
+        c.fillStyle = '#f7841f'; ell(c, px, py, 3, 2.2); c.fill();
+        c.strokeStyle = '#4fae45'; c.lineWidth = 2; c.lineCap = 'round';
+        c.beginPath(); c.moveTo(px, py - 1); c.lineTo(px - 3, py - 9); c.moveTo(px, py - 1); c.lineTo(px, py - 11); c.moveTo(px, py - 1); c.lineTo(px + 3, py - 9); c.stroke();
+      }
+    }
+    c.restore();
+  },
+  greenhouse(c, x, y, s) {
+    c.save(); c.translate(x, y); c.scale(s, s);
+    c.fillStyle = 'rgba(40,70,20,.2)'; ell(c, 0, 0, 42, 5); c.fill();
+    c.fillStyle = '#5aa646'; ell(c, -14, -8, 10, 9); c.fill(); ell(c, 8, -10, 12, 11); c.fill(); ell(c, 22, -7, 8, 8); c.fill();
+    c.fillStyle = 'rgba(215,242,255,.72)';
+    c.beginPath(); c.moveTo(-36, 0); c.lineTo(-36, -38); c.quadraticCurveTo(0, -70, 36, -38); c.lineTo(36, 0); c.closePath(); c.fill();
+    c.strokeStyle = '#ffffff'; c.lineWidth = 2.5; c.stroke();
+    c.lineWidth = 1.6; c.beginPath();
+    for (const vx of [-18, 0, 18]) { c.moveTo(vx, 0); c.lineTo(vx, vx === 0 ? -54 : -48); }
+    c.moveTo(-36, -20); c.lineTo(36, -20); c.moveTo(-36, -38); c.lineTo(36, -38); c.stroke();
+    c.fillStyle = 'rgba(255,255,255,.45)'; c.beginPath(); c.moveTo(-30, -36); c.lineTo(-22, -36); c.lineTo(-30, -10); c.closePath(); c.fill();
+    c.restore();
+  },
+  coop(c, x, y, s) {
+    c.save(); c.translate(x, y); c.scale(s, s);
+    c.fillStyle = 'rgba(40,70,20,.2)'; ell(c, 0, 0, 44, 5); c.fill();
+    c.fillStyle = '#c8473a'; c.fillRect(-34, -46, 68, 46);
+    c.fillStyle = '#8f2e25'; c.beginPath(); c.moveTo(-42, -44); c.lineTo(0, -76); c.lineTo(42, -44); c.lineTo(36, -44); c.lineTo(0, -70); c.lineTo(-36, -44); c.closePath(); c.fill();
+    c.fillStyle = '#a63a2f'; c.beginPath(); c.moveTo(-36, -44); c.lineTo(0, -70); c.lineTo(36, -44); c.closePath(); c.fill();
+    c.fillStyle = '#fff3e0'; c.fillRect(-12, -30, 24, 30);
+    c.strokeStyle = '#c8473a'; c.lineWidth = 3; c.beginPath(); c.moveTo(-12, -30); c.lineTo(12, 0); c.moveTo(12, -30); c.lineTo(-12, 0); c.stroke();
+    c.fillStyle = '#fff3e0'; c.fillRect(-6, -60, 12, 10); c.fillStyle = '#e7b85c'; c.fillRect(-4, -57, 8, 7);
+    c.restore();
+  },
+  tower(c, x, y, s) {
+    c.save(); c.translate(x, y); c.scale(s, s);
+    const g = c.createLinearGradient(-10, 0, 10, 0); g.addColorStop(0, '#e3e8ee'); g.addColorStop(1, '#a7b2bf');
+    c.fillStyle = g; c.fillRect(-9, -150, 18, 150);
+    for (let i = 0; i < 5; i++) {
+      const py = -20 - i * 28;
+      c.fillStyle = '#5aa646'; ell(c, 0, py, 22, 7); c.fill();
+      c.fillStyle = '#f7841f'; for (const dx of [-14, -5, 5, 14]) { ell(c, dx, py + 4, 2.4, 3.2); c.fill(); }
+      c.fillStyle = '#c9d2dc'; c.fillRect(-22, py + 6, 44, 3);
+    }
+    c.fillStyle = '#7c8794'; c.fillRect(-1.5, -170, 3, 22); c.fillStyle = '#ff5e5e'; c.beginPath(); c.arc(0, -171, 3.5, 0, TAU); c.fill();
+    c.restore();
+  },
+  orbital(c, x, y, s) {
+    c.save(); c.translate(x, y); c.scale(s, s);
+    c.fillStyle = '#4d7fd6'; c.fillRect(-46, -5, 18, 10); c.fillRect(28, -5, 18, 10);
+    c.strokeStyle = '#9fb4d8'; c.lineWidth = 1; for (const sx of [-41, -35, 33, 39]) { c.beginPath(); c.moveTo(sx, -5); c.lineTo(sx, 5); c.stroke(); }
+    c.strokeStyle = '#d7dfeb'; c.lineWidth = 4; ell(c, 0, 0, 36, 11); c.stroke();
+    c.fillStyle = '#eef3fa'; c.beginPath(); c.arc(0, 0, 13, 0, TAU); c.fill();
+    c.fillStyle = '#7fcf5f'; c.beginPath(); c.arc(0, 2, 9, Math.PI, 0); c.fill();
+    c.fillStyle = '#f7841f'; ell(c, -3, -1, 1.8, 3); c.fill(); ell(c, 3, -1, 1.8, 3); c.fill();
+    c.fillStyle = 'rgba(255,255,255,.55)'; ell(c, -4, -6, 4, 2.5, -0.4); c.fill();
+    c.restore();
+  },
+  portal(c, x, y, s, t = 0) {
+    c.save(); c.translate(x, y); c.scale(s, s);
+    const g = c.createRadialGradient(0, 0, 2, 0, 0, 40);
+    g.addColorStop(0, 'rgba(255,230,160,.95)'); g.addColorStop(0.45, 'rgba(245,124,31,.75)'); g.addColorStop(1, 'rgba(150,70,220,0)');
+    c.fillStyle = g; c.beginPath(); c.arc(0, 0, 40, 0, TAU); c.fill();
+    c.lineCap = 'round';
+    for (let i = 0; i < 4; i++) {
+      c.save(); c.rotate(t * (1.2 + i * 0.35) + i * 1.6);
+      c.strokeStyle = i % 2 ? 'rgba(160,90,240,.85)' : 'rgba(255,170,60,.9)'; c.lineWidth = 3.5 - i * 0.5;
+      c.beginPath(); c.arc(0, 0, 12 + i * 6, 0, 2.2); c.stroke(); c.restore();
+    }
+    c.restore();
+  },
+};
+function drawBreedHouse(c, x, y, s) {
+  c.save(); c.translate(x, y); c.scale(s, s);
+  c.fillStyle = 'rgba(40,70,20,.22)'; ell(c, 0, 0, 40, 5); c.fill();
+  c.fillStyle = '#fde6d2'; c.fillRect(-30, -38, 60, 38);
+  c.fillStyle = '#f08aa3'; c.beginPath(); c.moveTo(-37, -36); c.lineTo(0, -64); c.lineTo(37, -36); c.closePath(); c.fill();
+  c.fillStyle = '#e06d8a'; c.fillRect(-37, -38, 74, 4);
+  c.fillStyle = '#5a3420'; c.beginPath(); c.moveTo(-9, 0); c.lineTo(-9, -16); c.arc(0, -16, 9, Math.PI, 0); c.lineTo(9, 0); c.closePath(); c.fill();
+  c.fillStyle = '#e8405c'; heart(c, 0, -44, 7); c.fill();
+  c.fillStyle = '#bfe3f5'; c.fillRect(-25, -28, 10, 9); c.fillRect(15, -28, 10, 9);
+  c.strokeStyle = '#fff'; c.lineWidth = 1.5; c.strokeRect(-25, -28, 10, 9); c.strokeRect(15, -28, 10, 9);
+  c.fillStyle = '#e8c36a'; for (let i = -1; i <= 1; i++) { ell(c, i * 6, -1, 5, 2); c.fill(); }
+  c.restore();
+}
+function drawHutch(c, x, y, flip, extra = 0) {
+  c.save(); c.translate(x, y); if (flip) c.scale(-1, 1);
+  const up = extra * 30;
+  c.fillStyle = 'rgba(40,70,20,.25)'; ell(c, 10, 2, 70, 9); c.fill();
+  c.fillStyle = '#6e4529'; c.fillRect(-52, -22, 7, 22); c.fillRect(44, -22, 7, 22);
+  c.fillStyle = '#b77b4b'; rr(c, -58, -102 - up, 116, 84 + up, 6); c.fill();
+  c.strokeStyle = 'rgba(80,45,20,.3)'; c.lineWidth = 1.5;
+  for (let ly = -86; ly < -20; ly += 16) { c.beginPath(); c.moveTo(-58, ly); c.lineTo(58, ly); c.stroke(); }
+  // one extra floor per Hutch Extension
+  for (let k = 0; k < extra; k++) {
+    const yy = -102 - (k + 1) * 30;
+    c.fillStyle = '#9a6238'; c.fillRect(-58, yy + 27, 116, 4);
+    c.fillStyle = '#d8c9b0'; c.fillRect(-44, yy + 6, 30, 16);
+    c.strokeStyle = '#8a7a64'; c.lineWidth = 1;
+    for (let gx = -44; gx <= -14; gx += 7.5) { c.beginPath(); c.moveTo(gx, yy + 6); c.lineTo(gx, yy + 22); c.stroke(); }
+    c.fillStyle = '#3a2414'; c.beginPath(); c.moveTo(16, yy + 27); c.lineTo(16, yy + 14); c.arc(26, yy + 14, 10, Math.PI, 0); c.lineTo(36, yy + 27); c.closePath(); c.fill();
+    c.fillStyle = '#e8c36a'; ell(c, 26, yy + 26, 9, 2); c.fill();
+  }
+  c.save(); c.translate(0, -up);
+  c.fillStyle = '#8c4a2f'; c.beginPath(); c.moveTo(-70, -98); c.lineTo(0, -138); c.lineTo(70, -98); c.lineTo(70, -92); c.lineTo(-70, -92); c.closePath(); c.fill();
+  c.fillStyle = '#a65a3a'; c.beginPath(); c.moveTo(-62, -100); c.lineTo(0, -132); c.lineTo(62, -100); c.closePath(); c.fill();
+  c.fillStyle = '#e8c36a'; c.beginPath(); c.moveTo(-58, -92); c.lineTo(-48, -84); c.lineTo(-40, -92); c.lineTo(-30, -86); c.lineTo(-24, -92); c.closePath(); c.fill();
+  c.restore();
+  c.fillStyle = '#d8c9b0'; c.fillRect(-46, -80, 40, 30);
+  c.strokeStyle = '#8a7a64'; c.lineWidth = 1;
+  for (let gx = -46; gx <= -6; gx += 8) { c.beginPath(); c.moveTo(gx, -80); c.lineTo(gx, -50); c.stroke(); }
+  for (let gy = -80; gy <= -50; gy += 7.5) { c.beginPath(); c.moveTo(-46, gy); c.lineTo(-6, gy); c.stroke(); }
+  c.fillStyle = '#3a2414'; c.beginPath(); c.moveTo(12, -20); c.lineTo(12, -52); c.arc(30, -52, 18, Math.PI, 0); c.lineTo(48, -20); c.closePath(); c.fill();
+  c.fillStyle = '#e8c36a'; ell(c, 30, -22, 16, 3); c.fill();
+  c.fillStyle = '#c99563'; c.beginPath(); c.moveTo(14, -21); c.lineTo(46, -21); c.lineTo(88, 6); c.lineTo(60, 6); c.closePath(); c.fill();
+  c.strokeStyle = 'rgba(80,45,20,.35)'; c.lineWidth = 1.5;
+  for (let i = 1; i < 5; i++) { const t = i / 5; c.beginPath(); c.moveTo(14 + 46 * t, -21 + 27 * t); c.lineTo(46 + 42 * t, -21 + 27 * t); c.stroke(); }
+  c.restore();
+}
+function cloud(c, x, y, s) {
+  c.save(); c.translate(x, y); c.scale(s, s);
+  c.fillStyle = 'rgba(255,255,255,.9)';
+  c.beginPath(); c.arc(-26, 4, 16, 0, TAU); c.arc(-6, -6, 22, 0, TAU); c.arc(18, 0, 18, 0, TAU); c.arc(36, 8, 12, 0, TAU); c.arc(0, 10, 18, 0, TAU); c.fill();
+  c.restore();
+}
+// small props that show each level of an upgrade on the map
+const PROPS = {
+  whisper(c, x, y, s) { // scarecrow
+    c.save(); c.translate(x, y); c.scale(s, s);
+    c.fillStyle = 'rgba(40,70,20,.22)'; ell(c, 0, 0, 10, 3); c.fill();
+    c.fillStyle = '#7a5233'; c.fillRect(-1.5, -46, 3, 46); c.fillRect(-17, -34, 34, 3);
+    c.fillStyle = '#e8c36a'; ell(c, -18, -32, 3.5, 2.2); c.fill(); ell(c, 18, -32, 3.5, 2.2); c.fill(); ell(c, 0, -14, 4, 3); c.fill();
+    c.fillStyle = '#5b8fd6'; c.beginPath(); c.moveTo(-9, -36); c.lineTo(9, -36); c.lineTo(11, -17); c.lineTo(-11, -17); c.closePath(); c.fill();
+    c.fillStyle = '#e0473a'; c.fillRect(-4, -30, 3, 3); c.fillRect(3, -24, 3, 3);
+    c.fillStyle = '#f1d9a8'; c.beginPath(); c.arc(0, -42, 6, 0, TAU); c.fill();
+    c.fillStyle = '#3a2a1a'; c.fillRect(-3, -44, 1.6, 1.6); c.fillRect(1.5, -44, 1.6, 1.6);
+    c.fillStyle = '#8a5a2b'; ell(c, 0, -47, 10, 2.5); c.fill(); c.fillRect(-5, -55, 10, 8);
+    c.restore();
+  },
+  zoom(c, x, y, s) { // training cone
+    c.save(); c.translate(x, y); c.scale(s, s);
+    c.fillStyle = 'rgba(40,70,20,.25)'; ell(c, 0, 0, 8, 2.4); c.fill();
+    c.fillStyle = '#e0661a'; c.fillRect(-8, -2, 16, 3);
+    c.fillStyle = '#ff7a1a'; c.beginPath(); c.moveTo(-6, -1); c.lineTo(-1.5, -17); c.lineTo(1.5, -17); c.lineTo(6, -1); c.closePath(); c.fill();
+    c.fillStyle = '#fff'; c.beginPath(); c.moveTo(-4.2, -7); c.lineTo(4.2, -7); c.lineTo(3.5, -10); c.lineTo(-3.5, -10); c.closePath(); c.fill();
+    c.restore();
+  },
+  thumb(c, x, y, s) { // seedling
+    c.save(); c.translate(x, y); c.scale(s, s);
+    c.fillStyle = '#7a5033'; ell(c, 0, 0, 6, 2.2); c.fill();
+    c.strokeStyle = '#3f8f34'; c.lineWidth = 1.6; c.lineCap = 'round'; c.beginPath(); c.moveTo(0, 0); c.quadraticCurveTo(-1, -6, 0, -10); c.stroke();
+    c.fillStyle = '#62b84f'; ell(c, -4, -10, 4.5, 2.2, -0.5); c.fill(); ell(c, 4, -11, 4.5, 2.2, 0.5); c.fill();
+    c.restore();
+  },
+  cheeks(c, x, y, s) { // food bowl
+    c.save(); c.translate(x, y); c.scale(s, s);
+    c.fillStyle = 'rgba(40,70,20,.25)'; ell(c, 0, 0, 10, 2.6); c.fill();
+    c.fillStyle = '#5b9bd6'; c.beginPath(); c.moveTo(-10, -7); c.quadraticCurveTo(-9, 1, 0, 1); c.quadraticCurveTo(9, 1, 10, -7); c.closePath(); c.fill();
+    c.fillStyle = '#b8d7f2'; ell(c, 0, -7, 10, 2.8); c.fill();
+    c.fillStyle = '#f7841f'; ell(c, -4, -8, 2.6, 1.4); c.fill(); ell(c, 2, -8.5, 2.6, 1.4); c.fill(); ell(c, 5, -7, 2.2, 1.2); c.fill();
+    c.fillStyle = '#62b84f'; ell(c, -1, -9, 2.4, 1.1, 0.4); c.fill();
+    c.restore();
+  },
+  gulp(c, x, y, s) { // snack crate
+    c.save(); c.translate(x, y); c.scale(s, s);
+    c.fillStyle = 'rgba(40,70,20,.25)'; ell(c, 0, 0, 11, 2.6); c.fill();
+    drawCarrot(c, -4, -14, 11, 0, -0.35); drawCarrot(c, 3, -15, 11, 0, 0.3);
+    c.fillStyle = '#b98352'; c.fillRect(-10, -12, 20, 12);
+    c.strokeStyle = '#8a5a2e'; c.lineWidth = 1.2; c.strokeRect(-10, -12, 20, 12);
+    c.beginPath(); c.moveTo(-10, -6); c.lineTo(10, -6); c.stroke();
+    c.restore();
+  },
+};
+function drawBale(c, x, y) {
+  c.fillStyle = '#e8c36a'; rr(c, x - 7, y - 9, 14, 9, 2); c.fill();
+  c.strokeStyle = '#c79a3c'; c.lineWidth = 0.8; c.beginPath(); c.moveTo(x - 6, y - 6); c.lineTo(x + 6, y - 6); c.moveTo(x - 6, y - 3); c.lineTo(x + 6, y - 3); c.stroke();
+  c.strokeStyle = '#a5662e'; c.lineWidth = 1.2; c.beginPath(); c.moveTo(x - 3, y - 9); c.lineTo(x - 3, y); c.moveTo(x + 3, y - 9); c.lineTo(x + 3, y); c.stroke();
+}
+const ROSETTE = ['#2f8fd8', '#e8405c', '#f5b83d', '#58a845', '#9b59d0'];
+function drawRibbonBoard(c, x, y, n) {
+  c.fillStyle = 'rgba(40,70,20,.22)'; ell(c, x, y, 12, 3); c.fill();
+  c.fillStyle = '#7a5233'; c.fillRect(x - 1.5, y - 14, 3, 14);
+  c.fillStyle = '#c9a173'; rr(c, x - 12, y - 48, 24, 36, 3); c.fill();
+  c.strokeStyle = '#8a6240'; c.lineWidth = 1.2; rr(c, x - 12, y - 48, 24, 36, 3); c.stroke();
+  for (let i = 0; i < n; i++) {
+    const cx = x - 5 + (i % 2) * 10, cy = y - 42 + Math.floor(i / 2) * 6.6, col = ROSETTE[i % ROSETTE.length];
+    c.fillStyle = col; c.beginPath(); c.moveTo(cx - 1.5, cy); c.lineTo(cx - 2.5, cy + 4); c.lineTo(cx, cy + 2.6); c.lineTo(cx + 2.5, cy + 4); c.lineTo(cx + 1.5, cy); c.fill();
+    c.beginPath(); c.arc(cx, cy, 2.8, 0, TAU); c.fill();
+    c.fillStyle = '#ffd23f'; c.beginPath(); c.arc(cx, cy, 1.1, 0, TAU); c.fill();
+  }
+}
+
+// ---------------------------------------------------------------- background render
+const canvas = $('#field'), ctx = canvas.getContext('2d');
+const bg = document.createElement('canvas');
+const view = {scale: 1, dpr: 1};
+let bgSig = '';
+const HOUSE_X = 500, HOUSE_Y = 442;
+// where each kind of thing goes on the map: bands of [x0, x1, y0, y1]
+const PLACES = {
+  gnome: {seed: 1, base: 1, bands: [[140, 395, 430, 474]]},
+  patch: {seed: 2, base: 0.8, bands: [[598, 842, 436, 476]]},
+  greenhouse: {seed: 3, base: 0.9, bands: [[30, 400, 390, 404]]},
+  coop: {seed: 4, base: 0.85, bands: [[600, 970, 388, 402]]},
+  tower: {seed: 5, base: 0.85, bands: [[160, 390, 408, 416], [610, 860, 408, 416]]},
+  orbital: {seed: 6, base: 0.8, bands: [[625, 970, 40, 150]]},
+  portal: {seed: 7, base: 0.8, bands: [[150, 390, 50, 210]]},
+  whisper: {seed: 8, base: 0.9, bands: [[150, 390, 422, 436], [600, 850, 422, 438]]},
+  zoom: {seed: 9, base: 1, bands: [[140, 480, 600, 614]]},
+  thumb: {seed: 10, base: 1, bands: [[520, 860, 600, 614]]},
+  cheeks: {seed: 11, base: 1, bands: [[14, 96, 548, 606]]},
+  gulp: {seed: 12, base: 1, bands: [[904, 986, 548, 606]]},
+};
+const ORIGIN_UP = {gnome: 34, patch: 10, greenhouse: 46, coop: 56, tower: 160, orbital: 0, portal: 0};
+const crowd = n => clamp(1 - 0.22 * Math.log10(Math.max(1, n)), 0.42, 1);
+// stable low-discrepancy spots: the i-th copy always lands in the same place as more are bought
+function spots(id, n) {
+  const P = PLACES[id], total = P.bands.reduce((a, b) => a + b[1] - b[0], 0), sc = P.base * crowd(n), out = [];
+  for (let i = 0; i < n; i++) {
+    const u = (P.seed * 0.3819 + (i + 1) * 0.7548776662) % 1, v = (P.seed * 0.618 + (i + 1) * 0.569840291) % 1;
+    let x = u * total, band = P.bands[0];
+    for (const b of P.bands) { const w = b[1] - b[0]; if (x <= w) { band = b; break; } x -= w; }
+    out.push({x: band[0] + x, y: band[2] + v * (band[3] - band[2]), s: sc * (0.92 + 0.16 * ((i * 0.618) % 1)), flip: i % 2 === 1});
+  }
+  return out.sort((a, b) => a.y - b.y);
+}
+const owned = id => (id in S.bld ? S.bld[id] : S.upg[id]) || 0;
+function bgSignature() { return JSON.stringify([S.bld, S.upg, S.breed.built]); }
+function drawFlipped(c, fn, p) {
+  if (!p.flip) { fn(c, p.x, p.y, p.s); return; }
+  c.save(); c.translate(p.x, p.y); c.scale(-1, 1); fn(c, 0, 0, p.s); c.restore();
+}
+function renderBackground() {
+  bgSig = bgSignature();
+  const sc = view.scale * view.dpr;
+  bg.width = Math.max(1, Math.round(W * sc)); bg.height = Math.max(1, Math.round(H * sc));
+  const b = bg.getContext('2d');
+  b.setTransform(sc, 0, 0, sc, 0, 0);
+  G.spots = {};
+  const sp = id => (G.spots[id] = spots(id, owned(id)));
+  let g = b.createLinearGradient(0, 0, 0, 430);
+  g.addColorStop(0, '#86cdfb'); g.addColorStop(0.65, '#c6eaff'); g.addColorStop(1, '#ecf9ff');
+  b.fillStyle = g; b.fillRect(0, 0, W, 440);
+  g = b.createRadialGradient(82, 76, 10, 82, 76, 110);
+  g.addColorStop(0, 'rgba(255,248,200,1)'); g.addColorStop(0.3, 'rgba(255,236,150,.85)'); g.addColorStop(1, 'rgba(255,236,150,0)');
+  b.fillStyle = g; b.fillRect(0, 0, 220, 220);
+  b.fillStyle = '#fff1a8'; b.beginPath(); b.arc(82, 76, 30, 0, TAU); b.fill();
+  for (const p of sp('orbital')) BDRAW.orbital(b, p.x, p.y, p.s);
+  sp('portal');
+  b.fillStyle = '#b8df98';
+  b.beginPath(); b.moveTo(0, 352); b.bezierCurveTo(150, 300, 290, 336, 420, 348); b.bezierCurveTo(560, 362, 660, 296, 800, 318);
+  b.bezierCurveTo(900, 334, 960, 322, 1000, 330); b.lineTo(1000, 440); b.lineTo(0, 440); b.closePath(); b.fill();
+  for (const p of sp('tower')) BDRAW.tower(b, p.x, p.y, p.s);
+  b.fillStyle = '#a0d27c';
+  b.beginPath(); b.moveTo(0, 392); b.bezierCurveTo(70, 380, 140, 386, 210, 398); b.bezierCurveTo(330, 418, 440, 396, 560, 400);
+  b.bezierCurveTo(690, 404, 790, 380, 880, 388); b.bezierCurveTo(940, 392, 975, 386, 1000, 388); b.lineTo(1000, 440); b.lineTo(0, 440); b.closePath(); b.fill();
+  const hill = [...sp('greenhouse').map(p => ({...p, fn: BDRAW.greenhouse})), ...sp('coop').map(p => ({...p, fn: BDRAW.coop}))].sort((a, c) => a.y - c.y);
+  for (const p of hill) drawFlipped(b, p.fn, p);
+  g = b.createLinearGradient(0, 410, 0, H);
+  g.addColorStop(0, '#93d268'); g.addColorStop(0.4, '#7cc152'); g.addColorStop(1, '#63a83f');
+  b.fillStyle = g;
+  b.beginPath(); b.moveTo(0, 424); b.quadraticCurveTo(250, 410, 500, 420); b.quadraticCurveTo(750, 430, 1000, 418); b.lineTo(1000, H); b.lineTo(0, H); b.closePath(); b.fill();
+  const rnd = mulberry(7);
+  b.lineCap = 'round';
+  for (let i = 0; i < 420; i++) {
+    const x = rnd() * W, y = 428 + rnd() * (H - 428), sz = 3 + (y - 420) / 200 * 6;
+    b.strokeStyle = rnd() < 0.5 ? 'rgba(60,120,30,.35)' : 'rgba(200,240,150,.35)'; b.lineWidth = 1.2;
+    b.beginPath(); b.moveTo(x, y); b.lineTo(x + (rnd() - 0.5) * 4, y - sz); b.stroke();
+  }
+  for (let i = 0; i < 46; i++) {
+    const x = rnd() * W, y = 432 + rnd() * (H - 440);
+    b.fillStyle = ['#ffffff', '#fff3a0', '#ffc6d9'][Math.floor(rnd() * 3)];
+    for (let k = 0; k < 4; k++) { b.beginPath(); b.arc(x + Math.cos(k * 1.57) * 2, y + Math.sin(k * 1.57) * 2, 1.7, 0, TAU); b.fill(); }
+    b.fillStyle = '#f5b83d'; b.beginPath(); b.arc(x, y, 1.2, 0, TAU); b.fill();
+  }
+  // everything standing on the meadow, drawn back to front
+  const props = [];
+  for (const p of sp('gnome')) props.push({...p, fn: BDRAW.gnome});
+  for (const p of sp('patch')) props.push({...p, fn: BDRAW.patch, flip: false});
+  for (const id of ['whisper', 'zoom', 'thumb', 'cheeks', 'gulp']) for (const p of sp(id)) props.push({...p, fn: PROPS[id]});
+  const hx = S.upg.hutch;
+  props.push({y: 506, draw: c => drawHutch(c, 50, 506, false, Math.ceil(hx / 2))});
+  props.push({y: 506.1, draw: c => drawHutch(c, 950, 506, true, Math.floor(hx / 2))});
+  if (S.breed.built) {
+    props.push({y: HOUSE_Y, draw: c => drawBreedHouse(c, HOUSE_X, HOUSE_Y, 1)});
+    // Cozy Bedding: a pyramid of hay bales beside the house
+    const rows = [5, 4, 3, 2, 1];
+    let left = S.upg.cozy;
+    props.push({y: HOUSE_Y + 0.2, draw: c => {
+      let n = left;
+      for (let r = 0; r < rows.length && n > 0; r++) for (let k = 0; k < rows[r] && n > 0; k++, n--) drawBale(c, HOUSE_X - 44 - k * 14 - r * 7, HOUSE_Y + 2 - r * 9);
+    }});
+    if (S.upg.pedigree) props.push({y: HOUSE_Y + 0.3, draw: c => drawRibbonBoard(c, HOUSE_X + 54, HOUSE_Y + 2, S.upg.pedigree)});
+  }
+  props.sort((a, c) => a.y - c.y);
+  for (const p of props) { if (p.draw) p.draw(b); else drawFlipped(b, p.fn, p); }
+}
+
+// ---------------------------------------------------------------- pigs: creation & AI
+function sideBalance() {
+  const left = S.pigs.filter(p => p.side === 0).length;
+  return left <= S.pigs.length - left ? 0 : 1;
+}
+function newName() {
+  const used = new Set(S.pigs.map(p => p.name));
+  const free = NAMES.filter(n => !used.has(n));
+  if (free.length) return pick(free);
+  const base = pick(NAMES); let i = 2;
+  while (used.has(`${base} ${i}`)) i++;
+  return `${base} ${i}`;
+}
+function rollRarity() {
+  const ws = RARITIES.map((r, i) => r.w * (1 + S.upg.pedigree * PEDIGREE_BOOST[i]));
+  let x = Math.random() * ws.reduce((a, b) => a + b, 0);
+  for (let i = 0; i < ws.length; i++) { x -= ws[i]; if (x < 0) return i; }
+  return 0;
+}
+function makePig(forceR) {
+  const r = forceR ?? rollRarity(), R = RARITIES[r];
+  return {
+    id: S.nextPigId++, name: newName(), rarity: r,
+    speed: +rand(...R.speed).toFixed(2), cheeks: +rand(...R.cheeks).toFixed(3), forage: +rand(...R.forage).toFixed(4),
+    trait: Math.random() < R.trait ? pick(Object.keys(TRAITS)) : null, coat: makeCoat(r), side: sideBalance(), born: Date.now(),
+  };
+}
+function seedPigs() {
+  S.pigs.push({id: S.nextPigId++, name: 'Biscuit', rarity: 0, speed: 1, cheeks: 0, forage: 0.01, trait: null, side: 0, born: Date.now(), coat: SAMPLE_PIG.coat});
+  S.pigs.push({id: S.nextPigId++, name: 'Peanut', rarity: 0, speed: 1, cheeks: 0, forage: 0.01, trait: null, side: 1, born: Date.now(), coat: finishCoat('#dcb07a', '#fbf8f3', '#7a4a2e', 'crest', [])});
+}
+function initPig(p, at) {
+  p.hx = p.side === 0 ? rand(108, 168) : rand(832, 892);
+  p.hy = rand(500, 588);
+  p.x = at ? at.x : p.hx; p.y = at ? at.y : p.hy;
+  p.wx = p.hx; p.wy = p.hy;
+  p.state = at ? 'return' : 'home'; p.queue = []; p.timer = rand(0, 2); p.eaten = p.eaten || 0; p.g = growthOf(p.eaten);
+  p.face = p.side === 0 ? 1 : -1; p.phase = rand(0, TAU); p.hop = 0; p.hopV = 0; p.carry = -1;
+  p.moving = false; p.blinkT = rand(1, 4); p.windup = 0; p.zoom = 0; p.dustT = 0;
+  p.voice = 0.85 + (p.id * 37 % 40) / 100;
+  p.s = pigScale(p.y);
+}
+const WINDUP = 0.14;
+const isFree = p => p.state === 'home' || p.state === 'linger' || p.state === 'return';
+const munchTime = p => 0.3 * (1 - 0.15 * S.upg.gulp) * (p.trait === 'gulper' ? 0.5 : 1);
+function travel(p, x0, y0, x1, y1) { return Math.max(0, hyp(x1 - x0, y1 - y0) - catchR(p) * 0.6) / pigSpeed(p); }
+function clearQueue(p) { for (const c of p.queue) if (c.claimed === p) c.claimed = null; p.queue = []; }
+// when and where this pig can start its next dash
+function pigStart(p) {
+  if (p.state === 'munch') return {t: G.time + Math.max(0, p.timer), x: p.x, y: p.y, w: 0};
+  if (p.state === 'chase') return {t: G.time, x: p.x, y: p.y, w: Math.max(0, p.windup)};
+  return {t: G.time, x: p.x, y: p.y, w: WINDUP};
+}
+// best spot in this pig's plan for carrot c, keeping every other planned catch on time
+function bestSlot(p, c) {
+  const q = p.queue, m = munchTime(p), st = pigStart(p);
+  let best = null;
+  for (let k = 0; k <= q.length; k++) {
+    let t = st.t + st.w, x = st.x, y = st.y;
+    if (k > 0) { const a = q[k - 1]; t = a.landAt + m; x = a.lx; y = a.ly; }
+    const arrive = t + travel(p, x, y, c.lx, c.ly);
+    if (arrive > c.landAt - 0.03) continue;
+    if (k < q.length) { const b = q[k]; if (c.landAt + m + travel(p, c.lx, c.ly, b.lx, b.ly) > b.landAt - 0.03) continue; }
+    if (!best || arrive < best.arrive) best = {k, arrive};
+  }
+  return best;
+}
+// give carrot c to the pig that can reach it soonest without missing any other planned catch
+function planCatch(c) {
+  let bp = null, bs = null;
+  for (const p of S.pigs) {
+    if (p.queue.length >= 4 || p.state === 'charge') continue;
+    const sl = bestSlot(p, c);
+    if (sl && (!bs || sl.arrive < bs.arrive)) { bp = p; bs = sl; }
+  }
+  if (!bp) return false;
+  bp.queue.splice(bs.k, 0, c); c.claimed = bp;
+  if (isFree(bp)) { bp.state = 'chase'; dash(bp); }
+  return true;
+}
+function assign() {
+  const open = G.carrots.filter(c => !c.claimed && !c.dead && c.landAt - G.time > 0.05);
+  if (!open.length) return;
+  open.sort((a, b) => a.landAt - b.landAt);
+  for (const c of open) planCatch(c);
+}
+// hand back planned catches a pig can no longer reach, so another pig can try
+function validate() {
+  for (const p of S.pigs) {
+    p.queue = p.queue.filter(c => !c.dead && c.claimed === p);
+    if (!p.queue.length) continue;
+    const m = munchTime(p), st = pigStart(p), first = p.queue[0];
+    if (hyp(headX(p) - first.lx, p.y - first.ly) > catchR(p) && st.t + st.w + travel(p, st.x, st.y, first.lx, first.ly) > first.landAt + 0.05) { first.claimed = null; p.queue.shift(); }
+    let prev = p.queue[0];
+    for (let i = 1; i < p.queue.length; i++) {
+      const c = p.queue[i];
+      if (prev.landAt + m + travel(p, prev.lx, prev.ly, c.lx, c.ly) > c.landAt + 0.02) { c.claimed = null; p.queue.splice(i, 1); i--; }
+      else prev = c;
+    }
+  }
+}
+// every dash starts with a cartoon wind-up and a squeal
+function dash(p) { p.windup = WINDUP; p.dustT = 0; squeal(p); }
+function squeal(p) {
+  SFX.wheek(p.voice);
+  if (G.time - G.lastBubble > 0.35) { G.lastBubble = G.time; bubble(p, pick(['wheek!', 'WHEEK!', 'wheek wheek!', 'wheeeek!']), 0.8); }
+}
+function updatePig(p, dt) {
+  const spd = pigSpeed(p);
+  if (p.hop > 0 || p.hopV > 0) { p.hopV -= 1100 * dt; p.hop += p.hopV * dt; if (p.hop <= 0) { p.hop = 0; p.hopV = 0; } }
+  p.blinkT -= dt; if (p.blinkT < -0.13) p.blinkT = rand(2, 5);
+  if (p.state !== 'charge' && (p.eaten || 0) >= POP_AT) startCharge(p);
+  let tx = null, ty = null, sp = spd, spin = false;
+  p.lookUp = false;
+  switch (p.state) {
+    case 'chase': {
+      while (p.queue.length && (p.queue[0].dead || p.queue[0].claimed !== p)) p.queue.shift();
+      const t = p.queue[0];
+      if (!t) { p.state = 'linger'; p.timer = 0.4; p.windup = 0; break; }
+      if (Math.abs(t.lx - p.x) > 24) p.face = t.lx > p.x ? 1 : -1;
+      if (p.windup > 0) { p.windup -= dt; spin = true; break; }
+      tx = t.lx - p.face * 16 * pigSize(p); ty = t.ly;
+      p.lookUp = hyp(tx - p.x, ty - p.y) < 6;
+      break;
+    }
+    case 'charge':
+      p.timer -= dt; p.charge = clamp(1 - p.timer / CHARGE_TIME, 0, 1); p.cphase += dt * (6 + 34 * p.charge);
+      if (Math.random() < dt * (6 + 40 * p.charge)) { const z = pigSize(p), a = rand(0, TAU), r = rand(20, 34) * z; addPart(p.x + Math.cos(a) * r, p.y - 20 * z + Math.sin(a) * r * 0.6, -Math.cos(a) * 60, -Math.sin(a) * 60 - 30, rand(0.3, 0.6), pick(['#ff3b2f', '#ff7a3a', '#ffd0c0']), rand(2, 3.5), 'spark', 0); }
+      if (p.timer <= 0) { p.chargeSnd = null; popPig(p); return; }
+      break;
+    case 'munch':
+      p.timer -= dt;
+      if (p.timer <= 0) {
+        p.carry = -1;
+        p.queue = p.queue.filter(c => !c.dead && c.claimed === p);
+        if (p.queue.length) { p.state = 'chase'; squeal(p); }
+        else { p.state = 'linger'; p.timer = rand(0.8, 1.6); }
+      }
+      break;
+    case 'linger':
+      p.timer -= dt; if (p.timer <= 0) p.state = 'return';
+      break;
+    case 'return':
+      tx = p.hx; ty = p.hy; sp = Math.min(spd * 0.45, 95);
+      if (hyp(p.x - p.hx, p.y - p.hy) < 3) { p.state = 'home'; p.timer = rand(1, 3); p.wx = p.x; p.wy = p.y; }
+      break;
+    case 'home':
+      p.timer -= dt;
+      if (p.timer <= 0) {
+        p.timer = rand(2, 5);
+        const r = Math.random();
+        if (r < 0.55) { p.wx = clamp(p.hx + rand(-20, 20), 20, 980); p.wy = clamp(p.hy + rand(-10, 10), 484, 596); }
+        else if (r < 0.75 || G.streak >= 25) { p.hopV = 150 + Math.random() * 60; }
+      }
+      tx = p.wx; ty = p.wy; sp = 34;
+      break;
+  }
+  if (tx !== null) {
+    const dx = tx - p.x, dy = ty - p.y, d = hyp(dx, dy);
+    if (d > 0.5) {
+      const st = Math.min(d, sp * dt);
+      p.x += dx / d * st; p.y += dy / d * st;
+      p.moving = st / dt > 18;
+      if (p.state !== 'chase' && Math.abs(dx) > 2) p.face = dx > 0 ? 1 : -1;
+    } else p.moving = false;
+  } else p.moving = false;
+  if (spin) p.moving = true;
+  p.x = clamp(p.x, 20, 980); p.y = clamp(p.y, 478, 600);
+  p.s = pigScale(p.y);
+  p.g = p.state === 'charge' ? 3.95 + 0.05 * p.charge : growthOf(p.eaten || 0);
+  if (p.state !== 'charge' && p.eaten > POP_AT * 0.95 && Math.random() < dt * 0.25) bubble(p, pick(['urp…', 'so full…', '*gurgle*', 'one more…']), 1.4);
+  p.phase += dt * (spin ? 70 : p.moving ? 5 + Math.min(sp, 1600) / 16 : 1.6);
+  const zoomTarget = p.state === 'chase' && p.moving && !spin ? 1 : 0;
+  p.zoom += (zoomTarget - p.zoom) * Math.min(1, dt * 14);
+  if (p.state === 'chase' && p.moving) {
+    p.dustT -= dt;
+    if (p.dustT <= 0) {
+      p.dustT = spin ? 0.03 : 0.05;
+      addPart(p.x - p.face * 22 * pigSize(p), p.y - 3, -p.face * rand(40, 140), rand(-70, -20), rand(0.25, 0.45), pick(['#d6c29a', '#bfa47a', '#e8dcc0']), rand(2.5, 4.5), 'dot', 140);
+    }
+  }
+}
+
+// ---------------------------------------------------------------- carrots in flight
+const LAND_MIN = 205, LAND_MAX = 795;
+function makeCarrot(o) {
+  const lx = o.lx ?? rand(LAND_MIN, LAND_MAX), ly = o.ly ?? rand(488, 592);
+  const T = o.T ?? rand(1.25, 1.55), g = 900;
+  return {
+    kind: 'fall', sx: o.sx, sy: o.sy, lx, ly, T, t: 0, g, vx: (lx - o.sx) / T, vy: (ly - o.sy - 0.5 * g * T * T) / T,
+    x: o.sx, y: o.sy, count: 1, fromClick: !!o.fromClick, rot: rand(-0.6, 0.6), spin: rand(-4, 4), claimed: null, dead: false, tier: S.tier, landAt: G.time + T,
+  };
+}
+const MAX_IN_FLIGHT = 400;
+function launch(o) {
+  if (G.carrots.length >= MAX_IN_FLIGHT) return null;
+  const c = makeCarrot(o);
+  G.carrots.push(c);
+  return c;
+}
+function pickBuilding() {
+  const tot = farmBase();
+  let x = Math.random() * tot;
+  for (const b of BUILDINGS) { x -= S.bld[b.id] * b.rate; if (x < 0) return b; }
+  return BUILDINGS[0];
+}
+function pawSpot(i, t) {
+  const ring = Math.floor(i / 50), inRing = Math.min(50, S.paws - ring * 50), k = i % 50;
+  const a = k / inRing * TAU + t * 0.12 * (ring % 2 ? -1 : 1) + ring * 0.3;
+  return {x: 500 + Math.cos(a) * (112 + ring * 20), y: 192 + Math.sin(a) * (152 + ring * 20), a};
+}
+function updatePaws(dt) {
+  if (!S.paws || !S.pigs.length) return;
+  const rate = S.paws * pawPokeRate();
+  G.pawAcc = Math.min(G.pawAcc + rate * dt, Math.max(2, rate * 0.5));
+  for (let tries = 0; G.pawAcc >= 1 && tries < 4; tries++) {
+    // one poke throws up to pawCarrots() carrots, as many as the herd can catch
+    const i = G.pawNext % S.paws, sp = pawSpot(i, G.time);
+    let thrown = 0;
+    for (let n = pawCarrots(); thrown < n && G.carrots.length < MAX_IN_FLIGHT; thrown++) {
+      const c = makeCarrot({sx: 500 + (sp.x - 500) * 0.45, sy: 192 + (sp.y - 192) * 0.45, T: rand(1.25, 1.6), fromClick: false});
+      if (!planCatch(c)) break;
+      G.carrots.push(c);
+    }
+    if (!thrown) break;
+    G.pawNext++; G.pawAcc -= 1; G.pawPokes[i] = G.time; G.big.squish = Math.max(G.big.squish, 0.35);
+  }
+}
+function updateProduction(dt) {
+  updatePaws(dt);
+  const pps = farmPlucks();
+  if (pps > 0 && S.pigs.length) {
+    // helpers throw one carrot at a time, and only when some pig can make the catch;
+    // whatever the herd can't keep up with is simply never thrown
+    G.pluckAcc = Math.min(G.pluckAcc + pps * dt, Math.max(2, pps * 0.5));
+    for (let tries = 0; G.pluckAcc >= 1 && tries < 8 && G.carrots.length < MAX_IN_FLIGHT; tries++) {
+      const bd = pickBuilding(), list = G.spots[bd.id], spot = list && list.length ? pick(list) : null;
+      const o = spot ? {x: spot.x, y: spot.y - (ORIGIN_UP[bd.id] || 0) * spot.s} : ORIGINS[bd.id];
+      const c = makeCarrot({sx: o.x + rand(-6, 6), sy: o.y, fromClick: false});
+      if (!planCatch(c)) break;
+      G.carrots.push(c); G.pluckAcc -= 1; G.farmThrown++;
+    }
+  }
+  if (G.showerLeft > 0) {
+    G.showerCd -= dt;
+    if (G.showerCd <= 0) {
+      G.showerLeft--; G.showerCd = 0.12;
+      const sx = rand(140, 860);
+      launch({sx, sy: -30, lx: clamp(sx + rand(-70, 70), LAND_MIN, LAND_MAX), T: rand(1.2, 1.6), fromClick: true});
+    }
+  }
+}
+function updateCarrots(dt) {
+  for (const c of G.carrots) {
+    if (c.dead) continue;
+    c.t += dt;
+    c.x = c.sx + c.vx * c.t; c.y = c.sy + c.vy * c.t + 0.5 * c.g * c.t * c.t; c.rot += c.spin * dt;
+    const rem = c.T - c.t;
+    if (rem <= 0.045) {
+      let catcher = null;
+      const cl = c.claimed;
+      if (cl && cl.state !== 'munch' && cl.state !== 'charge' && hyp(headX(cl) - c.lx, cl.y - c.ly) <= catchR(cl)) catcher = cl;
+      else {
+        let bd = Infinity;
+        for (const p of S.pigs) {
+          if (p.state === 'munch' || p.state === 'charge') continue;
+          const d = hyp(headX(p) - c.lx, p.y - c.ly);
+          if (d <= catchR(p) && d < bd) { bd = d; catcher = p; }
+        }
+      }
+      if (catcher) { airCatch(catcher, c); continue; }
+    }
+    if (rem <= 0) vanish(c);
+  }
+  G.carrots = G.carrots.filter(c => !c.dead);
+}
+function pushResolved(v) { G.resolved.push(v); if (G.resolved.length > 60) G.resolved.shift(); }
+function earn(v, active) {
+  S.carrots += v; S.total += v; G.bucket += v;
+  if (!active) G.bucketP += v;
+}
+function airCatch(p, c) {
+  c.dead = true; c.claimed = null;
+  p.queue = p.queue.filter(q => q !== c);
+  G.streak++;
+  if (G.streak > S.stats.bestStreak) S.stats.bestStreak = G.streak;
+  let v = c.count * unitValue() * streakMult() * (1 + p.cheeks);
+  const lucky = p.trait === 'lucky' && Math.random() < 0.12;
+  if (lucky) v *= 5;
+  earn(v, c.fromClick);
+  S.stats.caught++; pushResolved(1);
+  p.eaten = (p.eaten || 0) + 1;
+  if (p.eaten >= POP_AT) { startCharge(p); return; }
+  p.state = 'munch'; p.timer = munchTime(p); p.carry = c.tier; p.hopV = 140; p.windup = 0;
+  if (lucky || G.time - G.lastFloat > 0.07) { G.lastFloat = G.time; addFloat(c.lx, c.ly - 62, '+' + fmt(v), lucky ? '#ffd23f' : '#ffffff', lucky ? 26 : 21); }
+  if (lucky) addFloat(c.lx, c.ly - 90, 'LUCKY!', '#ffd23f', 17);
+  burst(c.lx, c.ly - 26, 6, ['#ffb347', '#fff3c4', '#7ccf5a'], 130);
+  SFX.crunch();
+  if (G.streak === 25 || G.streak === 50 || G.streak % 250 === 0) bubble(p, `${G.streak} in a row!`);
+  else if (Math.random() < 0.03) bubble(p, pick(['nom!', 'crunch!', 'mine!']), 1);
+}
+// at 200K the pig stops dead, glows red and charges up, then bursts
+function startCharge(p) {
+  clearQueue(p);
+  p.state = 'charge'; p.timer = CHARGE_TIME; p.charge = 0; p.cphase = 0; p.carry = -1; p.hop = 0; p.hopV = 0; p.windup = 0; p.moving = false;
+  if (p.chargeSnd) p.chargeSnd.stop();
+  p.chargeSnd = SFX.charge(CHARGE_TIME);
+  bubble(p, pick(['uh oh…', 'too… full…', 'urrrk!']), 1.6);
+}
+// a pig that has eaten 200K carrots bursts, and blood covers the screen for 10 seconds
+function popPig(p, c) {
+  const i = S.pigs.indexOf(p);
+  if (i < 0) return;
+  clearQueue(p);
+  S.pigs.splice(i, 1);
+  S.stats.popped = (S.stats.popped || 0) + 1;
+  const z = pigSize(p), cx = p.x, cy = p.y - 22 * z;
+  for (let k = 0; k < 70; k++) {
+    const a = rand(0, TAU), v = rand(150, 650);
+    addPart(cx + rand(-10, 10) * z, cy + rand(-8, 8) * z, Math.cos(a) * v, Math.sin(a) * v - 250, rand(0.6, 1.4), pick(['#9c0c12', '#c4141d', '#7a060b', '#e02a2a']), rand(3, 8), 'dot', 900);
+  }
+  for (let k = 0; k < 18; k++) addPart(cx, cy, rand(-300, 300), rand(-500, -150), rand(0.8, 1.4), pick([p.coat.base, p.coat.second || p.coat.base]), rand(3, 6), 'leaf', 700);
+  SFX.splat();
+  startGore();
+  if (G.tag && G.tag.pig === p) G.tag = null;
+  toast(`${esc(p.name)} ate one carrot too many`, `${fmt(p.eaten)} carrots, then POP. Rehome pigs before they get this big!`, {pig: p, cls: 'rip', ms: 7000});
+}
+const GORE = {active: false, t: 0, splat: null, drips: [], w: 0, h: 0, dpr: 1};
+const BLOOD = ['rgba(138,8,12,.93)', 'rgba(165,14,20,.9)', 'rgba(110,4,8,.95)', 'rgba(185,20,28,.86)'];
+function goreBlob(c, x, y, r) {
+  c.beginPath(); c.arc(x, y, r, 0, TAU);
+  const n = 7 + Math.floor(Math.random() * 6);
+  for (let i = 0; i < n; i++) { const a = rand(0, TAU), d = r * rand(0.7, 1.15), br = r * rand(0.2, 0.45), bx = x + Math.cos(a) * d, by = y + Math.sin(a) * d; c.moveTo(bx + br, by); c.arc(bx, by, br, 0, TAU); }
+  c.fill();
+  for (let i = 0; i < 12; i++) { const a = rand(0, TAU), d = r * rand(1.2, 2.3); c.beginPath(); c.arc(x + Math.cos(a) * d, y + Math.sin(a) * d, r * rand(0.03, 0.09), 0, TAU); c.fill(); }
+}
+function startGore() {
+  const cv = $('#gore'), w = window.innerWidth, h = window.innerHeight, dpr = Math.min(window.devicePixelRatio || 1, 2);
+  if (!GORE.active || GORE.w !== w || GORE.h !== h) {
+    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+    GORE.splat = document.createElement('canvas'); GORE.splat.width = cv.width; GORE.splat.height = cv.height; GORE.drips = [];
+  }
+  Object.assign(GORE, {active: true, t: 0, w, h, dpr});
+  cv.style.display = 'block';
+  const c = GORE.splat.getContext('2d'), R = Math.max(w, h);
+  c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  for (let i = 0; i < 34; i++) {
+    const x = rand(-0.05, 1.05) * w, y = rand(-0.05, 0.85) * h, r = R * rand(0.05, 0.15), col = pick(BLOOD);
+    c.fillStyle = col; goreBlob(c, x, y, r);
+    for (let k = 0; k < 2; k++) GORE.drips.push({x: x + rand(-0.7, 0.7) * r, y: y + r * rand(0.5, 0.9), w: rand(4, 14), v: rand(14, 48), max: rand(0.15, 0.6) * h, col});
+  }
+  for (let i = 0; i < 260; i++) { c.fillStyle = pick(BLOOD); c.beginPath(); c.arc(rand(0, w), rand(0, h), rand(1.5, 9), 0, TAU); c.fill(); }
+  c.fillStyle = 'rgba(255,255,255,.12)';
+  for (let i = 0; i < 40; i++) { ell(c, rand(0, w), rand(0, h * 0.9), rand(4, 18), rand(2, 7), rand(-0.6, 0.6)); c.fill(); }
+}
+// the splatter slowly slides and drips down, then fades away after 10 seconds
+function drawGore(dt) {
+  if (!GORE.active) return;
+  GORE.t += dt;
+  const cv = $('#gore'), c = cv.getContext('2d'), t = GORE.t;
+  c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, cv.width, cv.height);
+  if (t >= 10) { GORE.active = false; cv.style.display = 'none'; return; }
+  c.globalAlpha = t < 6 ? 1 : 1 - (t - 6) / 4;
+  c.drawImage(GORE.splat, 0, t * 7 * GORE.dpr);
+  c.setTransform(GORE.dpr, 0, 0, GORE.dpr, 0, 0);
+  for (const d of GORE.drips) {
+    const len = Math.min(d.max, d.v * t), y = d.y + t * 7;
+    c.fillStyle = d.col; c.fillRect(d.x - d.w / 2, y - d.w, d.w, len + d.w);
+    c.beginPath(); c.arc(d.x, y + len, d.w * 0.75, 0, TAU); c.fill();
+  }
+  c.globalAlpha = 1;
+}
+// a carrot that reaches the ground just vanishes and doesn't count
+function vanish(c) {
+  c.dead = true; c.claimed = null;
+  if (G.streak >= 10) addFloat(c.lx, c.ly - 50, 'streak lost', '#ffe2d4', 15);
+  G.streak = 0;
+  S.stats.dropped++; pushResolved(0);
+  G.drops++;
+  if (G.drops >= 6 && !S.hints.speed) { S.hints.speed = 1; toast('Carrots are slipping away!', 'Carrots that hit the ground vanish, and only catches count. Build the Breeding House for more pigs, or train the ones you have.'); }
+}
+
+// ---------------------------------------------------------------- clicking
+function clickCarrot(pt) {
+  S.stats.clicks++;
+  G.big.squish = 1;
+  for (let i = 0, n = clickCount(); i < n; i++) launch({sx: 500 + rand(-26, 26), sy: 176 + rand(-30, 30), T: rand(1.25, 1.6), fromClick: true});
+  for (let i = 0; i < 4; i++) addPart(pt.x + rand(-10, 10), pt.y + rand(-10, 10), rand(-120, 120), rand(-160, -40), rand(0.4, 0.7), pick(['#5fb14e', '#8bd86d', '#3f8f34']), rand(2.5, 4), 'leaf', 500);
+  SFX.pluck();
+}
+function hitBig(pt) { const dx = (pt.x - 500) / 82, dy = (pt.y - 190) / 138; return dx * dx + dy * dy <= 1; }
+function pigAt(pt) {
+  let best = null, bd = 30;
+  for (const p of S.pigs) { const z = pigSize(p), d = hyp(pt.x - (p.x + 3 * z), pt.y - (p.y - 16 * z - p.hop)) / Math.max(1, z / 1.2); if (d < bd) { bd = d; best = p; } }
+  return best;
+}
+
+// ---------------------------------------------------------------- breeding
+function updateBreeding(dt) {
+  if (!S.breed.built) return;
+  if (S.pigs.length >= herdCap()) return;
+  S.breed.progress += dt;
+  if (S.breed.progress >= breedTime()) { S.breed.progress = 0; birth(true); }
+}
+function birth(announce, forceR) {
+  const p = makePig(forceR);
+  S.pigs.push(p); initPig(p, {x: HOUSE_X, y: 482}); S.stats.born++;
+  for (let i = 0; i < 8; i++) addPart(HOUSE_X + rand(-14, 14), 460 + rand(-8, 8), rand(-40, 40), rand(-70, -30), rand(0.8, 1.3), pick(['#f06b8b', '#ff9fb5', '#ffd1dc']), rand(3, 5), 'heart', -20);
+  if (announce) {
+    SFX.birth();
+    const R = RARITIES[p.rarity];
+    toast(`A pup is born: ${esc(p.name)}!`, `${R.name}${p.trait ? ' · ' + TRAITS[p.trait].name : ''} · Speed ${p.speed.toFixed(2)}×`, {pig: p, cls: 'pup'});
+  }
+  return p;
+}
+function rehome(id) {
+  if (S.pigs.length <= 1) { toast('Keep at least one pig!', 'Someone has to catch the carrots.'); return; }
+  const i = S.pigs.findIndex(p => p.id === id);
+  if (i < 0) return;
+  const p = S.pigs[i];
+  clearQueue(p);
+  if (p.chargeSnd) { p.chargeSnd.stop(); p.chargeSnd = null; }
+  S.pigs.splice(i, 1);
+  const reward = Math.max(20 * unitValue(), G.rate * 15) * (1 + p.rarity) * (p.g || 1);
+  earn(reward, true);
+  for (let k = 0; k < 8; k++) addPart(p.x + rand(-12, 12), p.y - 20 + rand(-8, 8), rand(-40, 40), rand(-70, -30), rand(0.8, 1.3), pick(['#f06b8b', '#ff9fb5']), rand(3, 5), 'heart', -20);
+  toast(`${esc(p.name)} found a new home`, `Their new family sent a thank-you basket of ${fmt(reward)} carrots.`);
+}
+
+// ---------------------------------------------------------------- lucky carrot
+function spawnLucky() {
+  const dir = Math.random() < 0.5 ? 1 : -1;
+  G.lucky = {x: dir > 0 ? -40 : W + 40, by: rand(90, 300), y: 0, dir, t: 0};
+  S.luckyTimer = rand(80, 160);
+}
+function updateLucky(dt) {
+  if (!G.lucky) {
+    S.luckyTimer -= dt;
+    if (S.luckyTimer <= 0 && S.total >= 40) spawnLucky();
+    return;
+  }
+  const L = G.lucky;
+  L.t += dt; L.x += L.dir * 58 * dt; L.y = L.by + Math.sin(L.t * 2.2) * 16;
+  if (Math.random() < dt * 12) addPart(L.x + rand(-10, 10), L.y + rand(0, 20), rand(-20, 20), rand(10, 40), rand(0.5, 0.9), pick(['#fff6a8', '#ffffff', '#ffc6f0']), rand(2, 3.5), 'spark', 0);
+  if (L.x < -70 || L.x > W + 70) G.lucky = null;
+}
+function claimLucky() {
+  const L = G.lucky; G.lucky = null;
+  S.stats.luckies++;
+  const roll = Math.random() * 100;
+  let title, sub;
+  if (roll < 35) { G.buffs.frenzy = G.time + 30; title = 'Carrot Frenzy!'; sub = 'Every carrot is worth ×3 for 30 seconds'; }
+  else if (roll < 60) { G.buffs.zoomies = G.time + 30; title = 'Zoomies!'; sub = 'Pigs run twice as fast for 30 seconds'; }
+  else if (roll < 85) {
+    const v = Math.max(G.rate * 60, clickCount() * unitValue() * 30, 25);
+    earn(v, true); title = 'Windfall!'; sub = `+${fmt(v)} carrots`;
+  } else { G.showerLeft = 30 + 3 * S.upg.thumb; title = 'Carrot Shower!'; sub = 'Catch them all!'; }
+  G.banner = {title, sub, life: 3.2};
+  for (let i = 0; i < 22; i++) addPart(L.x, L.y, rand(-220, 220), rand(-220, 120), rand(0.6, 1.2), pick(RAINBOW), rand(2.5, 4.5), Math.random() < 0.5 ? 'spark' : 'dot', 200);
+  SFX.chime();
+}
+
+// ---------------------------------------------------------------- effects
+function addPart(x, y, vx, vy, life, color, size, type = 'dot', g = 600) {
+  if (G.parts.length > 320) return;
+  G.parts.push({x, y, vx, vy, life, max: life, color, size, type, g, r: rand(0, TAU)});
+}
+function burst(x, y, n, colors, spd = 160) {
+  for (let i = 0; i < n; i++) { const a = rand(0, TAU), s = rand(spd * 0.4, spd); addPart(x, y, Math.cos(a) * s, Math.sin(a) * s - 60, rand(0.35, 0.7), pick(colors), rand(2, 3.6)); }
+}
+function addFloat(x, y, text, color, size) {
+  G.floats.push({x: x + rand(-6, 6), y, text, color, size, life: 1.1, max: 1.1});
+  if (G.floats.length > 40) G.floats.shift();
+}
+function bubble(p, text, life = 1.6) { G.bubbles = G.bubbles.filter(b => b.pig !== p); G.bubbles.push({pig: p, text, life}); }
+function updateFx(dt) {
+  for (const q of G.parts) {
+    q.vy += q.g * dt; q.x += q.vx * dt; q.y += q.vy * dt; q.life -= dt; q.r += dt * 4;
+    if (q.floor && q.y > q.floor) { q.y = q.floor; q.vy = -q.vy * 0.25; q.vx *= 0.55; if (Math.abs(q.vy) < 40) { q.vy = 0; q.vx = 0; q.g = 0; } }
+  }
+  G.parts = G.parts.filter(q => q.life > 0);
+  for (const f of G.floats) { f.y -= 42 * dt; f.life -= dt; }
+  G.floats = G.floats.filter(f => f.life > 0);
+  for (const b of G.bubbles) b.life -= dt;
+  G.bubbles = G.bubbles.filter(b => b.life > 0 && S.pigs.includes(b.pig));
+  G.sparkT -= dt;
+  if (G.sparkT <= 0) {
+    G.sparkT = 0.25;
+    for (const p of S.pigs) if (p.rarity === 4 && Math.random() < 0.5) addPart(p.x + rand(-22, 22) * pigSize(p), p.y - rand(8, 34) * pigSize(p), 0, -20, 0.7, p.coat.pattern === 'gold' ? '#fff3a0' : '#ffffff', 2.5, 'spark', 0);
+  }
+}
+function updateRate(dt) {
+  G.bucketT += dt;
+  if (G.bucketT >= 1) {
+    G.bucketT -= 1;
+    G.hist.push(G.bucket); if (G.hist.length > 5) G.hist.shift();
+    G.rate = G.hist.reduce((a, b) => a + b, 0) / G.hist.length;
+    if (!(G.buffs.frenzy > G.time)) S.passiveRate = S.passiveRate ? S.passiveRate * 0.92 + G.bucketP * 0.08 : G.bucketP;
+    G.farmRate = G.farmRate * 0.6 + G.farmThrown * 0.4; G.farmThrown = 0;
+    G.bucket = 0; G.bucketP = 0;
+  }
+}
+
+// ---------------------------------------------------------------- main update
+function update(dt) {
+  G.time += dt; S.stats.played += dt;
+  G.big.squish = Math.max(0, G.big.squish - dt * 6);
+  updateProduction(dt);
+  updateCarrots(dt);
+  assign();
+  G.assignT -= dt;
+  if (G.assignT <= 0) { G.assignT = 0.1; validate(); }
+  for (const p of S.pigs) updatePig(p, dt);
+  updateBreeding(dt);
+  updateLucky(dt);
+  updateFx(dt);
+  updateRate(dt);
+  G.achT -= dt;
+  if (G.achT <= 0) { G.achT = 1; checkAch(); }
+  if (G.banner) { G.banner.life -= dt; if (G.banner.life <= 0) G.banner = null; }
+  if (G.tag && G.tag.until < G.time) G.tag = null;
+  if (G.highlight && G.highlight.until < G.time) G.highlight = null;
+}
+
+// ---------------------------------------------------------------- render
+function pill(x, y, text, bgc, fg) {
+  ctx.font = `600 15px ${FONT}`; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  const w = ctx.measureText(text).width + 22;
+  ctx.fillStyle = bgc; rr(ctx, x, y, w, 28, 14); ctx.fill();
+  ctx.fillStyle = fg; ctx.fillText(text, x + 11, y + 14.5);
+  return w;
+}
+function speech(x, y, text, size = 14) {
+  ctx.font = `600 ${size}px ${FONT}`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  const w = ctx.measureText(text).width + 18, h = size + 12;
+  ctx.fillStyle = '#fffdf7'; ctx.strokeStyle = 'rgba(90,55,25,.35)'; ctx.lineWidth = 1.5;
+  rr(ctx, x - w / 2, y - h, w, h, h / 2); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x - 5, y - 1); ctx.lineTo(x, y + 7); ctx.lineTo(x + 5, y - 1); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = '#4a2f1d'; ctx.fillText(text, x, y - h / 2 + 0.5);
+}
+let pawSprite = null;
+function drawPawShape(c) {
+  c.fillStyle = '#e39a4f'; rr(c, -5, 3, 10, 12, 4); c.fill();
+  c.strokeStyle = '#a8662e'; c.lineWidth = 0.8; rr(c, -5, 3, 10, 12, 4); c.stroke();
+  c.fillStyle = '#f6c8bd'; ell(c, 0, 0, 6.5, 5.6); c.fill();
+  c.strokeStyle = '#b5655a'; ell(c, 0, 0, 6.5, 5.6); c.stroke();
+  c.fillStyle = '#e88a8a';
+  for (const [tx, ty] of [[-4.2, -4.6], [-1.4, -6.4], [1.4, -6.4], [4.2, -4.6]]) { ell(c, tx, ty, 1.5, 1.9); c.fill(); }
+  ell(c, 0, 0.9, 3, 2.3); c.fill();
+}
+function drawPaws(now) {
+  if (!S.paws) return;
+  if (!pawSprite) { pawSprite = document.createElement('canvas'); pawSprite.width = 54; pawSprite.height = 72; const c = pawSprite.getContext('2d'); c.scale(3, 3); c.translate(9, 9); drawPawShape(c); }
+  const shown = Math.min(S.paws, 400);
+  for (let i = 0; i < shown; i++) {
+    const sp = pawSpot(i, G.time), since = G.time - (G.pawPokes[i] ?? -9), poke = since < 0.3 ? Math.sin(since / 0.3 * Math.PI) : 0;
+    const ang = Math.atan2(192 - sp.y, 500 - sp.x);
+    ctx.save(); ctx.translate(sp.x + Math.cos(ang) * poke * 14, sp.y + Math.sin(ang) * poke * 14); ctx.rotate(ang + Math.PI / 2);
+    ctx.drawImage(pawSprite, -9, -9, 18, 24); ctx.restore();
+  }
+}
+function drawBigCarrot(now) {
+  const sq = G.big.squish, bob = Math.sin(now * 1.6) * 5;
+  const gr = ctx.createRadialGradient(500, 190 + bob, 20, 500, 190 + bob, 160);
+  gr.addColorStop(0, 'rgba(255,244,190,.65)'); gr.addColorStop(1, 'rgba(255,244,190,0)');
+  ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(500, 190 + bob, 160, 0, TAU); ctx.fill();
+  const pulse = (now % 2.4) / 2.4;
+  if (S.stats.clicks < 30) { ctx.strokeStyle = `rgba(255,255,255,${0.55 * (1 - pulse)})`; ctx.lineWidth = 3; ell(ctx, 500, 200 + bob, 70 + pulse * 40, 110 + pulse * 40); ctx.stroke(); }
+  ctx.save(); ctx.translate(500, 190 + bob); ctx.scale(1 + sq * 0.1, 1 - sq * 0.08);
+  drawCarrot(ctx, 0, 0, 190, S.tier, Math.sin(now * 1.1) * 0.05 + (sq ? Math.sin(now * 60) * 0.03 * sq : 0));
+  ctx.restore();
+}
+function drawLucky(now) {
+  const L = G.lucky;
+  const g = ctx.createRadialGradient(L.x, L.y, 4, L.x, L.y, 46);
+  g.addColorStop(0, 'rgba(255,250,200,.9)'); g.addColorStop(1, 'rgba(255,250,200,0)');
+  ctx.fillStyle = g; ctx.beginPath(); ctx.arc(L.x, L.y, 46, 0, TAU); ctx.fill();
+  drawCarrot(ctx, L.x, L.y + 6, 44, 2, Math.sin(now * 3) * 0.2);
+  const w = Math.abs(Math.sin(now * 18)) * 22 + 3;
+  ctx.fillStyle = '#5fc15a'; ell(ctx, L.x - w / 2 - 1, L.y - 34, w / 2, 4); ctx.fill(); ell(ctx, L.x + w / 2 + 1, L.y - 34, w / 2, 4); ctx.fill();
+  ctx.fillStyle = '#3f8f34'; ctx.fillRect(L.x - 1.5, L.y - 34, 3, 12);
+}
+function render(now) {
+  if (bgSignature() !== bgSig) renderBackground();
+  const sc = view.scale * view.dpr;
+  ctx.setTransform(sc, 0, 0, sc, 0, 0);
+  ctx.drawImage(bg, 0, 0, W, H);
+  for (const cl of G.clouds) { const x = ((cl.x0 + now * cl.v) % (W + 260)) - 130; cloud(ctx, x, cl.y, cl.s); }
+  (G.spots.portal || []).forEach((p, i) => BDRAW.portal(ctx, p.x, p.y, p.s, now + i * 0.7));
+  if (S.breed.built) {
+    const full = S.pigs.length >= herdCap(), k = full ? 1 : S.breed.progress / breedTime();
+    ctx.fillStyle = 'rgba(255,255,255,.85)'; ctx.beginPath(); ctx.arc(HOUSE_X, 376, 13, 0, TAU); ctx.fill();
+    ctx.strokeStyle = full ? '#c9b9a6' : '#f06b8b'; ctx.lineWidth = 4; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.arc(HOUSE_X, 376, 10, -Math.PI / 2, -Math.PI / 2 + TAU * k); ctx.stroke();
+    ctx.fillStyle = full ? '#b8a894' : '#f06b8b'; heart(ctx, HOUSE_X, 377, 4.2); ctx.fill();
+    if (full) label(ctx, HOUSE_X, 352, 'hutch full', 11, '#fff');
+  }
+  drawBigCarrot(now);
+  drawPaws(now);
+  if (S.stats.clicks < 3) {
+    const by = Math.sin(now * 3) * 4;
+    speech(640, 140 + by, 'Click the carrot!', 17);
+    ctx.fillStyle = '#fffdf7'; ctx.beginPath(); ctx.moveTo(578, 132 + by); ctx.lineTo(562, 140 + by); ctx.lineTo(578, 120 + by); ctx.fill();
+  }
+  if (G.lucky) drawLucky(now);
+  for (const c of G.carrots) {
+    const k = clamp(c.t / c.T, 0, 1);
+    ctx.fillStyle = `rgba(35,65,15,${0.08 + 0.22 * k})`; ell(ctx, c.x, c.ly, 5 + 9 * k, 2 + 3 * k); ctx.fill();
+  }
+  const hl = G.highlight;
+  const ps = S.pigs.slice().sort((a, b) => a.y - b.y);
+  for (const p of ps) {
+    let ring = null, ringA = 0.55, ringW = 2;
+    if (hl && hl.id === p.id) { ring = '#ffffff'; ringA = 0.6 + 0.4 * Math.sin(now * 10); ringW = 3.5; }
+    else if (p.rarity >= 2) ring = RARITIES[p.rarity].color;
+    const fat = clamp((p.g - 1) / 3, 0, 1), charging = p.state === 'charge';
+    const pulse = charging ? 0.5 + 0.5 * Math.sin(p.cphase) : 0;
+    const flush = charging ? 0.7 + 0.3 * pulse : clamp((p.eaten / POP_AT - 0.93) / 0.07, 0, 1) * 0.6;
+    const shake = charging ? 2 + 7 * p.charge : flush * 2;
+    if (charging) {
+      const z = pigSize(p), gx = p.x, gy = p.y - 18 * z, R = 34 * z * (1 + 0.25 * pulse + 0.3 * p.charge);
+      const gl = ctx.createRadialGradient(gx, gy, 0, gx, gy, R);
+      gl.addColorStop(0, `rgba(255,60,40,${0.35 + 0.35 * pulse})`); gl.addColorStop(0.6, `rgba(255,30,20,${0.18 + 0.2 * pulse})`); gl.addColorStop(1, 'rgba(255,0,0,0)');
+      ctx.fillStyle = gl; ctx.beginPath(); ctx.arc(gx, gy, R, 0, TAU); ctx.fill();
+    }
+    drawPig(ctx, p, p.x + (shake ? rand(-1, 1) * shake : 0), p.y + (charging ? rand(-1, 1) * shake * 0.5 : 0), pigSize(p), {face: p.face, phase: p.phase, running: p.moving, zoom: p.zoom, hop: p.hop, blink: p.blinkT < 0, carry: p.carry, lookUp: p.lookUp, ring, ringA, ringW, fat, flush});
+    if (charging) { // a hot red aura that brightens as the charge builds
+      const z = pigSize(p), gx = p.x, gy = p.y - 18 * z, R = 40 * z * (1 + 0.15 * pulse);
+      const gl = ctx.createRadialGradient(gx, gy, 0, gx, gy, R);
+      const a = (0.25 + 0.45 * pulse) * (0.45 + 0.55 * p.charge);
+      gl.addColorStop(0, `rgba(255,90,60,${a})`); gl.addColorStop(0.55, `rgba(255,40,20,${a * 0.75})`); gl.addColorStop(1, 'rgba(255,0,0,0)');
+      ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = gl; ctx.beginPath(); ctx.arc(gx, gy, R, 0, TAU); ctx.fill(); ctx.globalCompositeOperation = 'source-over';
+    }
+  }
+  for (const c of G.carrots) {
+    drawCarrotFast(ctx, c.x, c.y, 38, c.tier, c.rot);
+  }
+  for (const q of G.parts) {
+    ctx.globalAlpha = clamp(q.life / q.max, 0, 1); ctx.fillStyle = q.color;
+    if (q.type === 'heart') { heart(ctx, q.x, q.y, q.size); ctx.fill(); }
+    else if (q.type === 'spark') { star4(ctx, q.x, q.y, q.size * 1.4); ctx.fill(); }
+    else if (q.type === 'leaf') { ell(ctx, q.x, q.y, q.size * 1.4, q.size * 0.7, q.r); ctx.fill(); }
+    else if (q.type === 'ember') {
+      ctx.strokeStyle = q.color; ctx.lineWidth = q.size; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(q.x, q.y); ctx.lineTo(q.x - q.vx * 0.035, q.y - q.vy * 0.035); ctx.stroke();
+    }
+    else if (q.type === 'chunk') { ctx.save(); ctx.translate(q.x, q.y); ctx.rotate(q.r * 2.5); ctx.fillRect(-q.size, -q.size * 0.6, q.size * 2, q.size * 1.2); ctx.restore(); }
+    else if (q.type === 'puff') { ctx.beginPath(); ctx.arc(q.x, q.y, q.size * (1 + (1 - q.life / q.max) * 1.6), 0, TAU); ctx.fill(); }
+    else { ctx.beginPath(); ctx.arc(q.x, q.y, q.size, 0, TAU); ctx.fill(); }
+  }
+  ctx.globalAlpha = 1;
+  for (const f of G.floats) { ctx.globalAlpha = clamp(f.life / f.max * 1.6, 0, 1); label(ctx, f.x, f.y, f.text, f.size, f.color); }
+  ctx.globalAlpha = 1;
+  for (const b of G.bubbles) { ctx.globalAlpha = clamp(b.life * 3, 0, 1); speech(b.pig.x + b.pig.face * 8, b.pig.y - 44 * pigSize(b.pig) - b.pig.hop, b.text, 15); }
+  ctx.globalAlpha = 1;
+  if (G.tag) {
+    const p = G.tag.pig;
+    if (S.pigs.includes(p)) speech(p.x + 3, p.y - 44 * pigSize(p) - p.hop, `${p.name} · ${RARITIES[p.rarity].name}${p.trait ? ' · ' + TRAITS[p.trait].name : ''}`, 13);
+  }
+  let hy = 14;
+  if (G.streak >= 3) { pill(14, hy, `Streak ${G.streak} · ×${streakMult().toFixed(2)}`, 'rgba(245,124,31,.92)', '#fff'); hy += 34; }
+  if (G.buffs.frenzy > G.time) { pill(14, hy, `Frenzy ×3 · ${Math.ceil(G.buffs.frenzy - G.time)}s`, 'rgba(226,64,90,.92)', '#fff'); hy += 34; }
+  if (G.buffs.zoomies > G.time) { pill(14, hy, `Zoomies ×2 speed · ${Math.ceil(G.buffs.zoomies - G.time)}s`, 'rgba(60,130,220,.92)', '#fff'); hy += 34; }
+  if (G.banner) {
+    const b = G.banner;
+    ctx.globalAlpha = clamp(b.life, 0, 1);
+    const sc2 = 1 + Math.max(0, b.life - 2.9) * 1.2;
+    ctx.save(); ctx.translate(500, 340); ctx.scale(sc2, sc2);
+    label(ctx, 0, 0, b.title, 40, '#ffe066');
+    label(ctx, 0, 36, b.sub, 18, '#ffffff');
+    ctx.restore(); ctx.globalAlpha = 1;
+  }
+}
+
+// ---------------------------------------------------------------- icons for the shop
+function drawIcon(cv, key) {
+  const c = cv.getContext('2d'), k = cv.width / 100;
+  c.setTransform(k, 0, 0, k, 0, 0); c.clearRect(0, 0, 100, 100);
+  const [type, arg] = key.split(':');
+  c.fillStyle = type === 'tierlock' ? '#f1e6d6' : '#fff1de'; c.beginPath(); c.arc(50, 50, 48, 0, TAU); c.fill();
+  switch (type) {
+    case 'tier': drawCarrot(c, 50, 56, 64, +arg, 0.55); break;
+    case 'tierlock':
+      c.globalAlpha = 0.25; drawCarrot(c, 50, 56, 64, 0, 0.55); c.globalAlpha = 1;
+      c.font = `700 40px ${FONT}`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillStyle = '#b39c82'; c.fillText('?', 50, 54);
+      break;
+    case 'bld': {
+      const f = {gnome: [50, 84, 1.75], patch: [50, 70, 0.78], greenhouse: [50, 80, 1.05], coop: [50, 84, 1.0], tower: [50, 94, 0.48], orbital: [50, 54, 1.0], portal: [50, 50, 1.0]}[arg];
+      BDRAW[arg](c, f[0], f[1], f[2], 0.7);
+      break;
+    }
+    case 'house': drawBreedHouse(c, 50, 80, 1.05); break;
+    case 'paw': case 'pawup':
+      c.save(); c.translate(50, 54); c.rotate(-0.35); c.scale(3.6, 3.6); drawPawShape(c); c.restore();
+      if (type === 'pawup') { c.fillStyle = '#58a845'; c.beginPath(); c.arc(76, 30, 13, 0, TAU); c.fill(); c.fillStyle = '#fff'; c.beginPath(); c.moveTo(76, 21); c.lineTo(84, 32); c.lineTo(68, 32); c.closePath(); c.fill(); c.fillRect(73, 31, 6, 8); }
+      break;
+    case 'upg':
+      switch (arg) {
+        case 'thumb':
+          c.strokeStyle = '#3f8f34'; c.lineWidth = 5; c.lineCap = 'round'; c.beginPath(); c.moveTo(42, 82); c.quadraticCurveTo(40, 55, 48, 40); c.stroke();
+          c.fillStyle = '#5fb14e'; ell(c, 34, 48, 14, 7, -0.6); c.fill(); ell(c, 58, 40, 15, 7, 0.5); c.fill();
+          c.fillStyle = '#7a5033'; ell(c, 45, 84, 26, 7); c.fill();
+          c.font = `700 22px ${FONT}`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillStyle = '#f57c1f'; c.fillText('+1', 74, 70);
+          break;
+        case 'whisper':
+          drawCarrot(c, 40, 56, 54, 0, 0.4);
+          c.strokeStyle = '#f57c1f'; c.lineWidth = 4; c.lineCap = 'round';
+          for (let i = 0; i < 3; i++) { c.beginPath(); c.arc(56, 42, 10 + i * 9, -0.7, 0.7); c.stroke(); }
+          break;
+        case 'zoom':
+          c.strokeStyle = '#f5a25b'; c.lineWidth = 4; c.lineCap = 'round';
+          for (const yy of [44, 56, 68]) { c.beginPath(); c.moveTo(10, yy); c.lineTo(28, yy); c.stroke(); }
+          drawPig(c, SAMPLE_PIG, 54, 74, 1.3, {face: 1, running: true, phase: 1});
+          break;
+        case 'cheeks':
+          drawPig(c, SAMPLE_PIG, 40, 76, 1.55, {face: 1});
+          c.fillStyle = 'rgba(255,120,140,.45)'; c.beginPath(); c.arc(70, 54, 7, 0, TAU); c.fill();
+          drawCarrot(c, 86, 58, 22, 0, 1.3);
+          break;
+        case 'hay': case 'cozy':
+          c.fillStyle = '#e8c36a'; rr(c, 18, 48, 64, 34, 8); c.fill();
+          c.strokeStyle = '#c79a3c'; c.lineWidth = 2; for (const yy of [56, 64, 72]) { c.beginPath(); c.moveTo(22, yy); c.lineTo(78, yy); c.stroke(); }
+          c.strokeStyle = '#a5662e'; c.lineWidth = 3; c.beginPath(); c.moveTo(36, 48); c.lineTo(36, 82); c.moveTo(64, 48); c.lineTo(64, 82); c.stroke();
+          if (arg === 'cozy') { c.fillStyle = '#f06b8b'; heart(c, 50, 36, 14); c.fill(); }
+          else drawCarrot(c, 50, 38, 26, 0, 1.4);
+          break;
+        case 'gulp':
+          c.fillStyle = '#fff'; c.strokeStyle = '#8b6b55'; c.lineWidth = 4; c.beginPath(); c.arc(60, 56, 22, 0, TAU); c.fill(); c.stroke();
+          c.fillStyle = '#8b6b55'; c.fillRect(56, 27, 8, 7);
+          c.strokeStyle = '#f57c1f'; c.lineCap = 'round'; c.beginPath(); c.moveTo(60, 56); c.lineTo(60, 41); c.moveTo(60, 56); c.lineTo(71, 62); c.stroke();
+          drawCarrot(c, 30, 62, 36, 0, -0.7);
+          break;
+        case 'pedigree':
+          c.fillStyle = '#2f8fd8'; c.beginPath(); c.moveTo(40, 58); c.lineTo(30, 88); c.lineTo(42, 82); c.lineTo(48, 92); c.lineTo(52, 60); c.fill();
+          c.beginPath(); c.moveTo(60, 58); c.lineTo(70, 88); c.lineTo(58, 82); c.lineTo(52, 92); c.lineTo(48, 60); c.fill();
+          c.fillStyle = '#4da6ea'; for (let i = 0; i < 12; i++) { const a = i / 12 * TAU; c.beginPath(); c.arc(50 + Math.cos(a) * 20, 44 + Math.sin(a) * 20, 7, 0, TAU); c.fill(); }
+          c.fillStyle = '#ffd23f'; c.beginPath(); c.arc(50, 44, 17, 0, TAU); c.fill();
+          c.fillStyle = '#b97c00'; star4(c, 50, 44, 9); c.fill();
+          break;
+        case 'hutch':
+          c.save(); c.translate(42, 80); c.scale(0.42, 0.42); c.translate(-10, 0); drawHutch(c, 0, 0, false); c.restore();
+          c.fillStyle = '#58a845'; c.beginPath(); c.arc(76, 34, 14, 0, TAU); c.fill();
+          c.fillStyle = '#fff'; c.fillRect(69, 32, 14, 4); c.fillRect(74, 27, 4, 14);
+          break;
+      }
+      break;
+  }
+  c.setTransform(1, 0, 0, 1, 0, 0);
+}
+function drawPortrait(cv, p) {
+  const c = cv.getContext('2d');
+  c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, cv.width, cv.height);
+  const k = cv.width / 128;
+  c.setTransform(k, 0, 0, k, 0, 0);
+  drawPig(c, p, 58, 84, 1.75 / (1 + 0.25 * clamp(((p.g || 1) - 1) / 3, 0, 1)), {face: 1, fat: clamp(((p.g || 1) - 1) / 3, 0, 1)});
+  c.setTransform(1, 0, 0, 1, 0, 0);
+}
+
+// ---------------------------------------------------------------- UI (everything on one screen)
+const UI = {sig: {}, entries: new Map(), buyAmt: 1, sure: null, t: 0, t2: 0};
+const SECTIONS = ['carrots', 'training', 'farm', 'breed', 'herd', 'stats'];
+const costHTML = n => `<span class="ci"></span>${fmt(n)}`;
+function itemHTML(e) {
+  const cls = ['item', e.cls || ''].join(' ').trim();
+  const tag = e.buy ? 'button' : 'div';
+  const lv = e.lvl ? e.lvl() : '';
+  const meta = typeof e.meta === 'function' ? e.meta() : e.meta;
+  const cost = e.buy ? (e.maxed && e.maxed() ? 'MAX' : costHTML(e.cost())) : (e.costLabel || '');
+  return `<${tag} class="${cls}" ${e.buy ? `data-key="${e.key}" type="button"` : ''} title="${esc(e.desc)}">` +
+    `<canvas class="ico" width="88" height="88" data-icon="${e.icon}"></canvas>` +
+    `<span class="info"><span class="nm">${e.name}<span class="lv" data-lv>${lv}</span></span><span class="ds">${e.desc}</span>${meta !== undefined ? `<span class="mt" data-mt>${meta}</span>` : ''}</span>` +
+    `<span class="cost" data-cost>${cost}</span></${tag}>`;
+}
+function upgMeta(id) {
+  switch (id) {
+    case 'thumb': return `A click throws ${clickCount()} carrot${S.upg.thumb ? 's' : ''}`;
+    case 'whisper': return `Every carrot worth ×${whisperMult() < 100 ? whisperMult().toFixed(2) : fmt(whisperMult())}`;
+    case 'zoom': return `Pig speed ×${(1 + 0.15 * S.upg.zoom).toFixed(2)}`;
+    case 'cheeks': return `Catch reach ×${(1 + 0.15 * S.upg.cheeks).toFixed(2)}`;
+    case 'gulp': return `A carrot takes ${munchTime({}).toFixed(2)}s to eat`;
+    case 'cozy': return `A pup every ${breedTime().toFixed(1)}s`;
+    case 'pedigree': return `Rare or better: ${rareOdds()}%`;
+    case 'hutch': return `Herd space: ${herdCap()} pigs`;
+  }
+  return '';
+}
+function upgEntry(id) {
+  const u = UPG[id];
+  return {
+    key: 'upg:' + id, icon: u.icon, name: u.name, desc: u.desc,
+    lvl: () => S.upg[id] ? 'Lv ' + S.upg[id] : '', meta: () => upgMeta(id),
+    cost: () => upgCost(id), maxed: () => S.upg[id] >= u.max,
+    buy: () => { S.upg[id]++; },
+  };
+}
+function visibleBuildings() {
+  let hi = -1;
+  BUILDINGS.forEach((b, i) => { if (S.bld[b.id] > 0) hi = i; });
+  const out = [];
+  BUILDINGS.forEach((b, i) => { if (i <= hi + 1 || S.total >= b.cost * 0.5) out.push(i); });
+  return out;
+}
+function bldEntry(b) {
+  return {
+    key: 'bld:' + b.id, icon: 'bld:' + b.id, name: b.name, desc: b.desc,
+    lvl: () => S.bld[b.id] ? '×' + S.bld[b.id] : '',
+    meta: () => S.bld[b.id] ? `${fmtRate(S.bld[b.id] * b.rate * (1 + forageBonus()))}/s · +${fmtRate(b.rate)} each` : `+${fmtRate(b.rate)} carrots/s each`,
+    cost: () => bldCost(b, UI.buyAmt),
+    buy: () => { S.bld[b.id] += UI.buyAmt; },
+  };
+}
+function sectionEntries(sec) {
+  switch (sec) {
+    case 'carrots': {
+      const E = [];
+      if (S.tier + 1 < TIERS.length) {
+        const i = S.tier + 1, n = TIERS[i];
+        E.push({key: 'tier:' + i, icon: 'tier:' + i, name: n.name, desc: n.desc, meta: `Worth ${fmt(n.value)} each (×${n.value / TIERS[S.tier].value})`, cost: () => n.cost, buy: () => { S.tier = i; onTierUp(); }});
+      }
+      E.push(upgEntry('thumb'));
+      E.push(upgEntry('whisper'));
+      E.push({key: 'paw', icon: 'paw', name: 'Poking Paw', desc: 'Circles the big carrot and pokes it like a click.',
+        lvl: () => S.paws ? '×' + S.paws : '',
+        meta: () => S.paws ? `${fmtRate(pawRate())} carrots/s · a poke every ${fmtRate(1 / pawPokeRate())}s each` : `Pokes every ${fmtRate(1 / pawPokeRate())}s, throwing ${pawCarrots()} carrot${pawCarrots() > 1 ? 's' : ''}`,
+        cost: () => pawCost(), buy: () => { S.paws++; }});
+      for (const u of availablePawUps()) E.push({key: 'pawup:' + u.id, icon: 'pawup', name: u.name, desc: u.desc, meta: 'One-time paw upgrade', cost: () => u.cost, buy: () => { S.pawUp[u.id] = 1; }});
+      return E;
+    }
+    case 'training': return [upgEntry('zoom'), upgEntry('cheeks'), upgEntry('gulp')];
+    case 'farm': return visibleBuildings().map(i => bldEntry(BUILDINGS[i]));
+    case 'breed':
+      if (!S.breed.built) return [{key: 'house', icon: 'house', name: 'Breeding House', desc: 'A cosy house where new pups are born, each with random stats.', meta: 'A new pup every 45s', cost: () => BREED_HOUSE_COST, buy: () => { S.breed.built = true; S.breed.progress = 0; toast('The Breeding House is open!', 'A new pup will arrive soon. Each one has its own speed, cheeks and forage.'); }}];
+      return [upgEntry('cozy'), upgEntry('pedigree'), upgEntry('hutch')];
+    case 'all': return ['carrots', 'training', 'farm', 'breed'].flatMap(sectionEntries);
+  }
+  return [];
+}
+function availablePawUps() { return PAW_UPGRADES.filter(u => !S.pawUp[u.id] && S.paws >= u.need); }
+function nextLockedPawUp() { return PAW_UPGRADES.find(u => !S.pawUp[u.id] && S.paws < u.need); }
+function onTierUp() {
+  const T = TIERS[S.tier];
+  G.banner = {title: T.name + 's!', sub: `Every carrot is now worth ${fmt(T.value)}`, life: 3};
+  for (let i = 0; i < 26; i++) addPart(500, 190, rand(-260, 260), rand(-260, 80), rand(0.6, 1.1), pick(T.fx === 'rainbow' ? RAINBOW : T.body), rand(2.5, 4.5), Math.random() < 0.4 ? 'spark' : 'dot', 300);
+  SFX.chime();
+}
+const SIG = {
+  carrots: () => `${S.tier}|${availablePawUps().map(u => u.id).join()}|${nextLockedPawUp() ? nextLockedPawUp().id : ''}`,
+  training: () => 't',
+  farm: () => `${visibleBuildings().join(',')}|${UI.buyAmt}`,
+  breed: () => `${S.breed.built}`,
+  herd: () => `${herdCap()}|${S.herdSort}|${S.pigs.map(p => p.id).join(',')}`,
+  stats: () => `${Object.keys(S.ach).length}`,
+};
+function pigCardHTML(p) {
+  const R = RARITIES[p.rarity], fe = pigForage(p);
+  return `<div class="pig" style="--rc:${R.color}">` +
+    `<canvas width="104" height="76" data-pig="${p.id}" title="Show ${esc(p.name)} on the field"></canvas>` +
+    `<div><div class="ph"><span class="pn">${esc(p.name)}</span><span class="badge">${R.name}</span>` +
+    (p.trait ? `<span class="tchip" title="${esc(TRAITS[p.trait].name)}: ${esc(TRAITS[p.trait].desc)}">★ ${TRAITS[p.trait].name}</span>` : '') + `</div>` +
+    `<div class="pstats" data-eat="${p.id}"></div>` +
+    `<div class="pstats"><span title="How fast this pig runs">Speed <b>${p.speed.toFixed(2)}×</b></span> · <span title="Bonus carrots on every catch">Cheeks <b>+${Math.round(p.cheeks * 100)}%</b></span> · <span title="Boosts your whole farm's output">Forage <b>+${(fe * 100).toFixed(1)}%</b></span></div>` +
+    `</div><button class="rehome" data-rehome="${p.id}" type="button">Rehome</button></div>`;
+}
+function sortedPigs() {
+  const a = S.pigs.slice();
+  if (S.herdSort === 'newest') a.sort((x, y) => y.id - x.id);
+  else if (S.herdSort === 'speed') a.sort((x, y) => y.speed - x.speed);
+  else a.sort((x, y) => y.rarity - x.rarity || y.speed - x.speed);
+  return a;
+}
+function buildSection(sec) {
+  const el = $('#sec-' + sec);
+  UI.sig[sec] = SIG[sec]();
+  const E = sectionEntries(sec);
+  for (const e of E) UI.entries.set(e.key, e);
+  let h = '';
+  if (sec === 'carrots') {
+    const cur = TIERS[S.tier];
+    h += `<h3>Carrots</h3>`;
+    h += itemHTML({icon: 'tier:' + S.tier, name: cur.name, desc: cur.desc, meta: `Worth ${fmt(cur.value)} each`, cls: 'current', costLabel: 'Growing'});
+    const next = E.find(e => e.key.startsWith('tier:'));
+    if (next) h += itemHTML(next);
+    else h += `<p class="note">You grow the finest carrot in the universe. The pigs are very proud.</p>`;
+    h += `<h3 class="sub">Plucking</h3>`;
+    for (const e of E) if (e.key.startsWith('upg:')) h += itemHTML(e);
+    h += `<h3 class="sub">Poking paws</h3>`;
+    for (const e of E) if (e.key === 'paw' || e.key.startsWith('pawup:')) h += itemHTML(e);
+    const nl = nextLockedPawUp();
+    if (nl) h += itemHTML({icon: 'pawup', name: nl.name, desc: nl.desc, meta: `Needs ${nl.need} paw${nl.need > 1 ? 's' : ''}`, cls: 'locked', costLabel: ''});
+  } else if (sec === 'training') {
+    h += `<h3>Pig training</h3><p class="note">Faster pigs chain more catches. Carrots that hit the ground vanish.</p>`;
+    for (const e of E) h += itemHTML(e);
+  } else if (sec === 'farm') {
+    h += `<h3>Farm helpers <span class="h3meta grow" data-farmtot></span><span class="seg"><button type="button" data-amt="1" class="${UI.buyAmt === 1 ? 'on' : ''}">×1</button><button type="button" data-amt="10" class="${UI.buyAmt === 10 ? 'on' : ''}">×10</button></span></h3><div class="farmgrid">`;
+    for (const e of E) h += itemHTML(e);
+    if (visibleBuildings().length < BUILDINGS.length) h += itemHTML({icon: 'tierlock:0', name: '???', desc: 'Earn more carrots to discover the next helper.', meta: 'Keep growing', cls: 'locked', costLabel: ''});
+    h += `</div>`;
+  } else if (sec === 'breed') {
+    h += `<h3>Breeding house</h3>`;
+    if (!S.breed.built) h += itemHTML(E[0]);
+    else {
+      h += `<div class="breedbox"><div class="bb-top"><canvas width="72" height="72" data-icon="house"></canvas><div><div class="nm">Breeding House</div><div class="ds" data-breedtxt></div></div></div>` +
+        `<div class="bar"><i data-breedbar style="width:0%"></i></div><div class="bb-meta"><span data-herdtxt></span><span data-breedrate></span></div></div>`;
+      for (const e of E) h += itemHTML(e);
+    }
+  } else if (sec === 'herd') {
+    const prev = $('.herdlist', el), top = prev ? prev.scrollTop : 0;
+    h += `<h3>Your herd · ${S.pigs.length}/${herdCap()}<span class="grow"></span><span class="seg">` +
+      ['rarity', 'speed', 'newest'].map(s => `<button type="button" data-sort="${s}" class="${S.herdSort === s ? 'on' : ''}">${s[0].toUpperCase() + s.slice(1)}</button>`).join('') + `</span></h3>` +
+      `<p class="note"><b>Speed</b>: running. <b>Cheeks</b>: bonus on each catch. <b>Forage</b>: boosts the farm. Tap a pig to find it.</p><div class="herdlist">`;
+    for (const p of sortedPigs()) h += pigCardHTML(p);
+    h += `</div>`;
+    el.innerHTML = h;
+    const list = $('.herdlist', el); if (list) list.scrollTop = top;
+    h = null;
+  } else if (sec === 'stats') {
+    const got = ACH.filter(a => S.ach[a.id]).length;
+    h += `<h3>Stats</h3><div class="statrow">` +
+      [['Earned', 'total'], ['Clicks', 'clicks'], ['Caught', 'caught'], ['Missed', 'dropped'], ['Best streak', 'best'], ['Pups', 'born'], ['Lucky', 'luckies'], ['Played', 'played']]
+        .map(([n, k]) => `<span>${n} <b data-st="${k}"></b></span>`).join('') + `</div>` +
+      `<div class="achrow"><span>Achievements ${got}/${ACH.length} (+${got}% value)</span>` +
+      ACH.map(a => `<span class="achb ${S.ach[a.id] ? 'got' : ''}" title="${esc(a.name)}: ${esc(a.desc)}${S.ach[a.id] ? ' ✓' : ''}">★</span>`).join('') + `</div>`;
+  }
+  if (h !== null) el.innerHTML = h;
+  for (const cv of $$('canvas[data-icon]', el)) drawIcon(cv, cv.dataset.icon);
+  for (const cv of $$('canvas[data-pig]', el)) { const p = S.pigs.find(q => q.id === +cv.dataset.pig); if (p) drawPortrait(cv, p); }
+  refreshSection(sec);
+}
+function refreshSection(sec) {
+  const el = $('#sec-' + sec);
+  for (const it of $$('.item[data-key]', el)) {
+    const e = UI.entries.get(it.dataset.key); if (!e) continue;
+    const mx = !!(e.maxed && e.maxed()), cost = mx ? 0 : e.cost();
+    it.classList.toggle('maxed', mx);
+    it.classList.toggle('cant', !mx && S.carrots < cost);
+    const cs = it.querySelector('[data-cost]'), txt = mx ? 'MAX' : fmt(cost);
+    if (cs.dataset.v !== txt) { cs.dataset.v = txt; cs.innerHTML = mx ? 'MAX' : costHTML(cost); }
+    const lv = it.querySelector('[data-lv]'); if (lv && e.lvl) { const t = e.lvl(); if (lv.textContent !== t) lv.textContent = t; }
+    const mt = it.querySelector('[data-mt]'); if (mt && typeof e.meta === 'function') { const t = e.meta(); if (mt.textContent !== t) mt.textContent = t; }
+  }
+  if (sec === 'breed' && S.breed.built) {
+    const full = S.pigs.length >= herdCap(), bt = breedTime();
+    const bar = $('[data-breedbar]', el), txt = $('[data-breedtxt]', el);
+    if (bar) bar.style.width = (full ? 100 : S.breed.progress / bt * 100) + '%';
+    if (txt) txt.textContent = full ? 'The hutch is full. Rehome a pig or add space.' : `Next pup in ${Math.ceil(bt - S.breed.progress)}s`;
+    const ht = $('[data-herdtxt]', el); if (ht) ht.textContent = `Herd ${S.pigs.length} / ${herdCap()}`;
+    const br = $('[data-breedrate]', el); if (br) br.textContent = `Rare or better: ${rareOdds()}%`;
+  }
+  if (sec === 'herd') {
+    for (const n of $$('[data-eat]', el)) {
+      const p = S.pigs.find(q => q.id === +n.dataset.eat); if (!p) continue;
+      const near = p.eaten > POP_AT * 0.9, warn = p.state === 'charge' ? 'CHARGING!' : near ? 'about to pop!' : '';
+      const t = `Ate <b>${fmt(p.eaten || 0)}</b> · size <b>×${(p.g || 1).toFixed(2)}</b>${warn ? ` · <b style="color:#d9452f">${warn}</b>` : ''}`;
+      if (n.dataset.v !== t) { n.dataset.v = t; n.innerHTML = t; }
+    }
+  }
+  if (sec === 'farm') {
+    const ft = $('[data-farmtot]', el);
+    if (ft) {
+      const pps = farmPlucks();
+      const t = !pps ? '' : pps > G.farmRate * 1.25 + 0.5 ? `${fmtRate(pps)}/s · herd only catches ${fmtRate(G.farmRate)}/s: breed more pigs!` : `${fmtRate(pps)}/s · +${(forageBonus() * 100).toFixed(1)}% forage`;
+      if (ft.textContent !== t) ft.textContent = t;
+    }
+  }
+  if (sec === 'stats') {
+    const set = (k, v) => { const n = $(`[data-st="${k}"]`, el); if (n && n.textContent !== v) n.textContent = v; };
+    set('total', fmt(S.total)); set('clicks', fmt(S.stats.clicks)); set('caught', fmt(S.stats.caught)); set('dropped', fmt(S.stats.dropped));
+    set('best', fmt(S.stats.bestStreak)); set('born', fmt(S.stats.born)); set('luckies', fmt(S.stats.luckies)); set('played', dur(S.stats.played));
+  }
+}
+function refreshUI() {
+  $('#cCount').textContent = fmtCount(S.carrots);
+  $('#cRate').textContent = fmtRate(G.rate);
+  const r = G.resolved;
+  $('#cCatch').textContent = r.length ? `${Math.round(r.reduce((a, b) => a + b, 0) / r.length * 100)}% caught` : 'no catches yet';
+  for (const sec of SECTIONS) {
+    if (SIG[sec]() !== UI.sig[sec]) buildSection(sec);
+    else refreshSection(sec);
+  }
+}
+function buildAll() { UI.sig = {}; for (const sec of SECTIONS) buildSection(sec); }
+function tryBuy(e, el) {
+  if (e.maxed && e.maxed()) return;
+  const cost = e.cost();
+  if (S.carrots < cost) { el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); SFX.nope(); return; }
+  S.carrots -= cost;
+  e.buy();
+  SFX.buy();
+  el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
+  refreshUI();
+}
+function toast(title, body, opts = {}) {
+  const el = document.createElement('div');
+  el.className = 'toast' + (opts.cls ? ' ' + opts.cls : '');
+  if (opts.pig) { const cv = document.createElement('canvas'); cv.width = 128; cv.height = 92; drawPortrait(cv, opts.pig); el.appendChild(cv); }
+  const tx = document.createElement('div');
+  tx.innerHTML = `<b>${title}</b>${body ? `<span>${body}</span>` : ''}`;
+  el.appendChild(tx);
+  const box = $('#toasts'); box.appendChild(el);
+  while (box.children.length > (window.innerWidth <= 1100 ? 2 : 4)) box.firstChild.remove();
+  setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 420); }, opts.ms || 4500);
+}
+function modal(html, buttons) {
+  $('#mbody').innerHTML = html;
+  const mb = $('#mbtns'); mb.innerHTML = '';
+  for (const b of buttons) {
+    const btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'btn ' + (b.cls || ''); btn.textContent = b.label;
+    btn.onclick = () => { if (b.fn && b.fn() === false) return; $('#modal').hidden = true; };
+    mb.appendChild(btn);
+  }
+  $('#modal').hidden = false;
+  const last = mb.lastChild; if (last) last.focus();
+}
+function checkAch() {
+  for (const a of ACH) {
+    if (S.ach[a.id] || !a.test()) continue;
+    S.ach[a.id] = Date.now();
+    toast(`Achievement: ${a.name}`, `${a.desc}. Carrots are now worth 1% more.`, {cls: 'achtoast'});
+    SFX.chime();
+  }
+}
+function soundIcon() {
+  $('#btnSound').innerHTML = S.sound
+    ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>'
+    : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M17 9l5 6M22 9l-5 6"/></svg>';
+  $('#btnSound').setAttribute('aria-pressed', S.sound ? 'true' : 'false');
+}
+function drawLogo() {
+  const cv = $('#logo'), c = cv.getContext('2d');
+  c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, cv.width, cv.height);
+  drawPig(c, SAMPLE_PIG, 40, 62, 1.45, {face: 1, carry: 0});
+}
+
+// ---------------------------------------------------------------- save / load / offline
+function serialize() {
+  const d = Object.assign({}, S);
+  d.pigs = S.pigs.map(p => ({id: p.id, name: p.name, rarity: p.rarity, speed: p.speed, cheeks: p.cheeks, forage: p.forage, trait: p.trait, coat: p.coat, side: p.side, born: p.born, eaten: Math.floor(p.eaten || 0)}));
+  d.lastSaved = Date.now();
+  return JSON.stringify(d);
+}
+function save() {
+  try { localStorage.setItem(KEY, serialize()); S.lastSaved = Date.now(); } catch (e) { /* storage blocked: play on without saving */ }
+}
+function merge(base, d) {
+  for (const k of Object.keys(d)) {
+    const v = d[k];
+    if (v && typeof v === 'object' && !Array.isArray(v) && base[k] && typeof base[k] === 'object' && !Array.isArray(base[k])) merge(base[k], v);
+    else base[k] = v;
+  }
+  return base;
+}
+function sanitize(st) {
+  for (const k of ['carrots', 'total', 'passiveRate']) if (!isFinite(st[k]) || st[k] < 0) st[k] = 0;
+  st.tier = clamp(Math.floor(st.tier) || 0, 0, TIERS.length - 1);
+  for (const id of Object.keys(UPG)) st.upg[id] = clamp(Math.floor(st.upg[id]) || 0, 0, UPG[id].max);
+  st.pigs = Array.isArray(st.pigs) ? st.pigs.filter(p => p && p.coat && p.coat.base && isFinite(p.speed)) : [];
+  for (const p of st.pigs) { p.rarity = clamp(p.rarity | 0, 0, 4); if (p.trait === 'tidy') p.trait = 'gulper'; if (p.trait && !TRAITS[p.trait]) p.trait = null; p.side = p.side ? 1 : 0; p.eaten = Math.max(0, +p.eaten || 0); }
+  st.paws = Math.max(0, Math.floor(+st.paws || 0)); if (!st.pawUp || typeof st.pawUp !== 'object') st.pawUp = {};
+  st.nextPigId = Math.max(st.nextPigId || 1, ...st.pigs.map(p => p.id + 1), 1);
+  return st;
+}
+function parseSave(raw) { return sanitize(merge(freshState(), JSON.parse(raw))); }
+function load() {
+  try { const raw = localStorage.getItem(KEY); return raw ? parseSave(raw) : null; } catch (e) { return null; }
+}
+function resetRuntime() {
+  G.carrots = []; G.parts = []; G.floats = []; G.bubbles = [];
+  G.streak = 0; G.lucky = null; G.banner = null; G.showerLeft = 0; G.resolved = []; G.hist = []; G.rate = 0; G.pluckAcc = 0;
+  G.buffs = {frenzy: 0, zoomies: 0}; G.tag = null; G.highlight = null; G.drops = 0;
+}
+function startWith(state) {
+  S = state;
+  resetRuntime();
+  if (!S.pigs.length) seedPigs();
+  S.pigs.forEach(p => initPig(p));
+  soundIcon();
+  UI.sig = {};
+  renderBackground();
+  buildAll();
+}
+function applyOffline(sec, show) {
+  sec = Math.min(sec, 8 * 3600);
+  const gain = S.passiveRate * sec;
+  if (gain > 0) { S.carrots += gain; S.total += gain; }
+  if (gain > 0 && S.pigs.length) {
+    const each = gain / Math.max(1, unitValue()) / S.pigs.length;
+    for (const p of S.pigs) { p.eaten = Math.min(POP_AT - 60, (p.eaten || 0) + each); p.g = growthOf(p.eaten); }
+  }
+  const born = [];
+  if (S.breed.built) {
+    let t = S.breed.progress + sec;
+    const bt = breedTime();
+    while (t >= bt && S.pigs.length < herdCap() && born.length < 40) { t -= bt; born.push(birth(false)); }
+    S.breed.progress = S.pigs.length >= herdCap() ? 0 : t;
+  }
+  if (gain < 1 && !born.length) return;
+  const counts = {};
+  born.forEach(p => { counts[RARITIES[p.rarity].name] = (counts[RARITIES[p.rarity].name] || 0) + 1; });
+  const pupTxt = born.length ? ` ${born.length} new pup${born.length > 1 ? 's were' : ' was'} born (${Object.entries(counts).map(([n, c]) => `${c} ${n}`).join(', ')}).` : '';
+  if (show) modal(`<h2>Welcome back!</h2><p>You were away for <b>${dur(sec)}</b>.</p><p>Your herd kept catching and brought in <b><span class="ci"></span> ${fmt(gain)}</b> carrots.${pupTxt}</p>`, [{label: 'Wheek!'}]);
+  else toast('While you were away', `Your herd caught ${fmt(gain)} carrots.${pupTxt}`);
+}
+
+// ---------------------------------------------------------------- layout
+function resize() {
+  const wrap = $('#fieldWrap'), mobile = window.innerWidth <= 1100;
+  const aw = wrap.clientWidth, ah = mobile ? window.innerHeight * 0.6 : wrap.clientHeight;
+  const w = Math.max(260, Math.floor(Math.min(aw, ah * W / H))), h = Math.floor(w * H / W);
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  if (canvas.style.width !== w + 'px' || view.dpr !== dpr) {
+    canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+    view.dpr = dpr; canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+    view.scale = w / W;
+    renderBackground();
+  }
+  document.documentElement.style.setProperty('--hdr-h', $('#hdr').offsetHeight + 'px');
+}
+
+// ---------------------------------------------------------------- input
+function toLogical(e) {
+  const r = canvas.getBoundingClientRect();
+  return {x: (e.clientX - r.left) / r.width * W, y: (e.clientY - r.top) / r.height * H};
+}
+canvas.addEventListener('pointerdown', e => {
+  SFX.init();
+  const pt = toLogical(e);
+  if (G.lucky && hyp(pt.x - G.lucky.x, pt.y - G.lucky.y) < 46) { claimLucky(); return; }
+  if (hitBig(pt)) { clickCarrot(pt); return; }
+  const p = pigAt(pt);
+  if (p) { G.tag = {pig: p, until: G.time + 2.5}; SFX.wheek(p.voice); p.hopV = 170; }
+});
+canvas.addEventListener('pointermove', e => {
+  const pt = toLogical(e);
+  canvas.style.cursor = (G.lucky && hyp(pt.x - G.lucky.x, pt.y - G.lucky.y) < 46) || hitBig(pt) || pigAt(pt) ? 'pointer' : 'default';
+});
+canvas.addEventListener('keydown', e => {
+  if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) { e.preventDefault(); SFX.init(); clickCarrot({x: 500, y: 200}); }
+});
+document.addEventListener('pointerdown', () => SFX.init(), {once: true});
+$('#btnSound').addEventListener('click', () => { S.sound = !S.sound; soundIcon(); save(); });
+$('#btnHelp').addEventListener('click', () => modal(`<h2>How to play</h2>
+  <p>Click the big carrot to pluck one. A guinea pig dashes out of its hutch to catch it before it lands. Carrots that hit the ground vanish, so only catches count. Catches in a row build a streak bonus.</p>
+  <p>Spend carrots on better varieties, faster pigs and farm helpers. Everything you buy shows up on the field. Build the Breeding House for more pigs: each pup is born with random speed, cheeks and forage.</p>
+  <p>Poking Paws circle the big carrot and poke it for you. Pigs slowly fatten as they eat: twice their size at 10K carrots, three times at 50K, and at 200K they pop. Rehome a pig before that if you want to keep it!</p>
+  <p>Watch the sky for a lucky carrot with a leaf propeller and click it for a surprise.</p>`, [{label: 'Wheek!'}]));
+function exportSave() {
+  let code = '';
+  try { code = btoa(unescape(encodeURIComponent(serialize()))); } catch (er) { code = ''; }
+  modal(`<h2>Export save</h2><p>Copy this code somewhere safe. Paste it into Import save to restore your farm.</p><textarea readonly id="expTxt">${code}</textarea>`, [
+    {label: 'Copy', cls: 'ghost', fn: () => { const t = $('#expTxt'); t.select(); try { navigator.clipboard.writeText(t.value); } catch (er) { document.execCommand('copy'); } toast('Save code copied', ''); return false; }},
+    {label: 'Done'}]);
+}
+function importSave() {
+  modal(`<h2>Import save</h2><p>Paste a save code. Your current farm will be replaced.</p><textarea id="impTxt" placeholder="Paste your code here"></textarea>`, [
+    {label: 'Cancel', cls: 'ghost'},
+    {label: 'Load', fn: () => {
+      try { const st = parseSave(decodeURIComponent(escape(atob($('#impTxt').value.trim())))); startWith(st); save(); toast('Save loaded', 'Welcome back to your farm.'); }
+      catch (er) { toast('That code didn\'t work', 'Check that you copied the whole thing.'); return false; }
+    }}]);
+}
+function resetGame() {
+  modal('<h2>Start over?</h2><p>This wipes your carrots, upgrades and the whole herd. It can\'t be undone.</p>', [
+    {label: 'Keep playing', cls: 'ghost'},
+    {label: 'Reset everything', cls: 'danger', fn: () => { try { localStorage.removeItem(KEY); } catch (er) {} startWith(freshState()); save(); }}]);
+}
+$('#btnMenu').addEventListener('click', () => modal('<h2>Settings</h2><p>Your farm saves automatically in this browser.</p>', [
+  {label: 'Export save', cls: 'ghost', fn: () => { exportSave(); return false; }},
+  {label: 'Import save', cls: 'ghost', fn: () => { importSave(); return false; }},
+  {label: 'Reset game', cls: 'danger', fn: () => { resetGame(); return false; }},
+  {label: 'Close'}]));
+$('#layout').addEventListener('click', e => {
+  const it = e.target.closest('.item[data-key]');
+  if (it) { const en = UI.entries.get(it.dataset.key); if (en) tryBuy(en, it); return; }
+  const amt = e.target.closest('[data-amt]');
+  if (amt) { UI.buyAmt = +amt.dataset.amt; buildSection('farm'); return; }
+  const so = e.target.closest('[data-sort]');
+  if (so) { S.herdSort = so.dataset.sort; buildSection('herd'); return; }
+  const rh = e.target.closest('[data-rehome]');
+  if (rh) {
+    const id = +rh.dataset.rehome;
+    if (UI.sure === id) { UI.sure = null; rehome(id); refreshUI(); }
+    else {
+      for (const b of $$('.rehome.sure')) { b.classList.remove('sure'); b.textContent = 'Rehome'; }
+      UI.sure = id; rh.classList.add('sure'); rh.textContent = 'Sure?';
+      setTimeout(() => { if (UI.sure === id) { UI.sure = null; rh.classList.remove('sure'); rh.textContent = 'Rehome'; } }, 3000);
+    }
+    return;
+  }
+  const pc = e.target.closest('canvas[data-pig]');
+  if (pc) {
+    const p = S.pigs.find(q => q.id === +pc.dataset.pig);
+    if (p) { G.highlight = {id: p.id, until: G.time + 3}; G.tag = {pig: p, until: G.time + 3}; if (window.innerWidth <= 1100) canvas.scrollIntoView({behavior: 'smooth', block: 'center'}); }
+  }
+});
+window.addEventListener('resize', () => { clearTimeout(UI.rz); UI.rz = setTimeout(resize, 80); });
+if (window.ResizeObserver) new ResizeObserver(() => { clearTimeout(UI.rz); UI.rz = setTimeout(resize, 60); }).observe($('#fieldWrap'));
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) { save(); G.hiddenAt = Date.now(); }
+  else if (G.hiddenAt) {
+    const sec = (Date.now() - G.hiddenAt) / 1000; G.hiddenAt = 0; lastTs = performance.now();
+    if (sec > 5) applyOffline(sec, sec > 300);
+  }
+});
+window.addEventListener('pagehide', save);
+
+// ---------------------------------------------------------------- loop
+let lastTs = performance.now();
+function frame(ts) {
+  let dt = (ts - lastTs) / 1000; lastTs = ts;
+  if (!(dt > 0)) dt = 0;
+  dt = Math.min(dt, 0.1) * G.timeScale;
+  const steps = Math.max(1, Math.ceil(dt / 0.034));
+  for (let i = 0; i < steps; i++) update(dt / steps);
+  render(ts / 1000);
+  drawGore(Math.min(0.1, (ts - (frame.last || ts)) / 1000)); frame.last = ts;
+  UI.t += dt / G.timeScale;
+  if (UI.t >= 0.2) { UI.t = 0; refreshUI(); }
+  UI.t2 += dt / G.timeScale;
+  if (UI.t2 >= 10) { UI.t2 = 0; save(); }
+  requestAnimationFrame(frame);
+}
+
+// ---------------------------------------------------------------- start
+for (let i = 0; i < 5; i++) G.clouds.push({x0: rand(0, W + 260), y: rand(40, 250), s: rand(0.7, 1.3), v: rand(6, 16)});
+const loaded = load();
+S = loaded || freshState();
+if (!S.pigs.length) seedPigs();
+S.pigs.forEach(p => initPig(p));
+soundIcon();
+drawLogo();
+resize();
+buildAll();
+if (loaded) { const sec = (Date.now() - (S.lastSaved || Date.now())) / 1000; if (sec > 30) applyOffline(sec, true); }
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { drawLogo(); UI.sig = {}; refreshUI(); });
+requestAnimationFrame(frame);
+
+// ---------------------------------------------------------------- debug & test hooks
+window.wheek = {
+  get S() { return S; }, get G() { return G; },
+  tick(sec, step = 1 / 30) { const n = Math.round(sec / step); for (let i = 0; i < n; i++) update(step); refreshUI(); },
+  click(n = 1) { for (let i = 0; i < n; i++) clickCarrot({x: 500, y: 200}); },
+  give(n) { earn(n, true); refreshUI(); },
+  pup(r) { return birth(true, r); },
+  lucky() { spawnLucky(); G.lucky.x = 500; },
+  claimLucky() { if (G.lucky) claimLucky(); },
+  save, load: () => load(), reset() { startWith(freshState()); },
+  offline(sec) { applyOffline(sec, true); },
+  entries: (sec = 'all') => sectionEntries(sec), refresh: refreshUI,
+  feed(i, n) { const p = S.pigs[i]; if (p) { p.eaten = n; p.g = growthOf(n); } return p && p.g; },
+};
+if (DEBUG) {
+  const d = document.createElement('div'); d.id = 'dbg';
+  d.innerHTML = ['1e3:+1K', '1e6:+1M', '1e9:+1B', 'pup:Pup', 'lucky:Lucky', 'fast:×10 speed'].map(s => { const [k, l] = s.split(':'); return `<button data-d="${k}">${l}</button>`; }).join('');
+  document.body.appendChild(d);
+  d.addEventListener('click', e => {
+    const k = e.target.dataset.d; if (!k) return;
+    if (k === 'pup') birth(true); else if (k === 'lucky') window.wheek.lucky();
+    else if (k === 'fast') { G.timeScale = G.timeScale === 1 ? 10 : 1; e.target.textContent = G.timeScale === 1 ? '×10 speed' : '×1 speed'; }
+    else window.wheek.give(+k);
+  });
+}
+})();
+</script>
+</body>
+</html>

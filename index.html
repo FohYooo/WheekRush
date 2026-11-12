@@ -64,11 +64,13 @@ button.item:active{transform:translateY(2px);box-shadow:0 0 0 var(--line)}
 .item.shake{animation:shake .3s}
 @keyframes flash{0%{background:#fff0bd;border-color:#f5b041}}
 @keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
-.farmgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(172px,1fr));gap:6px;margin-bottom:6px}
+.farmgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:6px;margin-bottom:6px}
 .farmgrid .item{margin:0;grid-template-columns:36px minmax(0,1fr);grid-template-rows:auto auto;row-gap:1px;padding:5px 7px}
 .farmgrid .item .ico{width:36px;height:36px;grid-row:span 2}
 .farmgrid .item .ds{display:none}
 .farmgrid .item .cost{grid-column:2;font-size:13px}
+.farmgrid .item .nm{font-size:13px}
+.farmgrid .item .lv{margin-left:3px}
 .seg{display:inline-flex;background:#f3e4cf;border-radius:9px;padding:2px;gap:2px;text-transform:none;letter-spacing:0}
 .seg button{border:0;background:transparent;border-radius:7px;padding:2px 8px;cursor:pointer;font-weight:600;font-size:12px;color:var(--soft)}
 .seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 0 #e2ccb0}
@@ -83,6 +85,28 @@ button.item:active{transform:translateY(2px);box-shadow:0 0 0 var(--line)}
 .breedbox .bar i{background:linear-gradient(90deg,#f59bb0,#f06b8b)}
 .bb-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--soft);margin-top:4px}
 #sec-herd{flex:1 1 auto;min-height:150px;display:flex;flex-direction:column}
+.techgrid{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:2px}
+.tile{width:46px;height:46px;border-radius:10px;border:2px solid var(--line);background:#fff;padding:3px;cursor:pointer;position:relative;box-shadow:0 2px 0 var(--line)}
+.tile:hover{border-color:#f1b47e}
+.tile canvas{width:36px;height:36px;display:block}
+.tile.cant{opacity:.42}
+.tile .tn{position:absolute;right:3px;bottom:0;font-size:10px;font-weight:700;color:var(--orange2)}
+.tile.flash{animation:flash .45s}.tile.shake{animation:shake .3s}
+.techinfo{font-size:12px;color:var(--soft);min-height:16px;margin:4px 2px 6px;line-height:1.3}
+.order{background:#fff;border:2px solid #cfe3f7;border-radius:12px;padding:7px 9px;margin-bottom:6px}
+.ord-goal{font-weight:600;font-size:14px}
+.ord-meta{font-size:12px;color:var(--soft);margin-top:2px;display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.ord-btns{display:flex;gap:6px;margin-top:6px}
+.order .bar{margin-top:6px;height:8px}
+.order .bar i{background:linear-gradient(90deg,#7cc0f5,#2f8fd8)}
+.btn.small{padding:5px 12px;font-size:13px;border-radius:10px}
+.btn.cant{opacity:.45;cursor:default}
+.replant{display:flex;align-items:center;gap:8px;justify-content:space-between;font-size:12.5px;color:var(--soft);border-top:1px dashed var(--line);padding-top:6px;margin-bottom:6px}
+.replant b{color:#a06c00}
+.perks{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 6px}
+.perk{border:0;border-radius:8px;padding:3px 8px;font-size:11.5px;background:#fff3cf;color:#8a5a00;cursor:pointer;font-weight:600}
+.perk.own{background:#e8f5df;color:var(--green2);cursor:default}
+.perk.cant{opacity:.5;cursor:default}
 .herdlist{overflow-y:auto;min-height:0;flex:1;margin:0 -4px;padding:0 4px 6px;overscroll-behavior:contain}
 .pig{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:6px;align-items:center;background:#fff;border:2px solid var(--line);border-left:5px solid var(--rc);border-radius:12px;padding:4px 6px;margin-bottom:5px}
 .pig canvas{width:52px;height:38px;cursor:pointer}
@@ -132,7 +156,7 @@ button.item:active{transform:translateY(2px);box-shadow:0 0 0 var(--line)}
   #layout{display:flex;flex-direction:column;padding:8px;gap:8px}
   .col,#colC{display:contents}
   #fieldWrap{order:1;flex:none;min-height:0}
-  #sec-farm{order:2}#sec-carrots{order:3}#sec-training{order:4}#sec-breed{order:5}#sec-herd{order:6}#sec-stats{order:7}
+  #sec-tech{order:2}#sec-farm{order:3}#sec-orders{order:4}#sec-carrots{order:5}#sec-luck{order:6}#sec-training{order:7}#sec-breed{order:8}#sec-herd{order:9}#sec-stats{order:10}
   #sec-herd{min-height:0}
   .herdlist{overflow:visible}
   .tagline{display:none}
@@ -165,14 +189,17 @@ button.item:active{transform:translateY(2px);box-shadow:0 0 0 var(--line)}
   <main id="layout">
     <aside id="colL" class="col">
       <section class="sec" id="sec-carrots"></section>
+      <section class="sec" id="sec-luck"></section>
       <section class="sec" id="sec-training"></section>
     </aside>
     <section id="colC">
       <div id="fieldWrap"><canvas id="field" tabindex="0" aria-label="The carrot field. Click the big carrot to pluck carrots for your guinea pigs."></canvas></div>
+      <section class="sec" id="sec-tech"></section>
       <section class="sec" id="sec-farm"></section>
     </section>
     <aside id="colR" class="col">
       <section class="sec" id="sec-breed"></section>
+      <section class="sec" id="sec-orders"></section>
       <section class="sec" id="sec-herd"></section>
       <section class="sec" id="sec-stats"></section>
     </aside>
@@ -254,12 +281,12 @@ function dur(sec) {
 const TIERS = [
   {name: 'Garden Carrot', value: 1, cost: 0, desc: 'Crunchy, orange, honest.', body: ['#ffb65c', '#f7841f', '#d2600c'], leaf: '#4fae45'},
   {name: 'Purple Heirloom', value: 3, cost: 150, desc: 'Grandma\'s old seeds. The pigs go quiet with respect.', body: ['#c39ae6', '#8447b8', '#5b2588'], leaf: '#5cae4a', outline: 'rgba(60,10,80,.5)', ridge: 'rgba(40,0,60,.3)'},
-  {name: 'Rainbow Carrot', value: 9, cost: 3000, desc: 'Striped in every colour the garden knows.', fx: 'rainbow', leaf: '#58c35a'},
-  {name: 'Golden Carrot', value: 27, cost: 40000, desc: 'Shines in the sun. Tastes like it, too.', body: ['#fff3b0', '#f5c542', '#c58a12'], leaf: '#79c257', fx: 'shine', outline: 'rgba(130,80,0,.5)'},
-  {name: 'Frost Carrot', value: 81, cost: 5e5, desc: 'Grown in a glacier greenhouse. Brain-freeze crunchy.', body: ['#f2fdff', '#a5e6f7', '#5cb3d6'], leaf: '#8fe3cc', fx: 'crystal', outline: 'rgba(30,90,130,.45)', ridge: 'rgba(30,90,130,.25)'},
-  {name: 'Lava Carrot', value: 243, cost: 6e6, desc: 'Handle with oven mitts. The pigs blow on it first.', body: ['#7a2a18', '#3f140c', '#1e0806'], leaf: '#3f8a2c', fx: 'lava', outline: 'rgba(255,120,40,.7)', ridge: 'rgba(255,140,60,.35)'},
-  {name: 'Moon Carrot', value: 729, cost: 8e7, desc: 'Harvested on the far side. Slightly bouncy.', body: ['#ffffff', '#cfd0dc', '#8f90a6'], leaf: '#a6d99c', fx: 'moon', outline: 'rgba(70,70,100,.45)', ridge: 'rgba(70,70,100,.25)'},
-  {name: 'Cosmic Carrot', value: 2187, cost: 1e9, desc: 'Holds a tiny galaxy. Nobody asks how.', body: ['#7d5cff', '#3b1f94', '#150a40'], leaf: '#7ef0c2', fx: 'cosmic', outline: 'rgba(180,150,255,.7)', ridge: 'rgba(200,180,255,.3)'},
+  {name: 'Rainbow Carrot', value: 9, cost: 4000, desc: 'Striped in every colour the garden knows.', fx: 'rainbow', leaf: '#58c35a'},
+  {name: 'Golden Carrot', value: 27, cost: 1e5, desc: 'Shines in the sun. Tastes like it, too.', body: ['#fff3b0', '#f5c542', '#c58a12'], leaf: '#79c257', fx: 'shine', outline: 'rgba(130,80,0,.5)'},
+  {name: 'Frost Carrot', value: 81, cost: 3e6, desc: 'Grown in a glacier greenhouse. Brain-freeze crunchy.', body: ['#f2fdff', '#a5e6f7', '#5cb3d6'], leaf: '#8fe3cc', fx: 'crystal', outline: 'rgba(30,90,130,.45)', ridge: 'rgba(30,90,130,.25)'},
+  {name: 'Lava Carrot', value: 243, cost: 1.2e8, desc: 'Handle with oven mitts. The pigs blow on it first.', body: ['#7a2a18', '#3f140c', '#1e0806'], leaf: '#3f8a2c', fx: 'lava', outline: 'rgba(255,120,40,.7)', ridge: 'rgba(255,140,60,.35)'},
+  {name: 'Moon Carrot', value: 729, cost: 6e9, desc: 'Harvested on the far side. Slightly bouncy.', body: ['#ffffff', '#cfd0dc', '#8f90a6'], leaf: '#a6d99c', fx: 'moon', outline: 'rgba(70,70,100,.45)', ridge: 'rgba(70,70,100,.25)'},
+  {name: 'Cosmic Carrot', value: 2187, cost: 4e11, desc: 'Holds a tiny galaxy. Nobody asks how.', body: ['#7d5cff', '#3b1f94', '#150a40'], leaf: '#7ef0c2', fx: 'cosmic', outline: 'rgba(180,150,255,.7)', ridge: 'rgba(200,180,255,.3)'},
 ];
 
 const BUILDINGS = [
@@ -278,15 +305,43 @@ const ORIGINS = {
 
 const UPG = {
   thumb: {name: 'Green Thumb', base: 25, grow: 2.4, max: 9, icon: 'upg:thumb', desc: 'Each click throws one more carrot.'},
-  whisper: {name: 'Carrot Whisperer', base: 300, grow: 1.45, max: 200, icon: 'upg:whisper', desc: 'Every carrot is worth 10% more. Keeps stacking.'},
+  whisper: {name: 'Carrot Whisperer', base: 300, grow: 1.6, max: 200, icon: 'upg:whisper', desc: 'Every carrot is worth 10% more. Keeps stacking.'},
   zoom: {name: 'Zoomies Training', base: 30, grow: 1.8, max: 30, icon: 'upg:zoom', desc: 'All pigs run 15% faster.'},
   cheeks: {name: 'Big Cheeks', base: 90, grow: 2.8, max: 8, icon: 'upg:cheeks', desc: 'Pigs can snatch carrots from 15% farther away.'},
   gulp: {name: 'Speed Snacking', base: 150, grow: 2.8, max: 5, icon: 'upg:gulp', desc: 'Pigs gulp carrots 15% faster, so they\'re ready for the next one sooner.'},
   cozy: {name: 'Cozy Bedding', base: 300, grow: 2.6, max: 12, icon: 'upg:cozy', desc: 'Pups arrive 12% sooner.'},
   pedigree: {name: 'Pedigree Charts', base: 700, grow: 3.0, max: 10, icon: 'upg:pedigree', desc: 'Better odds of rare pups.'},
   hutch: {name: 'Hutch Extension', base: 400, grow: 2.5, max: 12, icon: 'upg:hutch', desc: 'Room for 2 more pigs.'},
+  lucky: {name: 'Lucky Seeds', base: 5000, grow: 3, max: 10, icon: 'upg:lucky', desc: 'Each carrot gets a 0.5% higher chance to be golden.'},
+  gild: {name: 'Gilded Carrots', base: 50000, grow: 4, max: 5, icon: 'upg:gild', desc: 'Golden carrots are worth 3 times more.'},
+  fever: {name: 'Fever Pitch', base: 8000, grow: 2.5, max: 5, icon: 'upg:fever', desc: 'Carrot Fever lasts 3 seconds longer.'},
+  moon: {name: 'Moonlight', base: 15000, grow: 2.6, max: 5, icon: 'upg:moon', desc: 'Carrots caught at night are worth 10% more.'},
 };
 const BREED_HOUSE_COST = 150;
+// one-time upgrades: three per farm helper, each doubling what that helper's carrots are worth
+const HELPER_UP_NAMES = {
+  gnome: ['Pointy Hats', 'Gnome Gossip', 'Gnome Union'],
+  patch: ['Raised Beds', 'Drip Irrigation', 'Companion Planting'],
+  greenhouse: ['Double Glazing', 'Misting System', 'Grow Lights'],
+  coop: ['Co-op Newsletter', 'Bulk Buying', 'Market Stall'],
+  tower: ['Nutrient Mix', 'Vertical Vines', 'Cloud Gardens'],
+  orbital: ['Zero-G Soil', 'Solar Sails', 'Moon Compost'],
+  portal: ['Stable Rift', 'Rift Tuning', 'Dimension Treaty'],
+};
+const HELPER_NEED = [1, 10, 50], HELPER_COSTX = [20, 600, 60000];
+// one-time upgrades that double clicked (and paw) carrots
+const CLICK_UPS = [{name: 'Firm Grip', cost: 2000}, {name: 'Strong Pluck', cost: 2e5}, {name: 'Iron Fingers', cost: 2e7}, {name: 'Turbo Thumb', cost: 2e9}, {name: 'Hand of Harvest', cost: 2e11}];
+const ROMAN = ['I', 'II', 'III', 'IV', 'V'];
+// Replant perks, bought with golden seeds and kept forever
+const PERKS = [
+  {id: 'barn', name: 'Old Barn', cost: 3, desc: 'Replant with the Breeding House already built.'},
+  {id: 'vault', name: 'Seed Vault', cost: 5, desc: 'Replant with 10 Garden Gnomes and 5 Poking Paws.'},
+  {id: 'owl', name: 'Night Owl', cost: 6, desc: 'Nights give 25% more.'},
+  {id: 'muscle', name: 'Muscle Memory', cost: 8, desc: 'Pigs run 25% faster, forever.'},
+  {id: 'heirloom', name: 'Heirloom Seeds', cost: 12, desc: 'Replant growing Purple Heirlooms.'},
+  {id: 'goldtouch', name: 'Golden Touch', cost: 20, desc: '+2% golden carrot chance, forever.'},
+];
+const DAY_LEN = 600;
 // Poking Paws circle the big carrot and poke it like a click
 const PAW_COST = 15;
 const PAW_UPGRADES = [
@@ -346,6 +401,14 @@ const ACH = [
   {id: 'gnomes', name: 'Gnome Army', desc: 'Own 10 Garden Gnomes', test: () => S.bld.gnome >= 10},
   {id: 'portal', name: 'Through the Portal', desc: 'Build a Carrot Portal', test: () => S.bld.portal >= 1},
   {id: 'paws', name: 'Helping Paws', desc: 'Own 25 Poking Paws', test: () => S.paws >= 25},
+  {id: 'golden1', name: 'Gold Rush', desc: 'Catch a golden carrot', test: () => (S.stats.goldens || 0) >= 1},
+  {id: 'fever', name: 'Carrot Fever', desc: 'Trigger Carrot Fever', test: () => (S.stats.fevers || 0) >= 1},
+  {id: 'night', name: 'Moonlit Munch', desc: 'Catch a carrot at night', test: () => (S.stats.nightCatches || 0) >= 1},
+  {id: 'orders5', name: 'Order Up', desc: 'Complete 5 orders', test: () => (S.stats.orders || 0) >= 5},
+  {id: 'tech10', name: 'Tinkerer', desc: 'Buy 10 one-time upgrades', test: () => Object.keys(S.tech || {}).length + Object.keys(S.pawUp || {}).length >= 10},
+  {id: 'replant', name: 'Second Season', desc: 'Replant your farm', test: () => (S.replants || 0) >= 1},
+  {id: 'seeds25', name: 'Seed Hoarder', desc: 'Own 25 golden seeds', test: () => (S.seeds || 0) >= 25},
+  {id: 'pop', name: 'Overstuffed', desc: 'Watch a pig eat until it bursts', test: () => (S.stats.popped || 0) >= 1},
   {id: 'chonk', name: 'Absolute Unit', desc: 'Grow a pig to twice its size', test: () => S.pigs.some(p => (p.eaten || 0) >= 10000)},
 ];
 
@@ -353,7 +416,7 @@ const ACH = [
 let S;
 const G = {
   time: 0, carrots: [], spots: {}, parts: [], floats: [], bubbles: [], clouds: [],
-  pluckAcc: 0, pawAcc: 0, pawNext: 0, pawPokes: {}, farmThrown: 0, farmRate: 0, streak: 0, buffs: {frenzy: 0, zoomies: 0}, lucky: null, banner: null,
+  pluckAcc: 0, feverUntil: 0, feverReady: 0, order: null, orderCd: 40, orderSeq: 0, catchRate: 0, lastCaught: 0, lanterns: [], pawAcc: 0, pawNext: 0, pawPokes: {}, farmThrown: 0, farmRate: 0, streak: 0, buffs: {frenzy: 0, zoomies: 0}, lucky: null, banner: null,
   showerLeft: 0, showerCd: 0, big: {squish: 0},
   bucket: 0, bucketP: 0, bucketT: 0, hist: [], rate: 0, resolved: [],
   tag: null, highlight: null, lastBubble: 0, lastFloat: 0, assignT: 0, achT: 0, timeScale: 1, drops: 0, hiddenAt: 0, sparkT: 0,
@@ -362,12 +425,12 @@ const G = {
 function freshState() {
   return {
     v: 1, carrots: 0, total: 0, tier: 0,
-    upg: {thumb: 0, whisper: 0, zoom: 0, cheeks: 0, gulp: 0, cozy: 0, pedigree: 0, hutch: 0},
+    upg: {thumb: 0, whisper: 0, zoom: 0, cheeks: 0, gulp: 0, cozy: 0, pedigree: 0, hutch: 0, lucky: 0, gild: 0, fever: 0, moon: 0},
     bld: Object.fromEntries(BUILDINGS.map(b => [b.id, 0])),
     breed: {built: false, progress: 0},
     pigs: [], nextPigId: 1, ach: {},
     stats: {clicks: 0, caught: 0, dropped: 0, pickups: 0, bestStreak: 0, born: 0, luckies: 0, played: 0, lost: 0},
-    paws: 0, pawUp: {},
+    paws: 0, pawUp: {}, tech: {}, runTotal: 0, seeds: 0, seedFree: 0, perks: {}, replants: 0, dayClock: 0,
     passiveRate: 0, lastSaved: Date.now(), sound: true, hints: {}, luckyTimer: 45, herdSort: 'rarity',
   };
 }
@@ -381,7 +444,23 @@ const farmBase = () => BUILDINGS.reduce((a, b) => a + S.bld[b.id] * b.rate, 0);
 const farmPlucks = () => farmBase() * (1 + forageBonus());
 const achMult = () => 1 + 0.01 * Object.keys(S.ach).length;
 const whisperMult = () => Math.pow(1.1, S.upg.whisper);
-const unitValue = () => TIERS[S.tier].value * achMult() * whisperMult() * (G.buffs.frenzy > G.time ? 3 : 1);
+const seedMult = () => 1 + 0.04 * (S.seeds || 0);
+const seedsForRun = () => Math.floor(Math.cbrt(Math.max(0, S.runTotal || 0) / 1e8));
+const goldenChance = () => 0.005 * S.upg.lucky + (S.perks.goldtouch ? 0.02 : 0);
+const goldenMult = () => 7 + 3 * S.upg.gild;
+const feverOn = () => G.feverUntil > G.time;
+const feverLen = () => 8 + 3 * S.upg.fever;
+// day/night: 6 min day, 1 min dusk, 2 min night, 1 min dawn
+function nightness() { const t = (S.dayClock || 0) % DAY_LEN; return t < 360 ? 0 : t < 420 ? (t - 360) / 60 : t < 540 ? 1 : 1 - (t - 540) / 60; }
+const nightBonus = () => 0.2 + 0.1 * S.upg.moon + (S.perks.owl ? 0.25 : 0);
+const nightMult = () => 1 + nightness() * nightBonus();
+function srcMult(src) {
+  let m = 1;
+  if (src === 'click' || src === 'paw') { for (let k = 0; k < CLICK_UPS.length; k++) if (S.tech['c:' + k]) m *= 2; }
+  else if (S.bld[src] !== undefined) { for (let k = 0; k < 3; k++) if (S.tech[`h:${src}:${k}`]) m *= 2; }
+  return m;
+}
+const unitValue = () => TIERS[S.tier].value * achMult() * whisperMult() * seedMult() * nightMult() * (G.buffs.frenzy > G.time ? 3 : 1) * (feverOn() ? 2 : 1);
 const clickCount = () => 1 + S.upg.thumb;
 const pawPokeRate = () => 0.1 * Math.pow(2, ['quick', 'nimble', 'busy', 'parade', 'storm'].filter(id => S.pawUp[id]).length);
 const pawCarrots = () => clickCount() + (S.pawUp.green ? 2 : 0);
@@ -395,7 +474,7 @@ function bldCost(b, n = 1) {
   return Math.ceil(c0 * (Math.pow(r, n) - 1) / (r - 1));
 }
 function pigSpeed(p) {
-  let s = 800 * p.speed * (1 + 0.15 * S.upg.zoom);
+  let s = 800 * p.speed * (1 + 0.15 * S.upg.zoom) * (S.perks.muscle ? 1.25 : 1);
   if (p.trait === 'zoomies') s *= 1.2;
   if (G.buffs.zoomies > G.time) s *= 2;
   return Math.min(s, 2600);
@@ -910,6 +989,45 @@ const PROPS = {
     c.restore();
   },
 };
+Object.assign(PROPS, {
+  lucky(c, x, y, s) { // four-leaf clover
+    c.save(); c.translate(x, y); c.scale(s, s);
+    c.strokeStyle = '#3f8f34'; c.lineWidth = 1.2; c.beginPath(); c.moveTo(0, 0); c.quadraticCurveTo(1, -4, 0, -7); c.stroke();
+    c.fillStyle = '#4fbf5a'; for (let k = 0; k < 4; k++) { const a = k * Math.PI / 2 + 0.785; ell(c, Math.cos(a) * 3, -7 + Math.sin(a) * 3, 2.8, 2.2, a); c.fill(); }
+    c.fillStyle = '#2f8f3a'; ell(c, 0, -7, 1, 1); c.fill();
+    c.restore();
+  },
+  gild(c, x, y, s) { // golden carrot statue
+    c.save(); c.translate(x, y); c.scale(s, s);
+    c.fillStyle = 'rgba(40,70,20,.22)'; ell(c, 0, 0, 9, 2.5); c.fill();
+    c.fillStyle = '#b8b3a8'; c.fillRect(-6, -8, 12, 8); c.fillStyle = '#d6d1c6'; c.fillRect(-7, -10, 14, 3);
+    drawCarrot(c, 0, -22, 22, 3, 0);
+    c.restore();
+  },
+  moon(c, x, y, s) { // lamp post, lit at night
+    c.save(); c.translate(x, y); c.scale(s, s);
+    c.fillStyle = 'rgba(40,70,20,.22)'; ell(c, 0, 0, 6, 2); c.fill();
+    c.fillStyle = '#2f3b33'; c.fillRect(-1.5, -46, 3, 46); c.fillRect(-4, -3, 8, 3);
+    c.beginPath(); c.moveTo(-6, -46); c.lineTo(6, -46); c.lineTo(3, -52); c.lineTo(-3, -52); c.closePath(); c.fill();
+    c.fillStyle = '#ffe9a8'; c.fillRect(-4, -45, 8, 8); c.strokeStyle = '#2f3b33'; c.lineWidth = 1; c.strokeRect(-4, -45, 8, 8);
+    c.restore();
+  },
+});
+// Fever Pitch: a string of paper lanterns across the sky, one per level
+function drawLanterns(c, n) {
+  if (!n) return [];
+  const x0 = 150, x1 = 850, y0 = 24, cy = 84, pts = [];
+  c.strokeStyle = '#6e4529'; c.lineWidth = 1.5; c.beginPath(); c.moveTo(x0, y0); c.quadraticCurveTo(500, cy, x1, y0); c.stroke();
+  for (let i = 0; i < n; i++) {
+    const t = (i + 1) / (n + 1), x = (1 - t) * (1 - t) * x0 + 2 * (1 - t) * t * 500 + t * t * x1, y = (1 - t) * (1 - t) * y0 + 2 * (1 - t) * t * cy + t * t * y0;
+    c.beginPath(); c.moveTo(x, y); c.lineTo(x, y + 6); c.stroke();
+    c.fillStyle = ['#e8405c', '#f57c1f', '#f5b83d', '#9b59d0', '#2f8fd8'][i % 5]; ell(c, x, y + 15, 7, 9); c.fill();
+    c.fillStyle = 'rgba(255,255,255,.25)'; ell(c, x - 2, y + 12, 2, 4); c.fill();
+    c.fillStyle = '#c99a2e'; c.fillRect(x - 4, y + 5, 8, 2.5); c.fillRect(x - 4, y + 23, 8, 2.5);
+    pts.push({x, y: y + 15});
+  }
+  return pts;
+}
 function drawBale(c, x, y) {
   c.fillStyle = '#e8c36a'; rr(c, x - 7, y - 9, 14, 9, 2); c.fill();
   c.strokeStyle = '#c79a3c'; c.lineWidth = 0.8; c.beginPath(); c.moveTo(x - 6, y - 6); c.lineTo(x + 6, y - 6); c.moveTo(x - 6, y - 3); c.lineTo(x + 6, y - 3); c.stroke();
@@ -949,6 +1067,9 @@ const PLACES = {
   thumb: {seed: 10, base: 1, bands: [[520, 860, 600, 614]]},
   cheeks: {seed: 11, base: 1, bands: [[14, 96, 548, 606]]},
   gulp: {seed: 12, base: 1, bands: [[904, 986, 548, 606]]},
+  lucky: {seed: 13, base: 1.1, bands: [[150, 850, 588, 598]]},
+  gild: {seed: 14, base: 1, bands: [[430, 570, 406, 412]]},
+  moon: {seed: 15, base: 1, bands: [[140, 860, 426, 434]]},
 };
 const ORIGIN_UP = {gnome: 34, patch: 10, greenhouse: 46, coop: 56, tower: 160, orbital: 0, portal: 0};
 const crowd = n => clamp(1 - 0.22 * Math.log10(Math.max(1, n)), 0.42, 1);
@@ -1016,7 +1137,7 @@ function renderBackground() {
   const props = [];
   for (const p of sp('gnome')) props.push({...p, fn: BDRAW.gnome});
   for (const p of sp('patch')) props.push({...p, fn: BDRAW.patch, flip: false});
-  for (const id of ['whisper', 'zoom', 'thumb', 'cheeks', 'gulp']) for (const p of sp(id)) props.push({...p, fn: PROPS[id]});
+  for (const id of ['whisper', 'zoom', 'thumb', 'cheeks', 'gulp', 'lucky', 'gild', 'moon']) for (const p of sp(id)) props.push({...p, fn: PROPS[id]});
   const hx = S.upg.hutch;
   props.push({y: 506, draw: c => drawHutch(c, 50, 506, false, Math.ceil(hx / 2))});
   props.push({y: 506.1, draw: c => drawHutch(c, 950, 506, true, Math.floor(hx / 2))});
@@ -1031,6 +1152,7 @@ function renderBackground() {
     }});
     if (S.upg.pedigree) props.push({y: HOUSE_Y + 0.3, draw: c => drawRibbonBoard(c, HOUSE_X + 54, HOUSE_Y + 2, S.upg.pedigree)});
   }
+  G.lanterns = drawLanterns(b, S.upg.fever);
   props.sort((a, c) => a.y - c.y);
   for (const p of props) { if (p.draw) p.draw(b); else drawFlipped(b, p.fn, p); }
 }
@@ -1225,6 +1347,7 @@ function makeCarrot(o) {
   const T = o.T ?? rand(1.25, 1.55), g = 900;
   return {
     kind: 'fall', sx: o.sx, sy: o.sy, lx, ly, T, t: 0, g, vx: (lx - o.sx) / T, vy: (ly - o.sy - 0.5 * g * T * T) / T,
+    src: o.src || (o.fromClick ? 'click' : 'farm'), golden: Math.random() < goldenChance(),
     x: o.sx, y: o.sy, count: 1, fromClick: !!o.fromClick, rot: rand(-0.6, 0.6), spin: rand(-4, 4), claimed: null, dead: false, tier: S.tier, landAt: G.time + T,
   };
 }
@@ -1255,7 +1378,7 @@ function updatePaws(dt) {
     const i = G.pawNext % S.paws, sp = pawSpot(i, G.time);
     let thrown = 0;
     for (let n = pawCarrots(); thrown < n && G.carrots.length < MAX_IN_FLIGHT; thrown++) {
-      const c = makeCarrot({sx: 500 + (sp.x - 500) * 0.45, sy: 192 + (sp.y - 192) * 0.45, T: rand(1.25, 1.6), fromClick: false});
+      const c = makeCarrot({sx: 500 + (sp.x - 500) * 0.45, sy: 192 + (sp.y - 192) * 0.45, T: rand(1.25, 1.6), fromClick: false, src: 'paw'});
       if (!planCatch(c)) break;
       G.carrots.push(c);
     }
@@ -1273,7 +1396,7 @@ function updateProduction(dt) {
     for (let tries = 0; G.pluckAcc >= 1 && tries < 8 && G.carrots.length < MAX_IN_FLIGHT; tries++) {
       const bd = pickBuilding(), list = G.spots[bd.id], spot = list && list.length ? pick(list) : null;
       const o = spot ? {x: spot.x, y: spot.y - (ORIGIN_UP[bd.id] || 0) * spot.s} : ORIGINS[bd.id];
-      const c = makeCarrot({sx: o.x + rand(-6, 6), sy: o.y, fromClick: false});
+      const c = makeCarrot({sx: o.x + rand(-6, 6), sy: o.y, fromClick: false, src: bd.id});
       if (!planCatch(c)) break;
       G.carrots.push(c); G.pluckAcc -= 1; G.farmThrown++;
     }
@@ -1313,7 +1436,7 @@ function updateCarrots(dt) {
 }
 function pushResolved(v) { G.resolved.push(v); if (G.resolved.length > 60) G.resolved.shift(); }
 function earn(v, active) {
-  S.carrots += v; S.total += v; G.bucket += v;
+  S.carrots += v; S.total += v; S.runTotal = (S.runTotal || 0) + v; G.bucket += v;
   if (!active) G.bucketP += v;
 }
 function airCatch(p, c) {
@@ -1321,7 +1444,10 @@ function airCatch(p, c) {
   p.queue = p.queue.filter(q => q !== c);
   G.streak++;
   if (G.streak > S.stats.bestStreak) S.stats.bestStreak = G.streak;
-  let v = c.count * unitValue() * streakMult() * (1 + p.cheeks);
+  let v = c.count * unitValue() * srcMult(c.src) * streakMult() * (1 + p.cheeks) * (c.golden ? goldenMult() : 1);
+  if (c.golden) { S.stats.goldens = (S.stats.goldens || 0) + 1; addFloat(c.lx, c.ly - 92, 'GOLDEN!', '#ffd23f', 18); burst(c.lx, c.ly - 30, 12, ['#ffd23f', '#fff3a0', '#ffffff'], 200); SFX.chime(); }
+  if (nightness() > 0.5) S.stats.nightCatches = (S.stats.nightCatches || 0) + 1;
+  if (G.streak % 200 === 0 && G.time >= G.feverReady) startFever();
   const lucky = p.trait === 'lucky' && Math.random() < 0.12;
   if (lucky) v *= 5;
   earn(v, c.fromClick);
@@ -1406,6 +1532,72 @@ function drawGore(dt) {
     c.beginPath(); c.arc(d.x, y + len, d.w * 0.75, 0, TAU); c.fill();
   }
   c.globalAlpha = 1;
+}
+function startFever() {
+  G.feverUntil = G.time + feverLen(); G.feverReady = G.feverUntil + 90;
+  S.stats.fevers = (S.stats.fevers || 0) + 1;
+  G.banner = {title: 'Carrot Fever!', sub: `Every carrot is worth double for ${feverLen()}s`, life: 2.6};
+  SFX.chime();
+}
+// ---- order board: timed goals for a big reward
+function newOrder() {
+  const rate = Math.max(1, G.catchRate), income = Math.max(G.rate, 5);
+  const types = ['catch', 'catch', 'streak', 'clicks', 'earn'];
+  if (goldenChance() >= 0.01) types.push('golden');
+  const type = pick(types);
+  let o;
+  if (type === 'catch') { const goal = Math.max(40, Math.round(rate * 60 * 1.15 / 10) * 10); o = {T: 60, goal, text: `Catch ${fmt(goal)} carrots`}; }
+  else if (type === 'streak') { const goal = Math.max(40, Math.round(Math.min(rate * 45, Math.max(60, S.stats.bestStreak * 0.6)) / 10) * 10); o = {T: 90, goal, text: `Reach a ${fmt(goal)}-catch streak`}; }
+  else if (type === 'clicks') o = {T: 30, goal: 75, text: 'Click the big carrot 75 times'};
+  else if (type === 'earn') { const goal = Math.ceil(income * 60 * 1.3); o = {T: 60, goal, text: `Earn ${fmt(goal)} carrots`}; }
+  else { const goal = Math.max(2, Math.round(rate * 60 * goldenChance() * 1.1)); o = {T: 60, goal, text: `Catch ${goal} golden carrots`}; }
+  return {...o, type, id: ++G.orderSeq, state: 'offer', reward: Math.max(200, income * 150), prog: 0, expires: G.time + 45};
+}
+function acceptOrder() {
+  const o = G.order; if (!o || o.state !== 'offer') return;
+  o.state = 'active'; o.until = G.time + o.T; o.best = 0;
+  o.base = {caught: S.stats.caught, clicks: S.stats.clicks, total: S.total, goldens: S.stats.goldens || 0};
+}
+function updateOrders(dt) {
+  const o = G.order;
+  if (!o) { G.orderCd -= dt; if (G.orderCd <= 0 && S.total >= 300) G.order = newOrder(); return; }
+  if (o.state === 'offer') { if (G.time > o.expires) { G.order = null; G.orderCd = 15; } return; }
+  if (o.type === 'catch') o.prog = S.stats.caught - o.base.caught;
+  else if (o.type === 'clicks') o.prog = S.stats.clicks - o.base.clicks;
+  else if (o.type === 'earn') o.prog = S.total - o.base.total;
+  else if (o.type === 'golden') o.prog = (S.stats.goldens || 0) - o.base.goldens;
+  else { o.best = Math.max(o.best, G.streak); o.prog = o.best; }
+  if (o.prog >= o.goal) {
+    earn(o.reward, true); S.stats.orders = (S.stats.orders || 0) + 1;
+    G.banner = {title: 'Order complete!', sub: `+${fmt(o.reward)} carrots`, life: 2.6};
+    toast('Order complete!', `${o.text}: ${fmt(o.reward)} carrots for you.`, {cls: 'achtoast'}); SFX.chime();
+    G.order = null; G.orderCd = 30;
+  } else if (G.time > o.until) { toast('Order expired', `${o.text}. Better luck next time!`); G.order = null; G.orderCd = 20; }
+}
+// ---- replant: reset the farm for golden seeds (+4% value each, forever); pigs, achievements and perks stay
+function doReplant() {
+  const gain = seedsForRun();
+  if (gain < 1) return;
+  S.seeds = (S.seeds || 0) + gain; S.seedFree = (S.seedFree || 0) + gain; S.replants = (S.replants || 0) + 1;
+  S.carrots = 0; S.runTotal = 0; S.tier = S.perks.heirloom ? 1 : 0;
+  for (const k of Object.keys(S.upg)) S.upg[k] = 0;
+  for (const b of BUILDINGS) S.bld[b.id] = 0;
+  S.paws = 0; S.pawUp = {}; S.tech = {};
+  S.breed = {built: !!S.perks.barn, progress: 0};
+  if (S.perks.vault) { S.bld.gnome = 10; S.paws = 5; }
+  G.carrots = []; G.pluckAcc = 0; G.pawAcc = 0; G.streak = 0; G.order = null; G.orderCd = 30; G.feverUntil = 0; G.buffs = {frenzy: 0, zoomies: 0}; G.showerLeft = 0;
+  for (const p of S.pigs) { clearQueue(p); if (p.state !== 'charge') { p.state = 'linger'; p.timer = 0.5; p.carry = -1; } }
+  renderBackground(); buildAll(); save();
+  G.banner = {title: 'Replanted!', sub: `+${gain} golden seed${gain > 1 ? 's' : ''}: carrots worth +${gain * 4}% more`, life: 3.5};
+  toast('A fresh season begins', `You gained ${gain} golden seed${gain > 1 ? 's' : ''}. Spend them on perks in the Stats box.`, {cls: 'achtoast', ms: 6000});
+  SFX.chime();
+}
+function buyPerk(id) {
+  const pk = PERKS.find(q => q.id === id);
+  if (!pk || S.perks[id] || (S.seedFree || 0) < pk.cost) { SFX.nope(); return; }
+  S.seedFree -= pk.cost; S.perks[id] = 1; SFX.buy();
+  toast(`Perk: ${pk.name}`, pk.desc, {cls: 'achtoast'});
+  refreshUI();
 }
 // a carrot that reaches the ground just vanishes and doesn't count
 function vanish(c) {
@@ -1534,13 +1726,15 @@ function updateRate(dt) {
     G.rate = G.hist.reduce((a, b) => a + b, 0) / G.hist.length;
     if (!(G.buffs.frenzy > G.time)) S.passiveRate = S.passiveRate ? S.passiveRate * 0.92 + G.bucketP * 0.08 : G.bucketP;
     G.farmRate = G.farmRate * 0.6 + G.farmThrown * 0.4; G.farmThrown = 0;
+    G.catchRate = G.catchRate * 0.7 + (S.stats.caught - G.lastCaught) * 0.3; G.lastCaught = S.stats.caught;
     G.bucket = 0; G.bucketP = 0;
   }
 }
 
 // ---------------------------------------------------------------- main update
 function update(dt) {
-  G.time += dt; S.stats.played += dt;
+  G.time += dt; S.stats.played += dt; S.dayClock = (S.dayClock || 0) + dt;
+  updateOrders(dt);
   G.big.squish = Math.max(0, G.big.squish - dt * 6);
   updateProduction(dt);
   updateCarrots(dt);
@@ -1607,6 +1801,28 @@ function drawBigCarrot(now) {
   drawCarrot(ctx, 0, 0, 190, S.tier, Math.sin(now * 1.1) * 0.05 + (sq ? Math.sin(now * 60) * 0.03 * sq : 0));
   ctx.restore();
 }
+const STARS = Array.from({length: 80}, () => ({x: rand(0, W), y: rand(0, 330), s: rand(1, 2.4), f: rand(1, 4), p: rand(0, TAU)}));
+// night: darken the field, then add stars, the moon and the lights
+function drawNight(now) {
+  const n = nightness();
+  if (n < 0.01) return;
+  ctx.globalCompositeOperation = 'multiply';
+  ctx.fillStyle = `rgb(${255 - 175 * n | 0},${255 - 160 * n | 0},${255 - 90 * n | 0})`;
+  ctx.fillRect(0, 0, W, H);
+  ctx.globalCompositeOperation = 'lighter';
+  for (const st of STARS) { ctx.fillStyle = `rgba(255,255,235,${n * (0.45 + 0.45 * Math.sin(now * st.f + st.p))})`; ctx.fillRect(st.x, st.y, st.s, st.s); }
+  const glow = (x, y, r, col, a) => { const g = ctx.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, `rgba(${col},${a})`); g.addColorStop(1, `rgba(${col},0)`); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, TAU); ctx.fill(); };
+  for (const p of G.spots.moon || []) glow(p.x, p.y - 41 * p.s, 70 * p.s, '255,205,110', 0.55 * n);
+  for (const l of G.lanterns || []) glow(l.x, l.y, 26, '255,150,80', 0.5 * n);
+  glow(500, 190, 150, '255,170,90', 0.18 * n);
+  for (const c of G.carrots) if (c.golden) glow(c.x, c.y, 30, '255,220,90', 0.6 * n);
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.globalAlpha = n;
+  glow(880, 92, 70, '255,250,220', 0.35);
+  ctx.fillStyle = '#fbf6df'; ctx.beginPath(); ctx.arc(880, 92, 26, 0, TAU); ctx.fill();
+  ctx.fillStyle = 'rgba(200,195,170,.6)'; ell(ctx, 872, 86, 5, 4); ctx.fill(); ell(ctx, 889, 99, 4, 3); ctx.fill(); ell(ctx, 884, 82, 2.5, 2); ctx.fill();
+  ctx.globalAlpha = 1;
+}
 function drawLucky(now) {
   const L = G.lucky;
   const g = ctx.createRadialGradient(L.x, L.y, 4, L.x, L.y, 46);
@@ -1670,6 +1886,12 @@ function render(now) {
     }
   }
   for (const c of G.carrots) {
+    if (c.golden) {
+      const gl = ctx.createRadialGradient(c.x, c.y, 0, c.x, c.y, 26);
+      gl.addColorStop(0, `rgba(255,225,90,${0.55 + 0.25 * Math.sin(now * 12 + c.sx)})`); gl.addColorStop(1, 'rgba(255,215,60,0)');
+      ctx.fillStyle = gl; ctx.beginPath(); ctx.arc(c.x, c.y, 26, 0, TAU); ctx.fill();
+      ctx.fillStyle = '#fff6c0'; star4(ctx, c.x + Math.cos(now * 5 + c.sx) * 16, c.y + Math.sin(now * 5 + c.sx) * 16, 4); ctx.fill();
+    }
     drawCarrotFast(ctx, c.x, c.y, 38, c.tier, c.rot);
   }
   for (const q of G.parts) {
@@ -1686,6 +1908,7 @@ function render(now) {
     else { ctx.beginPath(); ctx.arc(q.x, q.y, q.size, 0, TAU); ctx.fill(); }
   }
   ctx.globalAlpha = 1;
+  drawNight(now);
   for (const f of G.floats) { ctx.globalAlpha = clamp(f.life / f.max * 1.6, 0, 1); label(ctx, f.x, f.y, f.text, f.size, f.color); }
   ctx.globalAlpha = 1;
   for (const b of G.bubbles) { ctx.globalAlpha = clamp(b.life * 3, 0, 1); speech(b.pig.x + b.pig.face * 8, b.pig.y - 44 * pigSize(b.pig) - b.pig.hop, b.text, 15); }
@@ -1698,6 +1921,8 @@ function render(now) {
   if (G.streak >= 3) { pill(14, hy, `Streak ${G.streak} · ×${streakMult().toFixed(2)}`, 'rgba(245,124,31,.92)', '#fff'); hy += 34; }
   if (G.buffs.frenzy > G.time) { pill(14, hy, `Frenzy ×3 · ${Math.ceil(G.buffs.frenzy - G.time)}s`, 'rgba(226,64,90,.92)', '#fff'); hy += 34; }
   if (G.buffs.zoomies > G.time) { pill(14, hy, `Zoomies ×2 speed · ${Math.ceil(G.buffs.zoomies - G.time)}s`, 'rgba(60,130,220,.92)', '#fff'); hy += 34; }
+  if (feverOn()) { pill(14, hy, `Carrot Fever ×2 · ${Math.ceil(G.feverUntil - G.time)}s`, 'rgba(232,90,25,.94)', '#fff'); hy += 34; }
+  if (nightness() > 0.5) { pill(14, hy, `Night · carrots ×${nightMult().toFixed(2)}`, 'rgba(40,50,110,.9)', '#fff'); hy += 34; }
   if (G.banner) {
     const b = G.banner;
     ctx.globalAlpha = clamp(b.life, 0, 1);
@@ -1727,6 +1952,10 @@ function drawIcon(cv, key) {
       break;
     }
     case 'house': drawBreedHouse(c, 50, 80, 1.05); break;
+    case 'click':
+      c.save(); c.translate(48, 56); c.rotate(-0.5); c.scale(3.4, 3.4); drawPawShape(c); c.restore();
+      c.fillStyle = '#ffd23f'; star4(c, 74, 26, 14); c.fill(); c.fillStyle = '#fff6c0'; star4(c, 74, 26, 6); c.fill();
+      break;
     case 'paw': case 'pawup':
       c.save(); c.translate(50, 54); c.rotate(-0.35); c.scale(3.6, 3.6); drawPawShape(c); c.restore();
       if (type === 'pawup') { c.fillStyle = '#58a845'; c.beginPath(); c.arc(76, 30, 13, 0, TAU); c.fill(); c.fillStyle = '#fff'; c.beginPath(); c.moveTo(76, 21); c.lineTo(84, 32); c.lineTo(68, 32); c.closePath(); c.fill(); c.fillRect(73, 31, 6, 8); }
@@ -1767,6 +1996,23 @@ function drawIcon(cv, key) {
           c.strokeStyle = '#f57c1f'; c.lineCap = 'round'; c.beginPath(); c.moveTo(60, 56); c.lineTo(60, 41); c.moveTo(60, 56); c.lineTo(71, 62); c.stroke();
           drawCarrot(c, 30, 62, 36, 0, -0.7);
           break;
+        case 'lucky':
+          c.save(); c.translate(50, 78); c.scale(5.2, 5.2); PROPS.lucky(c, 0, 0, 1); c.restore();
+          break;
+        case 'gild':
+          c.save(); c.translate(50, 88); c.scale(2.6, 2.6); PROPS.gild(c, 0, 0, 1); c.restore();
+          break;
+        case 'fever': {
+          c.strokeStyle = '#6e4529'; c.lineWidth = 2; c.beginPath(); c.moveTo(10, 18); c.quadraticCurveTo(50, 34, 90, 18); c.stroke();
+          const cols = ['#e8405c', '#f5b83d', '#9b59d0'];
+          [[28, 26], [50, 30], [72, 26]].forEach(([x, y], i) => { c.beginPath(); c.moveTo(x, y); c.lineTo(x, y + 8); c.stroke(); c.fillStyle = cols[i]; ell(c, x, y + 26, 11, 15); c.fill(); c.fillStyle = '#c99a2e'; c.fillRect(x - 6, y + 9, 12, 4); c.fillRect(x - 6, y + 39, 12, 4); });
+          break;
+        }
+        case 'moon':
+          c.fillStyle = '#2f3b6e'; c.beginPath(); c.arc(50, 50, 46, 0, TAU); c.fill();
+          c.fillStyle = '#fbf6df'; c.beginPath(); c.arc(64, 34, 14, 0, TAU); c.fill(); c.fillStyle = '#2f3b6e'; c.beginPath(); c.arc(70, 29, 12, 0, TAU); c.fill();
+          c.save(); c.translate(40, 92); c.scale(1.5, 1.5); PROPS.moon(c, 0, 0, 1); c.restore();
+          break;
         case 'pedigree':
           c.fillStyle = '#2f8fd8'; c.beginPath(); c.moveTo(40, 58); c.lineTo(30, 88); c.lineTo(42, 82); c.lineTo(48, 92); c.lineTo(52, 60); c.fill();
           c.beginPath(); c.moveTo(60, 58); c.lineTo(70, 88); c.lineTo(58, 82); c.lineTo(52, 92); c.lineTo(48, 60); c.fill();
@@ -1795,7 +2041,8 @@ function drawPortrait(cv, p) {
 
 // ---------------------------------------------------------------- UI (everything on one screen)
 const UI = {sig: {}, entries: new Map(), buyAmt: 1, sure: null, t: 0, t2: 0};
-const SECTIONS = ['carrots', 'training', 'farm', 'breed', 'herd', 'stats'];
+const NO_HOVER = !!(window.matchMedia && matchMedia('(hover: none)').matches);
+const SECTIONS = ['carrots', 'luck', 'training', 'tech', 'farm', 'breed', 'orders', 'herd', 'stats'];
 const costHTML = n => `<span class="ci"></span>${fmt(n)}`;
 function itemHTML(e) {
   const cls = ['item', e.cls || ''].join(' ').trim();
@@ -1817,6 +2064,10 @@ function upgMeta(id) {
     case 'gulp': return `A carrot takes ${munchTime({}).toFixed(2)}s to eat`;
     case 'cozy': return `A pup every ${breedTime().toFixed(1)}s`;
     case 'pedigree': return `Rare or better: ${rareOdds()}%`;
+    case 'lucky': return `Golden chance ${+(goldenChance() * 100).toFixed(1)}% · worth ×${goldenMult()}`;
+    case 'gild': return `Golden carrots worth ×${goldenMult()}`;
+    case 'fever': return `Fever lasts ${feverLen()}s`;
+    case 'moon': return `Night bonus ×${(1 + nightBonus()).toFixed(2)}`;
     case 'hutch': return `Herd space: ${herdCap()} pigs`;
   }
   return '';
@@ -1860,17 +2111,26 @@ function sectionEntries(sec) {
         lvl: () => S.paws ? '×' + S.paws : '',
         meta: () => S.paws ? `${fmtRate(pawRate())} carrots/s · a poke every ${fmtRate(1 / pawPokeRate())}s each` : `Pokes every ${fmtRate(1 / pawPokeRate())}s, throwing ${pawCarrots()} carrot${pawCarrots() > 1 ? 's' : ''}`,
         cost: () => pawCost(), buy: () => { S.paws++; }});
-      for (const u of availablePawUps()) E.push({key: 'pawup:' + u.id, icon: 'pawup', name: u.name, desc: u.desc, meta: 'One-time paw upgrade', cost: () => u.cost, buy: () => { S.pawUp[u.id] = 1; }});
       return E;
     }
     case 'training': return [upgEntry('zoom'), upgEntry('cheeks'), upgEntry('gulp')];
+    case 'luck': return [upgEntry('lucky'), upgEntry('gild'), upgEntry('fever'), upgEntry('moon')];
+    case 'tech': return techList().filter(t => t.unlocked() && !t.bought()).sort((a, b) => a.cost - b.cost)
+      .map(t => ({key: t.key, icon: t.icon, name: t.name, desc: t.desc, badge: t.badge, cost: () => t.cost, buy: () => t.buy()}));
     case 'farm': return visibleBuildings().map(i => bldEntry(BUILDINGS[i]));
     case 'breed':
       if (!S.breed.built) return [{key: 'house', icon: 'house', name: 'Breeding House', desc: 'A cosy house where new pups are born, each with random stats.', meta: 'A new pup every 45s', cost: () => BREED_HOUSE_COST, buy: () => { S.breed.built = true; S.breed.progress = 0; toast('The Breeding House is open!', 'A new pup will arrive soon. Each one has its own speed, cheeks and forage.'); }}];
       return [upgEntry('cozy'), upgEntry('pedigree'), upgEntry('hutch')];
-    case 'all': return ['carrots', 'training', 'farm', 'breed'].flatMap(sectionEntries);
+    case 'all': return ['carrots', 'luck', 'training', 'tech', 'farm', 'breed'].flatMap(sectionEntries);
   }
   return [];
+}
+function techList() {
+  const L = [];
+  for (const b of BUILDINGS) HELPER_UP_NAMES[b.id].forEach((nm, k) => { const id = `h:${b.id}:${k}`; L.push({key: 'tech:' + id, name: nm, desc: `Carrots thrown by ${b.name}s are worth twice as much.`, cost: b.cost * HELPER_COSTX[k], icon: 'bld:' + b.id, badge: ROMAN[k], unlocked: () => S.bld[b.id] >= HELPER_NEED[k], bought: () => !!S.tech[id], buy: () => { S.tech[id] = 1; }}); });
+  CLICK_UPS.forEach((u, k) => { const id = 'c:' + k; L.push({key: 'tech:' + id, name: u.name, desc: 'Carrots from clicks and paws are worth twice as much.', cost: u.cost, icon: 'click', badge: ROMAN[k], unlocked: () => (S.runTotal || 0) >= u.cost * 0.2 || (k === 0 && S.stats.clicks >= 30), bought: () => !!S.tech[id], buy: () => { S.tech[id] = 1; }}); });
+  PAW_UPGRADES.forEach(u => L.push({key: 'tech:p:' + u.id, name: u.name, desc: u.desc, cost: u.cost, icon: 'pawup', badge: '', unlocked: () => S.paws >= u.need, bought: () => !!S.pawUp[u.id], buy: () => { S.pawUp[u.id] = 1; }}));
+  return L;
 }
 function availablePawUps() { return PAW_UPGRADES.filter(u => !S.pawUp[u.id] && S.paws >= u.need); }
 function nextLockedPawUp() { return PAW_UPGRADES.find(u => !S.pawUp[u.id] && S.paws < u.need); }
@@ -1881,12 +2141,15 @@ function onTierUp() {
   SFX.chime();
 }
 const SIG = {
-  carrots: () => `${S.tier}|${availablePawUps().map(u => u.id).join()}|${nextLockedPawUp() ? nextLockedPawUp().id : ''}`,
+  carrots: () => `${S.tier}`,
+  luck: () => 'l',
+  tech: () => sectionEntries('tech').map(e => e.key).join(),
+  orders: () => G.order ? G.order.id + G.order.state : 'none',
   training: () => 't',
   farm: () => `${visibleBuildings().join(',')}|${UI.buyAmt}`,
   breed: () => `${S.breed.built}`,
   herd: () => `${herdCap()}|${S.herdSort}|${S.pigs.map(p => p.id).join(',')}`,
-  stats: () => `${Object.keys(S.ach).length}`,
+  stats: () => `${Object.keys(S.ach).length}|${S.seeds}|${S.seedFree}|${Object.keys(S.perks).join()}|${seedsForRun() > 0}`,
 };
 function pigCardHTML(p) {
   const R = RARITIES[p.rarity], fe = pigForage(p);
@@ -1921,9 +2184,25 @@ function buildSection(sec) {
     h += `<h3 class="sub">Plucking</h3>`;
     for (const e of E) if (e.key.startsWith('upg:')) h += itemHTML(e);
     h += `<h3 class="sub">Poking paws</h3>`;
-    for (const e of E) if (e.key === 'paw' || e.key.startsWith('pawup:')) h += itemHTML(e);
-    const nl = nextLockedPawUp();
-    if (nl) h += itemHTML({icon: 'pawup', name: nl.name, desc: nl.desc, meta: `Needs ${nl.need} paw${nl.need > 1 ? 's' : ''}`, cls: 'locked', costLabel: ''});
+    for (const e of E) if (e.key === 'paw') h += itemHTML(e);
+  } else if (sec === 'luck') {
+    h += `<h3>Luck</h3><p class="note">Golden carrots, Carrot Fever on a 200-catch streak (then a 90s rest), and bonus carrots at night.</p>`;
+    for (const e of E) h += itemHTML(e);
+  } else if (sec === 'tech') {
+    h += `<h3>Upgrades <span class="h3meta grow">one-time boosts</span></h3>`;
+    if (!E.length) h += `<p class="note">New upgrades appear here as your farm grows.</p>`;
+    else h += `<div class="techgrid">` + E.map(e => `<button class="tile" data-key="${e.key}" type="button" title="${esc(e.name)}: ${esc(e.desc)}"><canvas width="72" height="72" data-icon="${e.icon}"></canvas>${e.badge ? `<span class="tn">${e.badge}</span>` : ''}</button>`).join('') +
+      `</div><div class="techinfo" id="techinfo">${NO_HOVER ? 'Tap an upgrade to see what it does, tap again to buy.' : 'Hover an upgrade to see what it does.'}</div>`;
+  } else if (sec === 'orders') {
+    const o = G.order;
+    h += `<h3>Order board</h3>`;
+    if (!o) h += `<p class="note" data-ordnext>A new order arrives soon.</p>`;
+    else {
+      h += `<div class="order"><div class="ord-goal">${esc(o.text)} in ${o.T}s</div><div class="ord-meta">Reward <span class="ci"></span><b>${fmt(o.reward)}</b><span data-ordtime></span></div>`;
+      if (o.state === 'offer') h += `<div class="ord-btns"><button class="btn small" type="button" data-ord="accept">Accept</button><button class="btn small ghost" type="button" data-ord="skip">Skip</button></div>`;
+      else h += `<div class="bar"><i data-ordbar style="width:0%"></i></div>`;
+      h += `</div>`;
+    }
   } else if (sec === 'training') {
     h += `<h3>Pig training</h3><p class="note">Faster pigs chain more catches. Carrots that hit the ground vanish.</p>`;
     for (const e of E) h += itemHTML(e);
@@ -1956,7 +2235,9 @@ function buildSection(sec) {
       [['Earned', 'total'], ['Clicks', 'clicks'], ['Caught', 'caught'], ['Missed', 'dropped'], ['Best streak', 'best'], ['Pups', 'born'], ['Lucky', 'luckies'], ['Played', 'played']]
         .map(([n, k]) => `<span>${n} <b data-st="${k}"></b></span>`).join('') + `</div>` +
       `<div class="achrow"><span>Achievements ${got}/${ACH.length} (+${got}% value)</span>` +
-      ACH.map(a => `<span class="achb ${S.ach[a.id] ? 'got' : ''}" title="${esc(a.name)}: ${esc(a.desc)}${S.ach[a.id] ? ' ✓' : ''}">★</span>`).join('') + `</div>`;
+      ACH.map(a => `<span class="achb ${S.ach[a.id] ? 'got' : ''}" title="${esc(a.name)}: ${esc(a.desc)}${S.ach[a.id] ? ' ✓' : ''}">★</span>`).join('') + `</div>` +
+      `<div class="replant"><div><b>Golden seeds ${S.seeds || 0}</b> (+${(S.seeds || 0) * 4}% value) · <span data-rpgain></span></div><button class="btn small" type="button" data-act="replant">Replant…</button></div>` +
+      ((S.seeds || 0) > 0 ? `<div class="perks">` + PERKS.map(pk => `<button type="button" class="perk ${S.perks[pk.id] ? 'own' : ''}" data-perk="${pk.id}" title="${esc(pk.desc)}">${pk.name} · ${S.perks[pk.id] ? 'owned' : pk.cost + ' seeds'}</button>`).join('') + `</div><p class="note">${S.seedFree || 0} seeds to spend. Hover a perk to see what it does.</p>` : '');
   }
   if (h !== null) el.innerHTML = h;
   for (const cv of $$('canvas[data-icon]', el)) drawIcon(cv, cv.dataset.icon);
@@ -1999,7 +2280,21 @@ function refreshSection(sec) {
       if (ft.textContent !== t) ft.textContent = t;
     }
   }
+  if (sec === 'tech') {
+    for (const t of $$('.tile[data-key]', el)) { const e = UI.entries.get(t.dataset.key); if (e) t.classList.toggle('cant', S.carrots < e.cost()); }
+  }
+  if (sec === 'orders') {
+    const o = G.order;
+    const nx = $('[data-ordnext]', el); if (nx) { const t = S.total < 300 ? 'Orders start once your farm gets going.' : `Next order in ${Math.max(0, Math.ceil(G.orderCd))}s.`; if (nx.textContent !== t) nx.textContent = t; }
+    const tm = $('[data-ordtime]', el);
+    if (o && tm) { const t = o.state === 'offer' ? ` · offer ends in ${Math.max(0, Math.ceil(o.expires - G.time))}s` : ` · ${fmt(Math.min(o.prog, o.goal))} / ${fmt(o.goal)} · ${Math.max(0, Math.ceil(o.until - G.time))}s left`; if (tm.textContent !== t) tm.textContent = t; }
+    const bar = $('[data-ordbar]', el); if (o && bar) bar.style.width = clamp(o.prog / o.goal, 0, 1) * 100 + '%';
+  }
   if (sec === 'stats') {
+    const rg = $('[data-rpgain]', el), gain = seedsForRun();
+    if (rg) { const t = gain > 0 ? `replant now for +${gain}` : `first seed at 100M carrots this season (${fmt(S.runTotal || 0)})`; if (rg.textContent !== t) rg.textContent = t; }
+    const rb = $('[data-act="replant"]', el); if (rb) rb.classList.toggle('cant', gain < 1);
+    for (const pb of $$('.perk[data-perk]', el)) { const pk = PERKS.find(q => q.id === pb.dataset.perk); pb.classList.toggle('cant', !S.perks[pk.id] && (S.seedFree || 0) < pk.cost); }
     const set = (k, v) => { const n = $(`[data-st="${k}"]`, el); if (n && n.textContent !== v) n.textContent = v; };
     set('total', fmt(S.total)); set('clicks', fmt(S.stats.clicks)); set('caught', fmt(S.stats.caught)); set('dropped', fmt(S.stats.dropped));
     set('best', fmt(S.stats.bestStreak)); set('born', fmt(S.stats.born)); set('luckies', fmt(S.stats.luckies)); set('played', dur(S.stats.played));
@@ -2094,6 +2389,9 @@ function sanitize(st) {
   st.pigs = Array.isArray(st.pigs) ? st.pigs.filter(p => p && p.coat && p.coat.base && isFinite(p.speed)) : [];
   for (const p of st.pigs) { p.rarity = clamp(p.rarity | 0, 0, 4); if (p.trait === 'tidy') p.trait = 'gulper'; if (p.trait && !TRAITS[p.trait]) p.trait = null; p.side = p.side ? 1 : 0; p.eaten = Math.max(0, +p.eaten || 0); }
   st.paws = Math.max(0, Math.floor(+st.paws || 0)); if (!st.pawUp || typeof st.pawUp !== 'object') st.pawUp = {};
+  for (const k of ['tech', 'perks']) if (!st[k] || typeof st[k] !== 'object') st[k] = {};
+  for (const k of ['seeds', 'seedFree', 'replants', 'dayClock']) st[k] = Math.max(0, +st[k] || 0);
+  if (!(st.runTotal >= 0)) st.runTotal = st.total;
   st.nextPigId = Math.max(st.nextPigId || 1, ...st.pigs.map(p => p.id + 1), 1);
   return st;
 }
@@ -2103,7 +2401,7 @@ function load() {
 }
 function resetRuntime() {
   G.carrots = []; G.parts = []; G.floats = []; G.bubbles = [];
-  G.streak = 0; G.lucky = null; G.banner = null; G.showerLeft = 0; G.resolved = []; G.hist = []; G.rate = 0; G.pluckAcc = 0;
+  G.streak = 0; G.lucky = null; G.banner = null; G.showerLeft = 0; G.order = null; G.orderCd = 40; G.feverUntil = 0; G.lastCaught = S ? S.stats.caught : 0; G.resolved = []; G.hist = []; G.rate = 0; G.pluckAcc = 0;
   G.buffs = {frenzy: 0, zoomies: 0}; G.tag = null; G.highlight = null; G.drops = 0;
 }
 function startWith(state) {
@@ -2119,7 +2417,7 @@ function startWith(state) {
 function applyOffline(sec, show) {
   sec = Math.min(sec, 8 * 3600);
   const gain = S.passiveRate * sec;
-  if (gain > 0) { S.carrots += gain; S.total += gain; }
+  if (gain > 0) { S.carrots += gain; S.total += gain; S.runTotal = (S.runTotal || 0) + gain; }
   if (gain > 0 && S.pigs.length) {
     const each = gain / Math.max(1, unitValue()) / S.pigs.length;
     for (const p of S.pigs) { p.eaten = Math.min(POP_AT - 60, (p.eaten || 0) + each); p.g = growthOf(p.eaten); }
@@ -2180,6 +2478,8 @@ $('#btnHelp').addEventListener('click', () => modal(`<h2>How to play</h2>
   <p>Click the big carrot to pluck one. A guinea pig dashes out of its hutch to catch it before it lands. Carrots that hit the ground vanish, so only catches count. Catches in a row build a streak bonus.</p>
   <p>Spend carrots on better varieties, faster pigs and farm helpers. Everything you buy shows up on the field. Build the Breeding House for more pigs: each pup is born with random speed, cheeks and forage.</p>
   <p>Poking Paws circle the big carrot and poke it for you. Pigs slowly fatten as they eat: twice their size at 10K carrots, three times at 50K, and at 200K they pop. Rehome a pig before that if you want to keep it!</p>
+  <p>One-time upgrades appear under the field. Golden carrots are worth extra, every 200 catches in a row starts Carrot Fever, and carrots caught at night are worth more. Take orders from the order board for big rewards.</p>
+  <p>Once you've earned 100 million carrots in a season you can Replant: start the farm over for golden seeds that make every carrot worth more, forever. Your pigs stay.</p>
   <p>Watch the sky for a lucky carrot with a leaf propeller and click it for a surprise.</p>`, [{label: 'Wheek!'}]));
 function exportSave() {
   let code = '';
@@ -2206,8 +2506,34 @@ $('#btnMenu').addEventListener('click', () => modal('<h2>Settings</h2><p>Your fa
   {label: 'Import save', cls: 'ghost', fn: () => { importSave(); return false; }},
   {label: 'Reset game', cls: 'danger', fn: () => { resetGame(); return false; }},
   {label: 'Close'}]));
+$('#layout').addEventListener('mouseover', e => {
+  const t = e.target.closest('.tile[data-key]'), info = $('#techinfo');
+  if (!t || !info) return;
+  const en = UI.entries.get(t.dataset.key);
+  if (en) info.innerHTML = `<b>${esc(en.name)}</b>: ${esc(en.desc)} · ${costHTML(en.cost())}`;
+});
 $('#layout').addEventListener('click', e => {
-  const it = e.target.closest('.item[data-key]');
+  const ord = e.target.closest('[data-ord]');
+  if (ord) { if (ord.dataset.ord === 'accept') acceptOrder(); else { G.order = null; G.orderCd = 10; } refreshUI(); return; }
+  const pk = e.target.closest('[data-perk]');
+  if (pk) { buyPerk(pk.dataset.perk); return; }
+  const ra = e.target.closest('[data-act="replant"]');
+  if (ra) {
+    const gain = seedsForRun();
+    if (gain < 1) { toast('Not ready to replant', 'Earn 100 million carrots this season for your first golden seed.'); return; }
+    modal(`<h2>Replant your farm?</h2><p>You'll get <b>${gain} golden seed${gain > 1 ? 's' : ''}</b>. Each one makes every carrot worth 4% more, forever, and seeds buy permanent perks.</p><p>Your carrots, carrot variety, upgrades, helpers and paws start over. You keep your pigs, achievements, seeds and perks.</p>`, [
+      {label: 'Not yet', cls: 'ghost'}, {label: `Replant for ${gain} seed${gain > 1 ? 's' : ''}`, fn: () => { doReplant(); }}]);
+    return;
+  }
+  const it = e.target.closest('.item[data-key], .tile[data-key]');
+  if (it && it.classList.contains('tile') && NO_HOVER && UI.armed !== it.dataset.key) {
+    // touch screens: first tap explains, second tap buys
+    UI.armed = it.dataset.key;
+    const en = UI.entries.get(it.dataset.key), info = $('#techinfo');
+    if (en && info) info.innerHTML = `<b>${esc(en.name)}</b>: ${esc(en.desc)} · ${costHTML(en.cost())} · tap again to buy`;
+    return;
+  }
+  UI.armed = null;
   if (it) { const en = UI.entries.get(it.dataset.key); if (en) tryBuy(en, it); return; }
   const amt = e.target.closest('[data-amt]');
   if (amt) { UI.buyAmt = +amt.dataset.amt; buildSection('farm'); return; }
